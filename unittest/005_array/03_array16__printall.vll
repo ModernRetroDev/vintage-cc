@@ -1,0 +1,57 @@
+fn main
+	# declarations
+	var__file f
+	var__u8   nxt   
+	var__u8   cmpres
+	var__u16  ctr
+	var__ptr  ptr  # pointer to address value
+	var__u16  stop
+	#
+	arr16__u8,512 array
+
+	setup__file  .f  'w'  "@:03_array16__printall.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#----------------------------------------#"
+	print__endl
+	print__str8 "# print all values from within the array #"
+	print__endl
+	print__str8 "#----------------------------------------#"
+	print__endl
+
+	equals__u16_u16 .stop  512
+
+	equals__u16_u16  .ctr  0
+	loop
+		#------------------------------------------------#
+		# conditional break                              #
+		#------------------------------------------------#
+		eval_eq__u16 .cmpres  .ctr  .stop
+		if .cmpres
+			break
+		endif
+		#------------------------------------------------#
+
+		print__u16_x .ctr
+		print__str8 "  "
+
+		ref__arr16  .ptr  .array  .ctr
+		# ^^^ store a reference (i.e., address) to an array element to ptr
+
+		load__u8  .nxt  .ptr
+		# ^^^ load referenced u8 value from `ptr` into `nxt`
+
+		# print__u16_x .ptr
+		# print__str8 "  "
+
+		print__u8 .nxt
+		print__endl
+
+		increment__u16  .ctr
+	endloop
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

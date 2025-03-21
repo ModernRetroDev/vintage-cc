@@ -1,0 +1,157 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 a
+	var__u8 b
+	var__u8 c
+	var__u8 cmpres
+
+	# definitions
+	equals__u8_u8  .a  10
+	equals__u8_u8  .b  20
+
+	setup__file  .f  'w'  "@:03_eval_u8__gt.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	# code starts
+	equals__u8_u8       .c  .a
+	plus_equals__u8_u8  .c  .b
+
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# eval-gt                               #"
+	print__endl
+	print__str8 "#---------------------------------------#"
+	print__endl
+
+	eval_gt__u8 .cmpres .a 5
+	print__str8 ".a (10) > 5: "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres .a 10
+	print__str8 ".a (10) > 10: "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres .a 15
+	print__str8 ".a (10) > 15: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_gt__u8 .cmpres 5 .a
+	print__str8 "5 > .a (10): "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres 10 .a
+	print__str8 "10 > .a (10): "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres 15 .a
+	print__str8 "15 > .a (10): "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_gt__u8 .cmpres 10 5
+	print__str8 "10 > 5: "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres 10 10
+	print__str8 "10 > 10: "
+	print__bool .cmpres
+	print__endl
+
+	eval_gt__u8 .cmpres 10 15
+	print__str8 "10 > 15: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_gt__u8 .cmpres .a .b
+	print__str8 ".a (10) > .b (20): "
+	print__bool .cmpres
+	print__endl
+
+	equals__u8_u8  .b  10
+
+	eval_gt__u8 .cmpres .a .b
+	print__str8 ".a (10) > .b (10): "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# eval-gteq                             #"
+	print__endl
+	print__str8 "#---------------------------------------#"
+	print__endl
+
+	# set back to initial values
+	equals__u8_u8  .a  10
+	equals__u8_u8  .b  20
+
+	eval_lteq__u8 .cmpres .a 5
+	print__str8 ".a (10) <= 5: "
+	print__bool .cmpres
+	print__endl
+
+	eval_lteq__u8 .cmpres .a 10
+	print__str8 ".a (10) <= 10: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_lteq__u8 .cmpres 5 .a
+	print__str8 "5 <= .a (10): "
+	print__bool .cmpres
+	print__endl
+
+	eval_lteq__u8 .cmpres 10 .a
+	print__str8 "10 <= .a (10): "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_lteq__u8 .cmpres 10 5
+	print__str8 "10 <= 5: "
+	print__bool .cmpres
+	print__endl
+
+	eval_lteq__u8 .cmpres 10 10
+	print__str8 "10 <= 10: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	eval_lteq__u8 .cmpres .a .b
+	print__str8 ".a (10) <= .b (20): "
+	print__bool .cmpres
+	print__endl
+
+	equals__u8_u8  .b  10
+
+	eval_lteq__u8 .cmpres .a .b
+	print__str8 ".a (10) <= .b (10): "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

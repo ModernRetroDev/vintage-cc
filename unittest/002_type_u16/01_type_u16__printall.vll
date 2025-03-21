@@ -1,0 +1,42 @@
+fn main
+	# declarations
+	var__file f
+	var__u8   cmpres
+	var__u16  ctr
+	var__u16  stop
+
+	setup__file  .f  'w'  "@:01_type_u16__printall.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-----------------------------------------------------#"
+	print__endl
+	print__str8 "# Print all values of a u16 in hex form($0000-$ffff)  #"
+	print__endl
+	print__str8 "#-----------------------------------------------------#"
+	print__endl
+
+	equals__u16_u16  .ctr   0
+	equals__u16_u16  .stop  65535
+	loop
+		print__u16_x .ctr
+		# print char ' '
+		# # print u8_X .ctr
+		print__endl
+		
+		#------------------------------------------------#
+		# conditional break                              #
+		#------------------------------------------------#
+		eval_eq__u16 .cmpres .ctr .stop
+		if .cmpres
+			break
+		endif
+		#------------------------------------------------#
+		increment__u16  .ctr
+
+	endloop
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

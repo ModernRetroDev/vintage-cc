@@ -1,0 +1,44 @@
+fn main
+	# declarations
+	var__file f
+	var__u8   cmpres
+
+	setup__file  .f  'w'  "@:01_eval_u8__eq.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#--------------------------------#"
+	print__endl
+	print__str8 "# evaluation of equality checks  #"
+	print__endl
+	print__str8 "#--------------------------------#"
+	print__endl
+
+
+	print__str8 "if (5 == 5):"
+	print__endl
+	eval_eq__u8 .cmpres 5 5
+	if .cmpres
+		print__str8 "   a: [if was true]"
+	else
+		print__str8 "   a: [if was false]"
+	endif
+	print__endl
+	print__endl
+
+
+	print__str8 "if (5 == 6):"
+	print__endl
+	eval_eq__u8 .cmpres .cmpres 5 6
+	if .cmpres
+		print__str8 "   b: [if was true]"
+	else
+		print__str8 "   b: [if was false]"
+	endif
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

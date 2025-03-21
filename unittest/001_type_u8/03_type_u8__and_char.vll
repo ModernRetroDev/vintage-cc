@@ -1,0 +1,41 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 ctr
+	var__u8 cmpres
+
+	setup__file  .f  'w'  "@:03-type-u8--and-char.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# PRINT ALL VALUES OF A U8 (0-255)      #"
+	print__endl
+	print__str8 "#---------------------------------------#"
+	print__endl
+
+	equals__u8_u8  .ctr  1
+	loop
+
+		print__u8 .ctr
+		print__char ' '
+		print__char .ctr
+		print__endl
+
+		#------------------------------------------------#
+		# conditional break                              #
+		#------------------------------------------------#
+		eval_eq__u8 .cmpres .ctr 255
+		if .cmpres
+			break
+		endif
+		#------------------------------------------------#
+		increment__u8  .ctr
+
+	endloop
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

@@ -1,0 +1,1 @@
+#--------------------------------## evaluation of equality checks  ##--------------------------------#if (5 == 5):   a: [if was true]if (5 == 6):   b: [if was false]

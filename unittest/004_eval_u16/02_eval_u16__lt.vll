@@ -1,0 +1,146 @@
+fn main
+	# declarations
+	var__file f
+	var__u16 a
+	var__u16 b
+	var__u8 cmpres
+
+	setup__file  .f  'w'  "@:02_eval_u16__lt.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# eval-lt (u16)                         #"
+	print__endl
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# test out comparisons of values < 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  5
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "10 < 5: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  10
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "10 < 10: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  15
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "10 < 15: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+	#--------------------------------------------------------------------------#
+	print__str8 "# test out comparisons of values > 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  500
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "1000 < 500: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  1000
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "1000 < 1000: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  1500
+
+	eval_lt__u16 .cmpres .a .b
+	print__str8 "1000 < 1500: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# eval-lteq (u16)                       #"
+	print__endl
+	print__str8 "#---------------------------------------#"
+	print__endl
+	print__str8 "# test out comparisons of values < 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  5
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "10 <= 5: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  10
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "10 <= 10: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  15
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "10 <= 15: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+	#--------------------------------------------------------------------------#
+	print__str8 "# test out comparisons of values > 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  500
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "1000 <= 500: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  1000
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "1000 <= 1000: "
+	print__bool .cmpres
+	print__endl
+
+	equals__u16_u16  .a  1000
+	equals__u16_u16  .b  1500
+
+	eval_lteq__u16 .cmpres .a .b
+	print__str8 "1000 <= 1500: "
+	print__bool .cmpres
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

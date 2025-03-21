@@ -1,0 +1,116 @@
+fn main
+	# declarations
+	var__file f
+	var__u16 a
+	var__u16 b
+	var__u8  c
+
+	setup__file  .f  'w'  "@:02_type_u16__addition.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u16 addition (small u16 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out addition of u16 values < 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u8_u8    .c  10
+
+	plus_equals__u16_u8  .a  .c
+	print__str8 "*** add a u8 var to a 16 var ***"
+	print__endl
+	print__str8 "10 + 10 = 20 ($0014): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  10
+	equals__u16_u16  .b  5
+
+	plus_equals__u16_u16  .a  .b
+	print__str8 "*** add two u16 variables together ***"
+	print__endl
+	print__str8 "10 + 5 = 15 ($000f): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16       .a  10
+	plus_equals__u16_u16  .a  3
+	print__str8 "*** add a direct u8 to a u16 var ***"
+	print__endl
+	print__str8 "10 + 3 = 13 ($000d): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16       .a  10
+	plus_equals__u16_u16  .a  256
+	print__str8 "*** add a direct u16 to a u16 var ***"
+	print__endl
+	print__str8 "10 + 256 = 266 ($010a): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u16 addition (large u16 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out addition of u16 values > 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  256
+	equals__u8_u8    .c  10
+
+	plus_equals__u16_u8  .a  .c
+	print__str8 "*** add a u8 var to a 16 var ***"
+	print__endl
+	print__str8 "256 + 10 = 20 ($010a): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  256
+	equals__u16_u16  .b  5
+
+	plus_equals__u16_u16  .a  .b
+	print__str8 "*** add two u16 variables together ***"
+	print__endl
+	print__str8 "256 + 5 = 261 ($0105): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16      .a  256
+	plus_equals__u16_u8  .a  3
+	print__str8 "*** add a direct u8 to a u16 var ***"
+	print__endl
+	print__str8 "256 + 3 = 259 ($0103): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16       .a  256
+	plus_equals__u16_u16  .a  256
+	print__str8 "*** add a direct u16 to a u16 var ***"
+	print__endl
+	print__str8 "256 + 256 = 512 ($0200): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn
