@@ -1,0 +1,63 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 a
+	var__u8 b
+
+	setup__file  .f  'w'  "@:04_type_u8__addition.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__str8 "# u8 addition                        #"
+	print__endl
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__endl
+
+	equals__u8_u8  .a  15
+	equals__u8_u8  .b  10
+
+	plus_equals__u8_u8  .a  .b
+	print__str8 "*** add a u8 var to a u8 var ***"
+	print__endl
+	print__str8 "15 + 10 = 25: "
+	print__u8 .a
+	print__endl
+	print__endl
+
+	equals__u8_u8  .a  50
+	equals__u8_u8  .b  250
+
+	plus_equals__u8_u8  .a  .b
+	print__str8 "*** add two u8 vars causing overflow ***"
+	print__endl
+	print__str8 "50 + 250 = 44 (300-256): "
+	print__u8  .a
+	print__endl
+	print__endl
+
+	equals__u8_u8       .a  10
+	plus_equals__u8_u8  .a  3
+	print__str8 "*** add a direct u8 to a u8 var ***"
+	print__endl
+	print__str8 "10 + 3 = 13: "
+	print__u8  .a
+	print__endl
+	print__endl
+
+	equals__u8_u8       .a  50
+	plus_equals__u8_u8  .a  250
+	print__str8 "*** direct u8 add causing overflow ***"
+	print__endl
+	print__str8 "50 + 250 = 44 (300-256): "
+	print__u8 .a
+	print__endl
+	print__endl
+
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

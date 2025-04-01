@@ -1,0 +1,62 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 a
+	var__u8 b
+
+	setup__file  .f  'w'  "@:05_type_u8__subtraction.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__str8 "# u8 subtraction                     #"
+	print__endl
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__endl
+
+	equals__u8_u8  .a  15
+	equals__u8_u8  .b  10
+
+	minus_equals__u8_u8  .a  .b
+	print__str8 "*** subtraction between two u8 vars ***"
+	print__endl
+	print__str8 "15 - 10 = 5: "
+	print__u8 .a
+	print__endl
+	print__endl
+
+	equals__u8_u8  .a  50
+	equals__u8_u8  .b  250
+
+	minus_equals__u8_u8  .a  .b
+	print__str8 "*** u8 var subtraction with underflow ***"
+	print__endl
+	print__str8 "50 - 250 = 56 (256 - 200): "
+	print__u8  .a
+	print__endl
+	print__endl
+
+	equals__u8_u8        .a  10
+	minus_equals__u8_u8  .a  3
+	print__str8 "*** subtraction of a direct u8 ***"
+	print__endl
+	print__str8 "10 - 3 = 7: "
+	print__u8  .a
+	print__endl
+	print__endl
+
+	equals__u8_u8        .a  50
+	minus_equals__u8_u8  .a  250
+	print__str8 "*** subtraction of a direct u8 with underflow ***"
+	print__endl
+	print__str8 "50 - 250 = 56 (256 - 200): "
+	print__u8 .a
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

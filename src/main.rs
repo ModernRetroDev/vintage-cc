@@ -20,6 +20,7 @@ mod process_increment;
 mod process_load;
 mod process_loop;
 mod process_lshift;
+mod process_minus_equals;
 mod process_open;
 mod process_plus_equals;
 mod process_print;
@@ -252,6 +253,12 @@ fn process_source(s: String) {
 		}
 		if next.is_lshift() {
 			if process_lshift::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_minus_equals() {
+			if process_minus_equals::now(next) {
 				return;
 			}
 			continue;

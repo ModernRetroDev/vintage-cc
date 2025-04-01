@@ -330,6 +330,12 @@ impl LinePart {
 		}
 		return false
 	}
+	pub fn is_minus_equals(&self) -> bool {
+		if self.next.starts_with("minus_equals__") {
+			return true
+		}
+		return false
+	}
 	pub fn is_open(&self) -> bool {
 		if self.next.starts_with("open__") {
 			return true

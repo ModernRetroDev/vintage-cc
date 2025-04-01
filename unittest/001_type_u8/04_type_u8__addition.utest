@@ -1,0 +1,1 @@
+#------------------------------------## u8 addition                        ##------------------------------------#*** add a u8 var to a u8 var ***15 + 10 = 25: 25*** add two u8 vars causing overflow ***50 + 250 = 44 (300-256): 44*** add a direct u8 to a u8 var ***10 + 3 = 13: 13*** direct u8 add causing overflow ***50 + 250 = 44 (300-256): 44

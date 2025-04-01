@@ -1,0 +1,131 @@
+fn main
+	# declarations
+	var__file f
+	var__u16 a
+	var__u16 b
+	var__u8  c
+
+	setup__file  .f  'w'  "@:05_type_u16__subtraction.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u16 subtraction (small u16 values)  #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out subtraction of u16 values < 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  25
+	equals__u8_u8    .c  10
+
+	minus_equals__u16_u8  .a  .c
+	print__str8 "*** subtract u8/u16 vars; no carry ***"
+	print__endl
+	print__str8 "25 - 10 = 15 ($000f): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  300
+	equals__u8_u8    .c  20
+
+	minus_equals__u16_u8  .a  .c
+	print__str8 "*** subtract u8/u16 vars; no carry ***"
+	print__endl
+	print__str8 "300 - 20 = 280 ($0118): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  300
+	equals__u8_u8    .c  250
+
+	minus_equals__u16_u8  .a  .c
+	print__str8 "*** subtract u8/u16 vars; w/carry ***"
+	print__endl
+	print__str8 "300 - 250 = 50 ($0032): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+
+	equals__u16_u16  .a  25
+
+	minus_equals__u16_u8  .a  10
+	print__str8 "*** subtract direct u8 w/u16; no carry ***"
+	print__endl
+	print__str8 "25 - 10 = 15 ($000f): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  300
+
+	minus_equals__u16_u8  .a  20
+	print__str8 "*** subtract direct u8 w/u16; no carry ***"
+	print__endl
+	print__str8 "300 - 20 = 280 ($0118): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  300
+
+	minus_equals__u16_u8  .a  250
+	print__str8 "*** subtract direct u8 w/u16; w/carry ***"
+	print__endl
+	print__str8 "300 - 250 = 50 ($0032): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  300
+	equals__u16_u16  .b  250
+
+	minus_equals__u16_u16  .a  .b
+	print__str8 "*** subtraction between u16 vars ***"
+	print__endl
+	print__str8 "300 - 250 = 50 ($0032): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u16 subtraction (large u16 values)  #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out subtraction of u16 values > 255"
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  5000
+	equals__u16_u16  .b  4800
+
+	minus_equals__u16_u16  .a  .b
+	print__str8 "*** subtraction between u16 vars ***"
+	print__endl
+	print__str8 "5000 - 4800 = 200 ($00c8): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	equals__u16_u16  .a  5000
+
+	minus_equals__u16_u16  .a  4800
+	print__str8 "*** subtract a direct u16 ***"
+	print__endl
+	print__str8 "5000 - 4800 = 200 ($00c8): $"
+	print__u16_x .a
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

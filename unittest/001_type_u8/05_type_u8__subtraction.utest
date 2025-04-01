@@ -1,0 +1,1 @@
+#------------------------------------## u8 subtraction                     ##------------------------------------#*** subtraction between two u8 vars ***15 - 10 = 5: 5*** u8 var subtraction with underflow ***50 - 250 = 56 (256 - 200): 56*** subtraction of a direct u8 ***10 - 3 = 7: 7*** subtraction of a direct u8 with underflow ***50 - 250 = 56 (256 - 200): 56
