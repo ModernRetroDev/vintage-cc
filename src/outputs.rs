@@ -1,17 +1,18 @@
 #![allow(static_mut_refs)]
 
-use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
-use std::sync::Mutex;
+use std::sync::{LazyLock, Mutex};
 
-lazy_static!{
-	static ref ARR8_INDICES:   Mutex<HashMap<String, usize>> = Mutex::new(HashMap::new());
-	static ref ARR16_INDICES:  Mutex<HashMap<String, usize>> = Mutex::new(HashMap::new());
-	static ref VAR_INDICES:    Mutex<HashMap<String, usize>> = Mutex::new(HashMap::new());
-	static ref IFBLK_HAS_ELSE: Mutex<HashMap<String, bool>>  = Mutex::new(HashMap::new());
-}
+static ARR8_INDICES: LazyLock<Mutex<HashMap<String, usize>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
+static ARR16_INDICES: LazyLock<Mutex<HashMap<String, usize>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
+static VAR_INDICES: LazyLock<Mutex<HashMap<String, usize>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
+static IFBLK_HAS_ELSE: LazyLock<Mutex<HashMap<String, bool>>> =
+    LazyLock::new(|| Mutex::new(HashMap::new()));
 
 static mut ACTIVE_FN:       String = String::new();
 static mut PLATFORM:        String = String::new();
