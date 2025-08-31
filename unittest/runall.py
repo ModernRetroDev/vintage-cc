@@ -19,11 +19,11 @@ for item in os.listdir():
 testgroups.sort()
 
 for testgroup in testgroups:
-	groupname = os.path.basename(testgroup)
+	targetname = os.path.basename(testgroup)
 
-	print('#================================================================#')
-	print(f"# Running TEST GROUP: `{groupname}`")
-	print('#================================================================#')
+	print('##################################################################')
+	print(f"# Running TARGET TESTS for: `{targetname}`")
+	print('##################################################################')
 
 	os.chdir(testgroup)
 

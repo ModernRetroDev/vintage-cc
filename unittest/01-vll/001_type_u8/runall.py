@@ -2,8 +2,8 @@
 import os
 import subprocess
 
-builtins_dir = '../../builtin'
-vlang_bin    = '../../target/debug/vintagecc'
+builtins_dir = '../../../builtin'
+vlang_bin    = '../../../target/debug/vintagecc'
 vlang_suffix = '.vll'
 
 modified_env = os.environ.copy()
