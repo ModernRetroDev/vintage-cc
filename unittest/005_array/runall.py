@@ -31,5 +31,5 @@ for utest in utests:
 		'cl65', '-t', 'cx16', '-o', 'UTEST.PRG', '-l', f'{assmname}.list', assmname])
 
 	subprocess.run([
-		'x16emu', '-warp', '-prg', 'UTEST.PRG', '-run'])
+		'x16emu', '-warp', '-sound', 'none', '-prg', 'UTEST.PRG', '-run'])
 	print()
