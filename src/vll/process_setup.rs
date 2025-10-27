@@ -77,8 +77,18 @@ fn as_type_file(part: LinePart) -> bool {
 
     outputs::mainfn_append(&format!("   ; setup__file {} {} {}", 
         retvar, fmode, fname));
-    outputs::mainfn_append(&format!("   ; ... f.mode = {}", 1));
+    outputs::mainfn_append(&format!("   ; ... f.ptr_addr[0] = #<({}+2)", retvar_res));
     outputs::mainfn_append(&format!("   ldx #0"));
+    outputs::mainfn_append(&format!("   lda #<({}+2)", retvar_res));
+    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
+    outputs::mainfn_append("");
+    outputs::mainfn_append(&format!("   ; ... f.ptr_addr[1] = #>({}+2)", retvar_res));
+    outputs::mainfn_append(         "   inx");
+    outputs::mainfn_append(&format!("   lda #>({}+2)", retvar_res));
+    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
+    outputs::mainfn_append("");
+    outputs::mainfn_append(&format!("   ; ... f.mode = {}", 1));
+    outputs::mainfn_append(         "   inx");
     outputs::mainfn_append(&format!("   lda #1"));
     outputs::mainfn_append(&format!("   sta {},X", retvar_res));
     outputs::mainfn_append("");

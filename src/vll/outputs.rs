@@ -318,6 +318,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
+                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                self.lines_vardefs.push(format!(
                     "   .byte $00 ; mode (u8)"));
                 self.lines_vardefs.push(format!(
                     "   .byte $00 ; device (u8)"));

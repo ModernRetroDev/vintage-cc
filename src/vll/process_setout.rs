@@ -31,8 +31,14 @@ fn as_type_file(part: LinePart) -> bool {
 
 	outputs::mainfn_append(&format!("   ; setout__file {}", filevar));
 	outputs::mainfn_append(&format!("   lda #<{}", filevar_res));
-	outputs::mainfn_append(         "   sta ZP_PTR_1");
+	outputs::mainfn_append(         "   sta ZP_PTR_2");
 	outputs::mainfn_append(&format!("   lda #>{}", filevar_res));
+	outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+	outputs::mainfn_append(         "   ldy #0");
+	outputs::mainfn_append(         "   lda (ZP_PTR_2),y");
+	outputs::mainfn_append(         "   sta ZP_PTR_1");
+	outputs::mainfn_append(         "   iny");
+	outputs::mainfn_append(         "   lda (ZP_PTR_2),y");
 	outputs::mainfn_append(         "   sta ZP_PTR_1+1");
 	outputs::mainfn_append(         "   jsr _setout__file");
 	outputs::mainfn_append("");

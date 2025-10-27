@@ -15,6 +15,7 @@
 ; VARIABLE DEFINITIONS                                   ;
 ;--------------------------------------------------------;
 var__main__f: ; type: file
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $00 ; mode (u8)
    .byte $00 ; device (u8)
    .byte $00 ; channel (u8)
@@ -546,8 +547,18 @@ fn_main:
    jsr BSOUT
 
    ; setup__file .f 'w' "@:02_eval_u16__lt.utest"
-   ; ... f.mode = 1
+   ; ... f.ptr_addr[0] = #<(var__main__f+2)
    ldx #0
+   lda #<(var__main__f+2)
+   sta var__main__f,X
+
+   ; ... f.ptr_addr[1] = #>(var__main__f+2)
+   inx
+   lda #>(var__main__f+2)
+   sta var__main__f,X
+
+   ; ... f.mode = 1
+   inx
    lda #1
    sta var__main__f,X
 
@@ -576,15 +587,27 @@ fn_main:
 
    ; open__file .f
    lda #<var__main__f
-   sta ZP_PTR_1
+   sta ZP_PTR_2
    lda #>var__main__f
+   sta ZP_PTR_2+1
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
    sta ZP_PTR_1+1
    jsr _open__file
 
    ; setout__file .f
    lda #<var__main__f
-   sta ZP_PTR_1
+   sta ZP_PTR_2
    lda #>var__main__f
+   sta ZP_PTR_2+1
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
    sta ZP_PTR_1+1
    jsr _setout__file
 
@@ -1170,8 +1193,14 @@ fn_main:
 
    ; close__file .f
    lda #<var__main__f
-   sta ZP_PTR_1
+   sta ZP_PTR_2
    lda #>var__main__f
+   sta ZP_PTR_2+1
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
    sta ZP_PTR_1+1
    jsr _close__file
 
