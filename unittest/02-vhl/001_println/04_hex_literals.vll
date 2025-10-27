@@ -1,0 +1,171 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u16 a
+    var__file outfile
+    var__u8 _stk_8_0
+    var__u16 _stk_16_0
+
+    setup__file .outfile 'w' "@:04_hex_literals.utest"
+    open__file .outfile
+    setout__file .outfile
+    # outfile.writeln("#------------------------------------------------#");
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #");
+    print__str8 "# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("#------------------------------------------------#");
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("*** print out a few binary u16 values***");
+    print__str8 "*** print out a few binary u16 values***"
+    print__endl
+    setout__default
+
+    # a = 0x0000;
+    equals__u16_u8 ._stk_16_0 0x0000
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0000     (0) :   {}", a);
+    print__str8 " * 0x0000     (0) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0001;
+    equals__u16_u8 ._stk_16_0 0x0001
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0001     (1) :   {}", a);
+    print__str8 " * 0x0001     (1) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0002;
+    equals__u16_u8 ._stk_16_0 0x0002
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0002     (2) :   {}", a);
+    print__str8 " * 0x0002     (2) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0004;
+    equals__u16_u8 ._stk_16_0 0x0004
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0004     (4) :   {}", a);
+    print__str8 " * 0x0004     (4) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0008;
+    equals__u16_u8 ._stk_16_0 0x0008
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0008     (8) :   {}", a);
+    print__str8 " * 0x0008     (8) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0010;
+    equals__u16_u8 ._stk_16_0 0x0010
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0010    (16) :   {}", a);
+    print__str8 " * 0x0010    (16) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0020;
+    equals__u16_u8 ._stk_16_0 0x0020
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0020    (32) :   {}", a);
+    print__str8 " * 0x0020    (32) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0040;
+    equals__u16_u8 ._stk_16_0 0x0040
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0040    (64) :   {}", a);
+    print__str8 " * 0x0040    (64) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0080;
+    equals__u16_u8 ._stk_16_0 0x0080
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0080   (128) :   {}", a);
+    print__str8 " * 0x0080   (128) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0100;
+    equals__u16_u16 ._stk_16_0 0x0100
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0x0100   (256) :   {}", a);
+    print__str8 " * 0x0100   (256) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0xFFFF;
+    equals__u16_u16 ._stk_16_0 0xFFFF
+    equals__u16_u16 .a ._stk_16_0
+
+    setout__file .outfile
+    # outfile.writeln(" * 0xFFFF (65535) :   {}", a);
+    print__str8 " * 0xFFFF (65535) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

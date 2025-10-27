@@ -1,0 +1,348 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 ctr
+    arr8__u8,10 array = 2,4,6,8,10,12,14,16,18,20
+    var__u8 next
+    var__file outfile
+    var__bool _cmpres
+    var__ptr _ptr
+    var__u8 _temp_u8
+    var__u8 _stk_8_0
+    var__u8 _loop_len_u8
+    var__u8 _loop_ctr_u8_0
+
+    # outfile.create("03_for_loop.utest");
+    setup__file .outfile 'w' "@:03_for_loop.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+    setout__file .outfile
+    print__str8 "# PRINT ALL VALUES FROM WITHIN AN ARRAY #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for next in array ...");
+    setout__file .outfile
+    print__str8 "# for next in array ..."
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # for next in array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    loop
+        get_length__arr8 ._loop_len_u8 .array
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+    ref__arr8 ._ptr .array ._loop_ctr_u8_0
+    load__u8 ._temp_u8 ._ptr
+        equals__u8_u8 .next ._temp_u8
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = {}", ctr, next);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    print__u8 .next
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for _ in array ...");
+    setout__file .outfile
+    print__str8 "# for _ in array ..."
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # for _ in array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    loop
+        get_length__arr8 ._loop_len_u8 .array
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .array .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for next in [all] array");
+    setout__file .outfile
+    print__str8 "# for next in [all] array"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # for next in [all] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    get_alloc__arr8 ._loop_len_u8 .array
+    loop
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+    ref__arr8 ._ptr .array ._loop_ctr_u8_0
+    load__u8 ._temp_u8 ._ptr
+        equals__u8_u8 .next ._temp_u8
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = {}", ctr, next);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    print__u8 .next
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for _ in [all] array");
+    setout__file .outfile
+    print__str8 "# for _ in [all] array"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # for _ in [all] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    get_alloc__arr8 ._loop_len_u8 .array
+    loop
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .array .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for ctr, next in [enumerate] array");
+    setout__file .outfile
+    print__str8 "# for ctr, next in [enumerate] array"
+    print__endl
+    setout__default
+
+    # for ctr, next in [enumerate] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    loop
+        get_length__arr8 ._loop_len_u8 .array
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+    ref__arr8 ._ptr .array ._loop_ctr_u8_0
+    load__u8 ._temp_u8 ._ptr
+        equals__u8_u8 .next ._temp_u8
+        equals__u8_u8 .ctr ._loop_ctr_u8_0
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = {}", ctr, next);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    print__u8 .next
+    print__endl
+    setout__default
+
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for _, next in [enumerate] array");
+    setout__file .outfile
+    print__str8 "# for _, next in [enumerate] array"
+    print__endl
+    setout__default
+
+    # for _, next in [enumerate] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    loop
+        get_length__arr8 ._loop_len_u8 .array
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+    ref__arr8 ._ptr .array ._loop_ctr_u8_0
+    load__u8 ._temp_u8 ._ptr
+        equals__u8_u8 .next ._temp_u8
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[?] = {}", next);
+    setout__file .outfile
+    print__str8 "array[?] = "
+    print__u8 .next
+    print__endl
+    setout__default
+
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for ctr, _ in [enumerate] array");
+    setout__file .outfile
+    print__str8 "# for ctr, _ in [enumerate] array"
+    print__endl
+    setout__default
+
+    # for ctr, _ in [enumerate] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    loop
+        get_length__arr8 ._loop_len_u8 .array
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+        equals__u8_u8 .ctr ._loop_ctr_u8_0
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = ?", ctr);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = ?"
+    print__endl
+    setout__default
+
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# for ctr, _ in [enumerate,all] array");
+    setout__file .outfile
+    print__str8 "# for ctr, _ in [enumerate,all] array"
+    print__endl
+    setout__default
+
+    # for ctr, _ in [enumerate,all] array {
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    get_alloc__arr8 ._loop_len_u8 .array
+    loop
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+        equals__u8_u8 .ctr ._loop_ctr_u8_0
+        increment__u8 ._loop_ctr_u8_0
+
+    # outfile.writeln("array[{}] = ?", ctr);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = ?"
+    print__endl
+    setout__default
+
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

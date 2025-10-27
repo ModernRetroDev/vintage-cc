@@ -1,0 +1,155 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 ctr
+    arr8__u8,5 count = 1,2,3,4,5
+    var__u8 res
+    var__file outfile
+    var__ptr _ptr
+    var__u8 _temp_u8
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u8 _stk_8_2
+
+    # outfile.create("03_eval_array_vals.utest");
+    setup__file .outfile 'w' "@:03_eval_array_vals.utest"
+    open__file .outfile
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# ARRAY VALUES USED IN MATHEMATICAL CALCULATIONS #");
+    setout__file .outfile
+    print__str8 "# ARRAY VALUES USED IN MATHEMATICAL CALCULATIONS #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+    setout__file .outfile
+    print__str8 "count["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .count .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+    setout__file .outfile
+    print__str8 "count["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .count .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+    setout__file .outfile
+    print__str8 "count["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .count .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+    setout__file .outfile
+    print__str8 "count["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .count .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+    setout__file .outfile
+    print__str8 "count["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .count .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("   1     +    3     +    5     = 9");
+    setout__file .outfile
+    print__str8 "   1     +    3     +    5     = 9"
+    print__endl
+    setout__default
+
+    # outfile.writeln("count[0] + count[2] + count[4] = ", endl=false);
+    setout__file .outfile
+    print__str8 "count[0] + count[2] + count[4] = "
+    setout__default
+
+    # res = count[0] count[2] count[4] + +;
+    ref__arr8 ._ptr .count 0
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_0 ._temp_u8
+    ref__arr8 ._ptr .count 2
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_1 ._temp_u8
+    ref__arr8 ._ptr .count 4
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_2 ._temp_u8
+    plus_equals__u8_u8 ._stk_8_1 ._stk_8_2
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .res ._stk_8_0
+
+    # outfile.writeln("{}", res);
+    setout__file .outfile
+    print__u8 .res
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

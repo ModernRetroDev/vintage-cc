@@ -1,0 +1,672 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u16 a
+    var__u16 b
+    var__u16 c
+    var__file outfile
+    var__bool _cmpres
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u16 _stk_16_0
+    var__u16 _stk_16_1
+
+    equals__u16_u16 .a 2000
+    equals__u16_u16 .b 1000
+    equals__u16_u16 .c 1500
+
+    # outfile.create("02_conditionals_u16.utest");
+    setup__file .outfile 'w' "@:02_conditionals_u16.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# TEST OUT CONDITIONALS (IF / ELSE IF / ELSE) #");
+    setout__file .outfile
+    print__str8 "# TEST OUT CONDITIONALS (IF / ELSE IF / ELSE) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 < 300: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 < 300: "
+    setout__default
+
+    # if' 500  300  < {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 2000 - 1000 < 1500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 2000 - 1000 < 1500: "
+    setout__default
+
+    # if' 2000  1000 - 1500 < {
+    equals__u16_u16 ._stk_16_0 2000
+    equals__u16_u16 ._stk_16_1 1000
+    minus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 ._stk_16_1 1500
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("As variables");
+    setout__file .outfile
+    print__str8 "As variables"
+    print__endl
+    setout__default
+
+    # outfile.writeln("------------");
+    setout__file .outfile
+    print__str8 "------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 2000 - 1000 < 1500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 2000 - 1000 < 1500: "
+    setout__default
+
+    # if' a  b - c < {
+    equals__u16_u16 ._stk_16_0 .a
+    equals__u16_u16 ._stk_16_1 .b
+    minus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 ._stk_16_1 .c
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if / elif / else:");
+    setout__file .outfile
+    print__str8 "if / elif / else:"
+    print__endl
+    setout__default
+
+    # outfile.writeln("----------------");
+    setout__file .outfile
+    print__str8 "----------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 < 300; elif 300 < 500; else: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 < 300; elif 300 < 500; else: "
+    setout__default
+
+    # if' 500 300 < {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (IF)");
+    setout__file .outfile
+    print__str8 "TRUE (IF)"
+    print__endl
+    setout__default
+
+    # } else if ... {
+    else
+    # } else if 300 500 < {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 500
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (ELIF)");
+    setout__file .outfile
+    print__str8 "TRUE (ELIF)"
+    print__endl
+    setout__default
+
+    else
+    # } else {
+    # outfile.writeln("FALSE (ELSE)");
+    setout__file .outfile
+    print__str8 "FALSE (ELSE)"
+    print__endl
+    setout__default
+
+    endif
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 300 < 500; elif 500 < 300; else: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 300 < 500; elif 500 < 300; else: "
+    setout__default
+
+    # if' 300 500 < {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 500
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (IF)");
+    setout__file .outfile
+    print__str8 "TRUE (IF)"
+    print__endl
+    setout__default
+
+    # } else if ... {
+    else
+    # } else if 500 300 < {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (ELIF)");
+    setout__file .outfile
+    print__str8 "TRUE (ELIF)"
+    print__endl
+    setout__default
+
+    else
+    # } else {
+    # outfile.writeln("FALSE (ELSE)");
+    setout__file .outfile
+    print__str8 "FALSE (ELSE)"
+    print__endl
+    setout__default
+
+    endif
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 300 < 300; elif 300 < 300; else: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 300 < 300; elif 300 < 300; else: "
+    setout__default
+
+    # if' 300 300 < {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 300
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (IF)");
+    setout__file .outfile
+    print__str8 "TRUE (IF)"
+    print__endl
+    setout__default
+
+    # } else if ... {
+    else
+    # } else if 300 300 < {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 300
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE (ELIF)");
+    setout__file .outfile
+    print__str8 "TRUE (ELIF)"
+    print__endl
+    setout__default
+
+    else
+    # } else {
+    # outfile.writeln("FALSE (ELSE)");
+    setout__file .outfile
+    print__str8 "FALSE (ELSE)"
+    print__endl
+    setout__default
+
+    endif
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("other comparison types:");
+    setout__file .outfile
+    print__str8 "other comparison types:"
+    print__endl
+    setout__default
+
+    # outfile.writeln("-----------------------");
+    setout__file .outfile
+    print__str8 "-----------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 > 300: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 > 300: "
+    setout__default
+
+    # if' 500 300 > {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_gt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 300 > 500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 300 > 500: "
+    setout__default
+
+    # if' 300 500 > {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 500
+    eval_gt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 == 500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 == 500: "
+    setout__default
+
+    # if' 500 500 == {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 500
+    eval_eq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 == 300: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 == 300: "
+    setout__default
+
+    # if' 500 300 == {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_eq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 != 500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 != 500: "
+    setout__default
+
+    # if' 500 500 != {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 500
+    eval_neq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 != 300: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 != 300: "
+    setout__default
+
+    # if' 500 300 != {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_neq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 >= 300: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 >= 300: "
+    setout__default
+
+    # if' 500 300 >= {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 300
+    eval_gteq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 500 >= 500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 500 >= 500: "
+    setout__default
+
+    # if' 500 500 >= {
+    equals__u16_u16 ._stk_16_0 500
+    equals__u16_u16 ._stk_16_1 500
+    eval_gteq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 300 >= 500: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 300 >= 500: "
+    setout__default
+
+    # if' 300 500 >= {
+    equals__u16_u16 ._stk_16_0 300
+    equals__u16_u16 ._stk_16_1 500
+    eval_gteq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

@@ -1,0 +1,86 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 ctr
+    arr8__u8,10 array = 2,4,6,8,10,12,14,16,18,20
+    var__file outfile
+    var__bool _cmpres
+    var__ptr _ptr
+    var__u8 _temp_u8
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+
+    # outfile.create("02_while_loop.utest");
+    setup__file .outfile 'w' "@:02_while_loop.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+    setout__file .outfile
+    print__str8 "# PRINT ALL VALUES FROM WITHIN AN ARRAY #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # while ctr 10 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 10
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+    setout__file .outfile
+    print__str8 "array["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .array .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

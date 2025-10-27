@@ -7,65 +7,89 @@ static mut UNIQUE_STR8_CTR:    u32 = 0;
 
 
 pub fn arr8_fullname(v: &str) -> String {
-	return format!("arr8__{}__{}", 
-		outputs::get_active_fn(), 
-		v.trim_start_matches("."));
+    return format!("arr8__{}__{}", 
+        outputs::get_active_fn(), 
+        v.trim_start_matches("."));
 }
 
 pub fn arr16_fullname(v: &str) -> String {
-	return format!("arr16__{}__{}", 
-		outputs::get_active_fn(), 
-		v.trim_start_matches("."));
+    return format!("arr16__{}__{}", 
+        outputs::get_active_fn(), 
+        v.trim_start_matches("."));
 }
 
 pub fn var_fullname(v: &str) -> String {
-	return format!("var__{}__{}", 
-		outputs::get_active_fn(), 
-		v.trim_start_matches("."));
+    match v.matches(".").count() {
+        1 => {
+            return format!("var__{}__{}", 
+                outputs::get_active_fn(), 
+                v.trim_start_matches("."));
+        },
+        2 => {
+            let mut fn_name:  String = "".to_string();
+            let mut var_name: String = "".to_string();
+            let mut ctr:      u8     = 0;
+            let     parts = v.split(".");
+
+            for part in parts.clone().into_iter() {
+                if ctr == 1 {
+                    fn_name = part.to_string();
+                } else if ctr == 2 {
+                    var_name = part.to_string();
+                }
+
+                ctr += 1;
+            }
+            return format!("var__{}__{}", fn_name, var_name);
+        },
+        _ => {
+            return "".to_string();
+        }
+    }
 }
 
 pub fn unique_eval_label() -> String {
-	let eval_no: u32;
+    let eval_no: u32;
 
-	unsafe {
-		eval_no = UNIQUE_EVAL_CTR;
-		UNIQUE_EVAL_CTR += 1;
-	}
+    unsafe {
+        eval_no = UNIQUE_EVAL_CTR;
+        UNIQUE_EVAL_CTR += 1;
+    }
 
-	return format!("eval_0x{:04X}", eval_no);
+    return format!("eval_0x{:04X}", eval_no);
 }
 
 pub fn unique_str8_varname() -> String {
-	let str8_no: u32;
+    let str8_no: u32;
 
-	unsafe {
-		str8_no = UNIQUE_STR8_CTR;
-		UNIQUE_STR8_CTR += 1;
-	}
+    unsafe {
+        str8_no = UNIQUE_STR8_CTR;
+        UNIQUE_STR8_CTR += 1;
+    }
 
-	return format!("str8_0x{:04X}", str8_no);
+    return format!("str8_0x{:04X}", str8_no);
 }
 
 pub fn unique_ifblk_name() -> String {
-	let ifblk_no: u32;
+    let ifblk_no: u32;
 
-	unsafe {
-		ifblk_no = UNIQUE_IFBLK_CTR;
-		UNIQUE_IFBLK_CTR += 1;
-	}
+    unsafe {
+        ifblk_no = UNIQUE_IFBLK_CTR;
+        UNIQUE_IFBLK_CTR += 1;
+    }
 
-	return format!("if_0x{:04X}", ifblk_no);
+    return format!("if_0x{:04X}", ifblk_no);
 }
 
 
 pub fn unique_loopblk_name() -> String {
-	let loopblk_no: u32;
+    let loopblk_no: u32;
 
-	unsafe {
-		loopblk_no = UNIQUE_LOOPBLK_CTR;
-		UNIQUE_LOOPBLK_CTR += 1;
-	}
+    unsafe {
+        loopblk_no = UNIQUE_LOOPBLK_CTR;
+        UNIQUE_LOOPBLK_CTR += 1;
+    }
 
-	return format!("loop_0x{:04X}", loopblk_no);
+    return format!("loop_0x{:04X}", loopblk_no);
 }
 

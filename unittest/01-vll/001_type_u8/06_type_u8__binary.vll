@@ -1,0 +1,119 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 a
+	var__u8 b
+
+	setup__file  .f  'w'  "@:06_type_u8__binary.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__str8 "# u8 specified as binary numbers     #"
+	print__endl
+	print__str8 "#------------------------------------#"
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values***"
+	print__endl
+
+	equals__u8_u8  .a  0b00000000
+	print__str8 " * 0b00000000 (0)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00000001
+	print__str8 " * 0b00000001 (1)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00000010
+	print__str8 " * 0b00000010 (2)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00000100
+	print__str8 " * 0b00000100 (4)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00001000
+	print__str8 " * 0b00001000 (8)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00010000
+	print__str8 " * 0b00010000 (16) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b00100000
+	print__str8 " * 0b00100000 (32) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b01000000
+	print__str8 " * 0b01000000 (64) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b10000000
+	print__str8 " * 0b10000000 (128): "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b11111111
+	print__str8 " * 0b11111111 (255): "
+	print__u8 .a
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values; no leading zeros ***"
+	print__endl
+
+	equals__u8_u8  .a  0b0
+	print__str8 " * 0b0       (0) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b1
+	print__str8 " * 0b1       (1) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b10
+	print__str8 " * 0b10      (2) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b100
+	print__str8 " * 0b100     (4) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b1000
+	print__str8 " * 0b1000    (8) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b10000
+	print__str8 " * 0b10000   (16): "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b100000
+	print__str8 " * 0b100000  (32): "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0b1000000
+	print__str8 " * 0b1000000 (64): "
+	print__u8 .a
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

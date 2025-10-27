@@ -1,0 +1,26 @@
+fn print_hello
+	print__str8 "hello world!"
+	print__endl
+endfn
+
+fn main
+	# declarations
+	var__file f
+
+	setup__file  .f  'w'  "@:01_simple.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------------------#"
+	print__endl
+	print__str8 "# call a simple function (no args, return values) #"
+	print__endl
+	print__str8 "#-------------------------------------------------#"
+	print__endl
+
+	call print_hello
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

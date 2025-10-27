@@ -1,0 +1,57 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let ctr: u8;
+	let undef: [u8;5];
+	let outfile: file;
+
+	outfile.create("02_store_vals.utest");
+
+	outfile.writeln("#-------------------------------------------------#");
+	outfile.writeln("# SAVE SOME VALUES INTO AN ARRAY; PRINT THEM BACK #");
+	outfile.writeln("#-------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("BEFORE:")
+	ctr = 0;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	outfile.writeln();
+
+	undef[0] = 1;
+	undef[1] = 3;
+	undef[2] = 5;
+	undef[3] = 7;
+	undef[4] = 13;
+
+	outfile.writeln("AFTER:")
+	ctr = 0;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	outfile.writeln();
+
+	outfile.close();
+	shutdown();
+}

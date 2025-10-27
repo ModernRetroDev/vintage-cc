@@ -1,0 +1,36 @@
+fn add_print
+	var__u8 _arg_0
+	var__u8 _arg_1
+	var__u8 combined
+
+	equals__u8_u8      .combined ._arg_0
+	plus_equals__u8_u8 .combined ._arg_1
+
+	print__str8 "5 + 3 = "
+	print__u8   .combined
+	print__endl
+endfn
+
+fn main
+	# declarations
+	var__file f
+
+	setup__file  .f  'w'  "@:02_u8_args.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#---------------------------------------------------#"
+	print__endl
+	print__str8 "# call a function (with args, but no return values) #"
+	print__endl
+	print__str8 "#---------------------------------------------------#"
+	print__endl
+
+	equals__u8_u8  .add_print._arg_0  5
+	equals__u8_u8  .add_print._arg_1  3
+	call add_print
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

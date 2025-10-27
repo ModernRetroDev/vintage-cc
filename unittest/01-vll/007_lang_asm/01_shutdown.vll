@@ -1,0 +1,30 @@
+fn shutdown
+	# turn off the system now
+	lang_asm "   ; shut off the system immediately"
+	lang_asm "   ldx #$42"
+	lang_asm "   ldy #$01"
+	lang_asm "   lda #$00"
+	lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+	# declarations
+	var__file f
+
+	setup__file  .f  'w'  "@:01_shutdown.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#--------------------------------------------------------#"
+	print__endl
+	print__str8 "# call a shutdown function written using inline assembly #"
+	print__endl
+	print__str8 "#--------------------------------------------------------#"
+	print__endl
+
+	print__str8 "about to shut down the system!!!"
+	print__endl
+
+	close__file .f
+	call shutdown
+endfn

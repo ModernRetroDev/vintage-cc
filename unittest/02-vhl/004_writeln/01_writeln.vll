@@ -1,0 +1,50 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+
+    # outfile.create("01_writeln.utest");
+    setup__file .outfile 'w' "@:01_writeln.utest"
+    open__file .outfile
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# TEST OUT WRITELN FUNCTION (I.E., FILE WRITING) #");
+    setout__file .outfile
+    print__str8 "# TEST OUT WRITELN FUNCTION (I.E., FILE WRITING) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Hello World!");
+    setout__file .outfile
+    print__str8 "Hello World!"
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

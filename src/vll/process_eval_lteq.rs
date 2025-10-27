@@ -1,4 +1,5 @@
 use crate::vll::get;
+use crate::vll::fn_args;
 use crate::vll::outputs;
 
 use crate::vll::builtins;
@@ -31,29 +32,21 @@ fn as_type_u8(part: LinePart) -> bool {
 	lhs_isvar = lhs_part.is_varname();
 	rhs_isvar = rhs_part.is_varname();
 
-	if lhs_isvar {
-		lhs_res = get::var_fullname(&lhs);
-		let vtype = outputs::get_vartype(&lhs_res).unwrap();
-		if vtype != "u8" {
-			println!(
-				"WARNING: ln:{} Expected a u8 type; got `{}`, which is type `{}`",
-				part.ln_no, lhs, vtype)
-		}
-	} else {
-		lhs_res = format!("#{}", &lhs);
+	if !fn_args::is_type_u8(&lhs_part) {
+		return true;
 	}
+	match fn_args::get_u8_value_str(&lhs_part) {
+		Some(val_str) => { lhs_res = val_str; },
+		None => { return true; },
+	};
 
-	if rhs_isvar {
-		rhs_res = get::var_fullname(&rhs);
-		let vtype = outputs::get_vartype(&rhs_res).unwrap();
-		if vtype != "u8" {
-			println!(
-				"WARNING: ln:{} Expected a u8 type; got `{}`, which is type `{}`",
-				part.ln_no, rhs, vtype)
-		}
-	} else {
-		rhs_res = format!("#{}", &rhs);
+	if !fn_args::is_type_u8(&rhs_part) {
+		return true;
 	}
+	match fn_args::get_u8_value_str(&rhs_part) {
+		Some(val_str) => { rhs_res = val_str; },
+		None => { return true; },
+	};
 
 	outputs::mainfn_append(&format!("   ; eval_lteq__u8 {} {} {}",
 		retvar, lhs, rhs));
@@ -126,31 +119,34 @@ fn as_type_u16(part: LinePart) -> bool {
 	lhs_isvar = lhs_part.is_varname();
 	rhs_isvar = rhs_part.is_varname();
 
-	if lhs_isvar {
-		lhs_res = get::var_fullname(&lhs);
-		let vtype = outputs::get_vartype(&lhs_res).unwrap();
-		if vtype != "u16" {
-			println!(
-				"WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
-				part.ln_no, lhs, vtype)
-		}
-	} else {
-		println!("ERROR/TODO: Non variable U16 in eval_lteq on LN {}", part.ln_no);
-		return true;
-	}
 
-	if rhs_isvar {
-		rhs_res = get::var_fullname(&rhs);
-		let vtype = outputs::get_vartype(&rhs_res).unwrap();
-		if vtype != "u16" {
-			println!(
-				"WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
-				part.ln_no, rhs, vtype)
-		}
-	} else {
-		println!("ERROR/TODO: Non variable U16 in eval_lteq on LN {}", part.ln_no);
+	if !fn_args::is_type_u16(&lhs_part) {
+		println!("ERROR: ln:{} Expected a u16 type; got `{}`",
+			part.ln_no, lhs);
 		return true;
 	}
+	match fn_args::get_u16_value_str(&lhs_part) {
+		Some(val_str) => { lhs_res = val_str; },
+		None => {
+			println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+				part.ln_no, lhs_part.next);
+			return true;
+		},
+	};
+
+	if !fn_args::is_type_u16(&rhs_part) {
+		println!("ERROR: ln:{} Expected a u16 type; got `{}`",
+			part.ln_no, rhs);
+		return true;
+	}
+	match fn_args::get_u16_value_str(&rhs_part) {
+		Some(val_str) => { rhs_res = val_str; },
+		None => {
+			println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+				part.ln_no, rhs_part.next);
+			return true;
+		},
+	};
 
 	outputs::mainfn_append(&format!("   ; _eval_lteq__u16 {retvar} {lhs} {rhs}"));
 
@@ -167,6 +163,44 @@ fn as_type_u16(part: LinePart) -> bool {
 		outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
 		outputs::mainfn_append(         "   sta ZP_PTR_1");
 		outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
+		outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+		//
+		outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
+		outputs::mainfn_append(         "   sta ZP_PTR_2");
+		outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
+		outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+		//
+		outputs::mainfn_append(         "   jsr _eval_lteq__u16");
+		outputs::mainfn_append(&format!("   sta {retvar_res}"));
+		outputs::mainfn_append("");
+	} else if lhs_isvar {
+		outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
+		outputs::mainfn_append(         "   sta ZP_PTR_1");
+		outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
+		outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+		//
+		outputs::mainfn_append(&format!("   lda #<{}", &rhs_res[1..]));
+		outputs::mainfn_append(         "   sta r0");
+		outputs::mainfn_append(&format!("   lda #>{}", &rhs_res[1..]));
+		outputs::mainfn_append(         "   sta r0+1");
+		//
+		outputs::mainfn_append(&format!("   lda #<r0"));
+		outputs::mainfn_append(         "   sta ZP_PTR_2");
+		outputs::mainfn_append(&format!("   lda #>r0"));
+		outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+		//
+		outputs::mainfn_append(         "   jsr _eval_lteq__u16");
+		outputs::mainfn_append(&format!("   sta {retvar_res}"));
+		outputs::mainfn_append("");
+	} else if rhs_isvar {
+		outputs::mainfn_append(&format!("   lda #<{}", &lhs_res[1..]));
+		outputs::mainfn_append(         "   sta r0");
+		outputs::mainfn_append(&format!("   lda #>{}", &lhs_res[1..]));
+		outputs::mainfn_append(         "   sta r0+1");
+		//
+		outputs::mainfn_append(&format!("   lda #<r0"));
+		outputs::mainfn_append(         "   sta ZP_PTR_1");
+		outputs::mainfn_append(&format!("   lda #>r0"));
 		outputs::mainfn_append(         "   sta ZP_PTR_1+1");
 		//
 		outputs::mainfn_append(&format!("   lda #<{rhs_res}"));

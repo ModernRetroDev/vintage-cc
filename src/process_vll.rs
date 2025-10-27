@@ -7,21 +7,29 @@ use crate::vll::line_part::LinePart;
 use crate::vll::builtins;
 use crate::vll::process_arr8;
 use crate::vll::process_arr16;
-use crate::vll::process_close;
 use crate::vll::process_break;
+use crate::vll::process_call;
+use crate::vll::process_close;
 use crate::vll::process_else;
 use crate::vll::process_endif;
 use crate::vll::process_endloop;
 use crate::vll::process_equals;
+use crate::vll::process_equals_not;
 use crate::vll::process_eval_eq;
 use crate::vll::process_eval_neq;
+use crate::vll::process_eval_logi_and;
 use crate::vll::process_eval_lt;
 use crate::vll::process_eval_lteq;
 use crate::vll::process_eval_gt;
 use crate::vll::process_eval_gteq;
 use crate::vll::process_fn;
+use crate::vll::process_get_alloc;
+use crate::vll::process_get_length;
+use crate::vll::process_goto;
 use crate::vll::process_if;
 use crate::vll::process_increment;
+use crate::vll::process_label;
+use crate::vll::process_lang_asm;
 use crate::vll::process_load;
 use crate::vll::process_loop;
 use crate::vll::process_lshift;
@@ -150,6 +158,12 @@ fn process_source(s: String) {
 			}
 			continue;
 		}
+		if next.is_call() {
+			if process_call::now(next) {
+				return;
+			}
+			continue;
+		}
 		if next.is_close() {
 			if process_close::now(next) {
 				return;
@@ -190,6 +204,12 @@ fn process_source(s: String) {
 			}
 			continue;
 		}
+		if next.is_eval_logi_and() {
+			if process_eval_logi_and::now(next) {
+				return;
+			}
+			continue;
+		}
 		if next.is_eval_lt() {
 			if process_eval_lt::now(next) {
 				return;
@@ -220,8 +240,32 @@ fn process_source(s: String) {
 			}
 			continue;
 		}
+		if next.is_equals_not() {
+			if process_equals_not::now(next) {
+				return;
+			}
+			continue;
+		}
 		if next.is_fn() {
 			if process_fn::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_get_alloc() {
+			if process_get_alloc::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_get_length() {
+			if process_get_length::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_goto() {
+			if process_goto::now(next) {
 				return;
 			}
 			continue;
@@ -234,6 +278,18 @@ fn process_source(s: String) {
 		}
 		if next.is_increment() {
 			if process_increment::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_label() {
+			if process_label::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_lang_asm() {
+			if process_lang_asm::now(next) {
 				return;
 			}
 			continue;

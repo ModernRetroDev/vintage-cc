@@ -1,0 +1,254 @@
+fn main
+	# declarations
+	var__file f
+	var__u16 a
+
+	setup__file  .f  'w'  "@:08_type_u16__hex.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#------------------------------------------#"
+	print__endl
+	print__str8 "# u16 specified as hexadecimal numbers     #"
+	print__endl
+	print__str8 "#------------------------------------------#"
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u16 values***"
+	print__endl
+
+	equals__u16_u16  .a  0x0000
+	print__str8 " * 0x0000 (0)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0001
+	print__str8 " * 0x0001 (1)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0002
+	print__str8 " * 0x0002 (2)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0004
+	print__str8 " * 0x0004 (4)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0008
+	print__str8 " * 0x0008 (8)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0010
+	print__str8 " * 0x0010 (16) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0020
+	print__str8 " * 0x0020 (32) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0040
+	print__str8 " * 0x0040 (64) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0080
+	print__str8 " * 0x0080 (128): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x00FF
+	print__str8 " * 0x00FF (255): "
+	print__u16 .a
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u16 values; no leading zeros ***"
+	print__endl
+
+	equals__u16_u16  .a  0x0
+	print__str8 " * 0x0 (0)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x1
+	print__str8 " * 0x1 (1)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x2
+	print__str8 " * 0x2 (2)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x3
+	print__str8 " * 0x3 (3)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x4
+	print__str8 " * 0x4 (4)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x5
+	print__str8 " * 0x5 (5)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x6
+	print__str8 " * 0x6 (6)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x7
+	print__str8 " * 0x7 (7)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x8
+	print__str8 " * 0x8 (8)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x9
+	print__str8 " * 0x9 (9)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xA
+	print__str8 " * 0xA (10) :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xB
+	print__str8 " * 0xB (11) :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xC
+	print__str8 " * 0xC (12) :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xD
+	print__str8 " * 0xD (13) :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xE
+	print__str8 " * 0xE (14) :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xF
+	print__str8 " * 0xF (15) :   "
+	print__u16 .a
+	print__endl
+	print__endl
+
+
+	print__str8 "*** print out a few hexadecimal u16 values***"
+	print__endl
+
+	equals__u16_u16  .a  0x0000
+	print__str8 " * 0x0000 (0)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0001
+	print__str8 " * 0x0001 (1)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0002
+	print__str8 " * 0x0002 (2)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0004
+	print__str8 " * 0x0004 (4)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0008
+	print__str8 " * 0x0008 (8)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0010
+	print__str8 " * 0x0010 (16)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0020
+	print__str8 " * 0x0020 (32)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0040
+	print__str8 " * 0x0040 (64)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0080
+	print__str8 " * 0x0080 (128)  :   "
+	print__u16 .a
+	print__endl
+
+
+	equals__u16_u16  .a  0x0100
+	print__str8 " * 0x0100 (256)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0200
+	print__str8 " * 0x0200 (512)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0400
+	print__str8 " * 0x0400 (1024) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x0800
+	print__str8 " * 0x0800 (2048) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x1000
+	print__str8 " * 0x1000 (4096) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x2000
+	print__str8 " * 0x2000 (8192) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x4000
+	print__str8 " * 0x4000 (16384): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0x8000
+	print__str8 " * 0x8000 (32768): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0xFFFF
+	print__str8 " * 0xFFFF (65535): "
+	print__u16 .a
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

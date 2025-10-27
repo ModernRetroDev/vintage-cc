@@ -1,0 +1,137 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__bool bool_false
+    var__bool bool_true
+    var__u16 big_u
+    var__u8 small_u
+    var__str8 test_str = "Hello World!"
+    var__file outfile
+
+    equals__bool_bool .bool_false false
+    equals__bool_bool .bool_true true
+    equals__u16_u16 .big_u 1337
+    equals__u8_u8 .small_u 10
+
+    setup__file .outfile 'w' "@:01_defaults.utest"
+    open__file .outfile
+    setout__file .outfile
+    # outfile.writeln("#-----------------------------------#");
+    print__str8 "#-----------------------------------#"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("# PRINT A VARIETY OF DEFAULT VALUES #");
+    print__str8 "# PRINT A VARIETY OF DEFAULT VALUES #"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("#-----------------------------------#");
+    print__str8 "#-----------------------------------#"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("This and the preceding lines were strings.");
+    print__str8 "This and the preceding lines were strings."
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("The following are two bool variables (false and true):");
+    print__str8 "The following are two bool variables (false and true):"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("{}", bool_false);
+    print__bool .bool_false
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("{}", bool_true);
+    print__bool .bool_true
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("The following is a u8 variable:");
+    print__str8 "The following is a u8 variable:"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("{}", small_u);
+    print__u8 .small_u
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("The following is a u16 variable:");
+    print__str8 "The following is a u16 variable:"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("{}", big_u);
+    print__u16 .big_u
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("The following is a str variable:");
+    print__str8 "The following is a str variable:"
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln("{}", test_str);
+    print__str8 .test_str
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    setout__file .outfile
+    # outfile.writeln("This string includes a newline here:\n... and continued.");
+    print__str8 "This string includes a newline here:\n... and continued."
+    print__endl
+    setout__default
+
+    setout__file .outfile
+    # outfile.writeln();
+    print__endl
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

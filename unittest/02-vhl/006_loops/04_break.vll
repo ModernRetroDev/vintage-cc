@@ -1,0 +1,309 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 ctr
+    var__u8 ctr2
+    arr8__u8,20 undef
+    var__file outfile
+    var__bool _cmpres
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u8 _stk_8_2
+    var__u8 _loop_len_u8
+    var__u8 _loop_ctr_u8_0
+
+    # outfile.create("04_break.utest");
+    setup__file .outfile 'w' "@:04_break.utest"
+    open__file .outfile
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# BREAK OUT OF NESTED LOOPS USING A LABELED LOOP #");
+    setout__file .outfile
+    print__str8 "# BREAK OUT OF NESTED LOOPS USING A LABELED LOOP #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# break out of named `loop`");
+    setout__file .outfile
+    print__str8 "# break out of named `loop`"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # loop { @outer
+    loop
+
+    # ctr2 = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr2 ._stk_8_0
+
+    # outfile.writeln("{}:", ctr, endl=false);
+    setout__file .outfile
+    print__u8 .ctr
+    print__str8 ":"
+    setout__default
+
+    # while ctr2 5 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr2
+    equals__u8_u8 ._stk_8_1 5
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" {}", ctr2, endl=false);
+    setout__file .outfile
+    print__str8 " "
+    print__u8 .ctr2
+    setout__default
+
+    # if' ctr 8 ==   ctr2 3 ==   && {
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 8
+    eval_eq__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .ctr2
+    equals__u8_u8 ._stk_8_2 3
+    eval_eq__u8 ._stk_8_1 ._stk_8_1 ._stk_8_2
+    eval_logi_and__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # break @outer;
+    goto loop_outer
+
+    endif
+
+    # ctr2 = ctr2 1 +;
+    increment__u8 .ctr2
+    endloop
+
+    # outfile.writeln("~");
+    setout__file .outfile
+    print__str8 "~"
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+    label loop_outer
+
+    # outfile.writeln("!");
+    setout__file .outfile
+    print__str8 "!"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# break out of named `while` loop");
+    setout__file .outfile
+    print__str8 "# break out of named `while` loop"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # while ctr 20 < { @outer2
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 20
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # ctr2 = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr2 ._stk_8_0
+
+    # outfile.writeln("{}:", ctr, endl=false);
+    setout__file .outfile
+    print__u8 .ctr
+    print__str8 ":"
+    setout__default
+
+    # while ctr2 5 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr2
+    equals__u8_u8 ._stk_8_1 5
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" {}", ctr2, endl=false);
+    setout__file .outfile
+    print__str8 " "
+    print__u8 .ctr2
+    setout__default
+
+    # if' ctr 8 ==   ctr2 3 ==   && {
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 8
+    eval_eq__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .ctr2
+    equals__u8_u8 ._stk_8_2 3
+    eval_eq__u8 ._stk_8_1 ._stk_8_1 ._stk_8_2
+    eval_logi_and__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # break @outer2;
+    goto loop_outer2
+
+    endif
+
+    # ctr2 = ctr2 1 +;
+    increment__u8 .ctr2
+    endloop
+
+    # outfile.writeln("~");
+    setout__file .outfile
+    print__str8 "~"
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+    label loop_outer2
+
+    # outfile.writeln("!");
+    setout__file .outfile
+    print__str8 "!"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("# break out of named `for` loop");
+    setout__file .outfile
+    print__str8 "# break out of named `for` loop"
+    print__endl
+    setout__default
+
+    # for ctr, _ in [enumerate,all] undef { @outer3
+    equals__u8_u8 ._loop_ctr_u8_0 0
+    get_alloc__arr8 ._loop_len_u8 .undef
+    loop
+        eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
+        if ._cmpres
+            break
+        endif
+        equals__u8_u8 .ctr ._loop_ctr_u8_0
+        increment__u8 ._loop_ctr_u8_0
+
+    # ctr2 = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr2 ._stk_8_0
+
+    # outfile.writeln("{}:", ctr, endl=false);
+    setout__file .outfile
+    print__u8 .ctr
+    print__str8 ":"
+    setout__default
+
+    # while ctr2 5 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr2
+    equals__u8_u8 ._stk_8_1 5
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" {}", ctr2, endl=false);
+    setout__file .outfile
+    print__str8 " "
+    print__u8 .ctr2
+    setout__default
+
+    # if' ctr 8 ==   ctr2 3 ==   && {
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 8
+    eval_eq__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .ctr2
+    equals__u8_u8 ._stk_8_2 3
+    eval_eq__u8 ._stk_8_1 ._stk_8_1 ._stk_8_2
+    eval_logi_and__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # break @outer3;
+    goto loop_outer3
+
+    endif
+
+    # ctr2 = ctr2 1 +;
+    increment__u8 .ctr2
+    endloop
+
+    # outfile.writeln("~");
+    setout__file .outfile
+    print__str8 "~"
+    print__endl
+    setout__default
+
+    endloop
+    label loop_outer3
+
+    # outfile.writeln("!");
+    setout__file .outfile
+    print__str8 "!"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

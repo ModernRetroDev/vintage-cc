@@ -1,0 +1,230 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 ctr
+    arr8__u8,5 undef
+    var__file outfile
+    var__ptr _ptr
+    var__u8 _temp_u8
+    var__u8 _stk_8_0
+
+    # outfile.create("02_store_vals.utest");
+    setup__file .outfile 'w' "@:02_store_vals.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# SAVE SOME VALUES INTO AN ARRAY; PRINT THEM BACK #");
+    setout__file .outfile
+    print__str8 "# SAVE SOME VALUES INTO AN ARRAY; PRINT THEM BACK #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("BEFORE:")
+    setout__file .outfile
+    print__str8 "BEFORE:"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # undef[0] = 1;
+    equals__u8_u8 ._stk_8_0 1
+    ref__arr8 ._ptr .undef 0
+    store__u8 ._ptr ._stk_8_0
+
+    # undef[1] = 3;
+    equals__u8_u8 ._stk_8_0 3
+    ref__arr8 ._ptr .undef 1
+    store__u8 ._ptr ._stk_8_0
+
+    # undef[2] = 5;
+    equals__u8_u8 ._stk_8_0 5
+    ref__arr8 ._ptr .undef 2
+    store__u8 ._ptr ._stk_8_0
+
+    # undef[3] = 7;
+    equals__u8_u8 ._stk_8_0 7
+    ref__arr8 ._ptr .undef 3
+    store__u8 ._ptr ._stk_8_0
+
+    # undef[4] = 13;
+    equals__u8_u8 ._stk_8_0 13
+    ref__arr8 ._ptr .undef 4
+    store__u8 ._ptr ._stk_8_0
+
+    # outfile.writeln("AFTER:")
+    setout__file .outfile
+    print__str8 "AFTER:"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    # outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+    setout__file .outfile
+    print__str8 "undef["
+    print__u8 .ctr
+    print__str8 "] = "
+    ref__arr8 ._ptr .undef .ctr
+    load__u8 ._temp_u8 ._ptr
+    print__u8 ._temp_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

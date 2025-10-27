@@ -1,0 +1,50 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let bool_false: bool = false;
+	let bool_true:  bool = true;
+	let big_u:      u16  = 1337;
+	let small_u:    u8   = 10;
+	let test_str:   str  = "Hello World!";
+	let outfile:    file;
+
+	outfile.create("01_defaults.utest");
+
+	outfile.writeln("#-----------------------------------#");
+	outfile.writeln("# PRINT A VARIETY OF DEFAULT VALUES #");
+	outfile.writeln("#-----------------------------------#");
+
+	outfile.writeln("This and the preceding lines were strings.");
+	outfile.writeln();
+
+	outfile.writeln("The following are two bool variables (false and true):");
+	outfile.writeln("{}", bool_false);
+	outfile.writeln("{}", bool_true);
+	outfile.writeln();
+
+	outfile.writeln("The following is a u8 variable:");
+	outfile.writeln("{}", small_u);
+	outfile.writeln();
+
+	outfile.writeln("The following is a u16 variable:");
+	outfile.writeln("{}", big_u);
+	outfile.writeln();
+
+	outfile.writeln("The following is a str variable:");
+	outfile.writeln("{}", test_str);
+	outfile.writeln();
+
+	outfile.writeln("This string includes a newline here:\n... and continued.");
+	outfile.writeln();
+
+	outfile.close();
+	shutdown();
+}

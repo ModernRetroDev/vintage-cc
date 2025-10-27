@@ -1,0 +1,259 @@
+fn main
+	# declarations
+	var__file f
+	var__u16  a
+
+	setup__file  .f  'w'  "@:07_type_u16__binary.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u16 specified as binary numbers     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values (as u16)***"
+	print__endl
+
+	equals__u16_u16  .a  0b00000000
+	print__str8 " * 0b00000000 (0)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00000001
+	print__str8 " * 0b00000001 (1)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00000010
+	print__str8 " * 0b00000010 (2)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00000100
+	print__str8 " * 0b00000100 (4)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00001000
+	print__str8 " * 0b00001000 (8)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00010000
+	print__str8 " * 0b00010000 (16) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b00100000
+	print__str8 " * 0b00100000 (32) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b01000000
+	print__str8 " * 0b01000000 (64) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b10000000
+	print__str8 " * 0b10000000 (128): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b11111111
+	print__str8 " * 0b11111111 (255): "
+	print__u16 .a
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values (as u16); no leading zeros ***"
+	print__endl
+
+	equals__u16_u16  .a  0b0
+	print__str8 " * 0b0       (0) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1
+	print__str8 " * 0b1       (1) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b10
+	print__str8 " * 0b10      (2) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b100
+	print__str8 " * 0b100     (4) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000
+	print__str8 " * 0b1000    (8) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b10000
+	print__str8 " * 0b10000   (16): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b100000
+	print__str8 " * 0b100000  (32): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000000
+	print__str8 " * 0b1000000 (64): "
+	print__u16 .a
+	print__endl
+	print__endl
+
+
+	print__str8 "*** print out a few binary u16 values***"
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000000000
+	print__str8 " * 0b0000000000000000 (0)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000000001
+	print__str8 " * 0b0000000000000001 (1)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000000010
+	print__str8 " * 0b0000000000000010 (2)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000000100
+	print__str8 " * 0b0000000000000100 (4)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000001000
+	print__str8 " * 0b0000000000001000 (8)    :     "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000010000
+	print__str8 " * 0b0000000000010000 (16)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000000100000
+	print__str8 " * 0b0000000000100000 (32)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000001000000
+	print__str8 " * 0b0000000001000000 (64)   :    "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000000010000000
+	print__str8 " * 0b0000000010000000 (128)  :   "
+	print__u16 .a
+	print__endl
+
+
+	equals__u16_u16  .a  0b0000000100000000
+	print__str8 " * 0b0000000100000000 (256)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000001000000000
+	print__str8 " * 0b0000001000000000 (512)  :   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000010000000000
+	print__str8 " * 0b0000010000000000 (1024) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0000100000000000
+	print__str8 " * 0b0000100000000000 (2048) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0001000000000000
+	print__str8 " * 0b0001000000000000 (4096) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0010000000000000
+	print__str8 " * 0b0010000000000000 (8192) :  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b0100000000000000
+	print__str8 " * 0b0100000000000000 (16384): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000000000000000
+	print__str8 " * 0b1000000000000000 (32768): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1111111111111111
+	print__str8 " * 0b1111111111111111 (65535): "
+	print__u16 .a
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u16; no leading zeros ***"
+	print__endl
+
+	equals__u16_u16  .a  0b100000000
+	print__str8 " * 0b100000000          (256):   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000000000
+	print__str8 " * 0b1000000000         (512):   "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b10000000000
+	print__str8 " * 0b10000000000       (1024):  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b100000000000
+	print__str8 " * 0b100000000000      (2048):  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000000000000
+	print__str8 " * 0b1000000000000     (4096):  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b10000000000000
+	print__str8 " * 0b10000000000000    (8192):  "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b100000000000000
+	print__str8 " * 0b100000000000000  (16384): "
+	print__u16 .a
+	print__endl
+
+	equals__u16_u16  .a  0b1000000000000000
+	print__str8 " * 0b1000000000000000 (32768): "
+	print__u16 .a
+	print__endl
+
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

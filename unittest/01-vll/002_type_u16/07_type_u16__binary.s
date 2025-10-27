@@ -1,0 +1,2295 @@
+;--------------------------------------------------------;
+; PLATFORM BOILERPLATE                                   ;
+;--------------------------------------------------------;
+.include "x16.inc"
+
+.org $080D
+.segment "STARTUP"
+.segment "INIT"
+.segment "ONCE"
+.segment "CODE"
+
+   jmp fn_main
+
+;--------------------------------------------------------;
+; VARIABLE DEFINITIONS                                   ;
+;--------------------------------------------------------;
+var__main__f: ; type: file
+   .byte $00 ; mode (u8)
+   .byte $00 ; device (u8)
+   .byte $00 ; channel (u8)
+   .byte $00 ; status (u8)
+   .byte $00, $00 ; fname (u16)
+
+var__main__a: ; type: u16
+   .byte $00, $00
+
+str8_0x0000: ; type: str8
+   .byte $1B ; length (u8)
+   .byte $1B ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $40,$3A,$30,$37,$5F,$74,$79,$70,$65,$5F
+   .byte $75,$31,$36,$5F,$5F,$62,$69,$6E,$61,$72
+   .byte $79,$2E,$75,$74,$65,$73,$74
+   .byte $00 ; null terminator (u8)
+
+str8_0x0001: ; type: str8
+   .byte $27 ; length (u8)
+   .byte $27 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$23
+   .byte $00 ; null terminator (u8)
+
+str8_0x0002: ; type: str8
+   .byte $27 ; length (u8)
+   .byte $27 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $23,$20,$75,$31,$36,$20,$73,$70,$65,$63
+   .byte $69,$66,$69,$65,$64,$20,$61,$73,$20,$62
+   .byte $69,$6E,$61,$72,$79,$20,$6E,$75,$6D,$62
+   .byte $65,$72,$73,$20,$20,$20,$20,$20,$23
+   .byte $00 ; null terminator (u8)
+
+str8_0x0003: ; type: str8
+   .byte $27 ; length (u8)
+   .byte $27 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
+   .byte $2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$23
+   .byte $00 ; null terminator (u8)
+
+str8_0x0004: ; type: str8
+   .byte $30 ; length (u8)
+   .byte $30 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
+   .byte $6F,$75,$74,$20,$61,$20,$66,$65,$77,$20
+   .byte $62,$69,$6E,$61,$72,$79,$20,$75,$38,$20
+   .byte $76,$61,$6C,$75,$65,$73,$20,$28,$61,$73
+   .byte $20,$75,$31,$36,$29,$2A,$2A,$2A
+   .byte $00 ; null terminator (u8)
+
+str8_0x0005: ; type: str8
+   .byte $17 ; length (u8)
+   .byte $17 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$20,$28,$30,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0006: ; type: str8
+   .byte $17 ; length (u8)
+   .byte $17 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$31,$20,$28,$31,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0007: ; type: str8
+   .byte $17 ; length (u8)
+   .byte $17 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$31,$30,$20,$28,$32,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0008: ; type: str8
+   .byte $17 ; length (u8)
+   .byte $17 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $31,$30,$30,$20,$28,$34,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0009: ; type: str8
+   .byte $17 ; length (u8)
+   .byte $17 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$31
+   .byte $30,$30,$30,$20,$28,$38,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000A: ; type: str8
+   .byte $16 ; length (u8)
+   .byte $16 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$31,$30
+   .byte $30,$30,$30,$20,$28,$31,$36,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000B: ; type: str8
+   .byte $16 ; length (u8)
+   .byte $16 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$31,$30,$30
+   .byte $30,$30,$30,$20,$28,$33,$32,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000C: ; type: str8
+   .byte $16 ; length (u8)
+   .byte $16 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$31,$30,$30,$30
+   .byte $30,$30,$30,$20,$28,$36,$34,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000D: ; type: str8
+   .byte $15 ; length (u8)
+   .byte $15 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$20,$28,$31,$32,$38,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000E: ; type: str8
+   .byte $15 ; length (u8)
+   .byte $15 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$31,$31,$31,$31
+   .byte $31,$31,$31,$20,$28,$32,$35,$35,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x000F: ; type: str8
+   .byte $43 ; length (u8)
+   .byte $43 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
+   .byte $6F,$75,$74,$20,$61,$20,$66,$65,$77,$20
+   .byte $62,$69,$6E,$61,$72,$79,$20,$75,$38,$20
+   .byte $76,$61,$6C,$75,$65,$73,$20,$28,$61,$73
+   .byte $20,$75,$31,$36,$29,$3B,$20,$6E,$6F,$20
+   .byte $6C,$65,$61,$64,$69,$6E,$67,$20,$7A,$65
+   .byte $72,$6F,$73,$20,$2A,$2A,$2A
+   .byte $00 ; null terminator (u8)
+
+str8_0x0010: ; type: str8
+   .byte $14 ; length (u8)
+   .byte $14 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$20,$20,$20,$20
+   .byte $20,$20,$20,$28,$30,$29,$20,$3A,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0011: ; type: str8
+   .byte $14 ; length (u8)
+   .byte $14 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$20,$20,$20,$20
+   .byte $20,$20,$20,$28,$31,$29,$20,$3A,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0012: ; type: str8
+   .byte $14 ; length (u8)
+   .byte $14 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$20,$20,$20
+   .byte $20,$20,$20,$28,$32,$29,$20,$3A,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0013: ; type: str8
+   .byte $14 ; length (u8)
+   .byte $14 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$20,$20
+   .byte $20,$20,$20,$28,$34,$29,$20,$3A,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0014: ; type: str8
+   .byte $14 ; length (u8)
+   .byte $14 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$20
+   .byte $20,$20,$20,$28,$38,$29,$20,$3A,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0015: ; type: str8
+   .byte $13 ; length (u8)
+   .byte $13 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $20,$20,$20,$28,$31,$36,$29,$3A,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0016: ; type: str8
+   .byte $13 ; length (u8)
+   .byte $13 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$20,$20,$28,$33,$32,$29,$3A,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0017: ; type: str8
+   .byte $13 ; length (u8)
+   .byte $13 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$20,$28,$36,$34,$29,$3A,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0018: ; type: str8
+   .byte $28 ; length (u8)
+   .byte $28 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
+   .byte $6F,$75,$74,$20,$61,$20,$66,$65,$77,$20
+   .byte $62,$69,$6E,$61,$72,$79,$20,$75,$31,$36
+   .byte $20,$76,$61,$6C,$75,$65,$73,$2A,$2A,$2A
+   .byte $00 ; null terminator (u8)
+
+str8_0x0019: ; type: str8
+   .byte $23 ; length (u8)
+   .byte $23 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$30,$29,$20,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001A: ; type: str8
+   .byte $23 ; length (u8)
+   .byte $23 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $31,$20,$28,$31,$29,$20,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001B: ; type: str8
+   .byte $23 ; length (u8)
+   .byte $23 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$31
+   .byte $30,$20,$28,$32,$29,$20,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001C: ; type: str8
+   .byte $23 ; length (u8)
+   .byte $23 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$31,$30
+   .byte $30,$20,$28,$34,$29,$20,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001D: ; type: str8
+   .byte $23 ; length (u8)
+   .byte $23 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$31,$30,$30
+   .byte $30,$20,$28,$38,$29,$20,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001E: ; type: str8
+   .byte $22 ; length (u8)
+   .byte $22 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$31,$30,$30,$30
+   .byte $30,$20,$28,$31,$36,$29,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x001F: ; type: str8
+   .byte $22 ; length (u8)
+   .byte $22 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$31,$30,$30,$30,$30
+   .byte $30,$20,$28,$33,$32,$29,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0020: ; type: str8
+   .byte $22 ; length (u8)
+   .byte $22 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$31,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$36,$34,$29,$20,$20,$20,$3A
+   .byte $20,$20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0021: ; type: str8
+   .byte $21 ; length (u8)
+   .byte $21 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$30,$31,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$31,$32,$38,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0022: ; type: str8
+   .byte $21 ; length (u8)
+   .byte $21 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$30,$31,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$32,$35,$36,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0023: ; type: str8
+   .byte $21 ; length (u8)
+   .byte $21 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $30,$31,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$35,$31,$32,$29,$20,$20,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0024: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
+   .byte $31,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$31,$30,$32,$34,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0025: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$31
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$32,$30,$34,$38,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0026: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$30,$31,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$34,$30,$39,$36,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0027: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$30,$31,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$38,$31,$39,$32,$29,$20,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0028: ; type: str8
+   .byte $1F ; length (u8)
+   .byte $1F ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$30,$31,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$31,$36,$33,$38,$34,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0029: ; type: str8
+   .byte $1F ; length (u8)
+   .byte $1F ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$33,$32,$37,$36,$38,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x002A: ; type: str8
+   .byte $1F ; length (u8)
+   .byte $1F ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$31,$31,$31,$31
+   .byte $31,$31,$31,$31,$31,$31,$31,$31,$31,$31
+   .byte $31,$20,$28,$36,$35,$35,$33,$35,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x002B: ; type: str8
+   .byte $34 ; length (u8)
+   .byte $34 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
+   .byte $6F,$75,$74,$20,$61,$20,$66,$65,$77,$20
+   .byte $62,$69,$6E,$61,$72,$79,$20,$75,$31,$36
+   .byte $3B,$20,$6E,$6F,$20,$6C,$65,$61,$64,$69
+   .byte $6E,$67,$20,$7A,$65,$72,$6F,$73,$20,$2A
+   .byte $2A,$2A
+   .byte $00 ; null terminator (u8)
+
+str8_0x002C: ; type: str8
+   .byte $21 ; length (u8)
+   .byte $21 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$20,$20,$20,$20,$20,$20
+   .byte $20,$20,$20,$20,$28,$32,$35,$36,$29,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x002D: ; type: str8
+   .byte $21 ; length (u8)
+   .byte $21 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$20,$20,$20,$20,$20
+   .byte $20,$20,$20,$20,$28,$35,$31,$32,$29,$3A
+   .byte $20,$20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x002E: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$20,$20,$20,$20
+   .byte $20,$20,$20,$28,$31,$30,$32,$34,$29,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x002F: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$20,$20,$20
+   .byte $20,$20,$20,$28,$32,$30,$34,$38,$29,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0030: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$20,$20
+   .byte $20,$20,$20,$28,$34,$30,$39,$36,$29,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0031: ; type: str8
+   .byte $20 ; length (u8)
+   .byte $20 ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$20
+   .byte $20,$20,$20,$28,$38,$31,$39,$32,$29,$3A
+   .byte $20,$20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0032: ; type: str8
+   .byte $1F ; length (u8)
+   .byte $1F ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $20,$20,$28,$31,$36,$33,$38,$34,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+str8_0x0033: ; type: str8
+   .byte $1F ; length (u8)
+   .byte $1F ; alloc (u8)
+   .byte $01 ; element size (u8)
+   ; data start
+   .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
+   .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30
+   .byte $30,$20,$28,$33,$32,$37,$36,$38,$29,$3A
+   .byte $20
+   .byte $00 ; null terminator (u8)
+
+;--------------------------------------------------------;
+; BUILT-IN FUNCTIONS                                     ;
+;--------------------------------------------------------;
+.global _close__file
+.global _open__file
+.global _print__endl
+.global _print__str8
+.global _print__u16
+.global _setout__file
+.global _shutdown
+
+
+_close__file:
+   ; close an open file
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO FILE TO BE CLOSED.             ;
+   ;-----------------------------------------------------;
+   ; load channel number into A
+   ldy #2
+   lda (ZP_PTR_1),y
+   jsr CLOSE
+   rts
+
+
+_open__file:
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO FILE TO BE OPENED.             ;
+   ;-----------------------------------------------------;
+   ; CLOBBERS ZP_PTR_2 and ZP_PTR_3.                     ;
+   ;-----------------------------------------------------;
+   ; set ZP_PTR_2 to point to the str8 filename
+   ldy #04
+   lda (ZP_PTR_1),y
+   sta ZP_PTR_2
+   iny
+   lda (ZP_PTR_1),y
+   sta ZP_PTR_2+1
+
+   ; ZP_PTR_2 now points to the str8 filename
+
+   ; save a copy of the str8 pointer in ZP_PTR_3
+   clc
+   lda ZP_PTR_2
+   adc #03 ; skip over: length, allocated, and elemsize
+   sta ZP_PTR_3
+   lda ZP_PTR_2+1
+   adc #0
+   sta ZP_PTR_3+1
+
+   ; load str8 length from ZP_PTR_2
+   ldy #0
+   lda (ZP_PTR_2),y
+
+   ; adjust ZP_PTR_3 to point at str8 data
+   ldx ZP_PTR_3
+   ldy ZP_PTR_3+1
+   
+   ;-----------------------------------------------------;
+   ; Set the name of the file to be opened               ;
+   ;-----------------------------------------------------;
+   jsr SETNAM
+
+   ; store the device# within ZP_PTR_2
+   ldy #01
+   lda (ZP_PTR_1),y
+   sta ZP_PTR_2
+
+   ; store the mode within ZP_PTR_2+1
+   ldy #0
+   lda (ZP_PTR_1),y
+   sta ZP_PTR_2+1
+
+   ; load channel number into A
+   ldy #2
+   lda (ZP_PTR_1),y
+
+   ldx ZP_PTR_2   ; device #
+   ldy ZP_PTR_2+1 ; mode
+   
+   ;-----------------------------------------------------;
+   ; Set other file parameters                           ;
+   ;-----------------------------------------------------;
+   jsr SETLFS
+   
+   ;-----------------------------------------------------;
+   ; Open the File                                       ;
+   ;-----------------------------------------------------;
+   jsr OPEN
+   rts
+
+
+_print__endl:
+   ; print an end of line character
+   lda #$0D
+   jsr CHROUT
+   rts
+
+
+_print__str8:
+   ; print out a string of characters
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO STRING TO BE PRINTED.          ;
+   ;-----------------------------------------------------;
+   ; zero out iteration counter, Y
+   ldy #0
+   ; zero out escape char indicator, X
+   ldx #0
+   ; store str8 length to ZP_PTR_2
+   lda (ZP_PTR_1),y
+   sta ZP_PTR_2
+   ; increment ZP_PTR_1 by 3 bytes
+   clc
+   lda ZP_PTR_1
+   adc #3
+   sta ZP_PTR_1
+   lda ZP_PTR_1+1
+   adc #0
+   sta ZP_PTR_1+1
+print__str8_loop:
+   cpy ZP_PTR_2
+   beq print__str8_done
+   cpx #1
+   bne print__str8_unescaped
+   ;-----------------------------------------------------;
+   ; Has preceding escape char                           ;
+   ;-----------------------------------------------------;
+   lda (ZP_PTR_1),y
+   cmp #$6E ; `n` character
+   bne print__str8_check_backslash
+   ; print an end of line character
+   lda #$0D
+   jsr CHROUT
+   ldx #0
+   iny
+   bra print__str8_loop
+print__str8_check_backslash:
+   lda (ZP_PTR_1),y
+   cmp #$5C ; backslash char
+   bne print__str8_check_unhandled
+   ; print out a backslash
+   jsr CHROUT
+   ldx #0
+   iny
+   bra print__str8_loop
+print__str8_check_unhandled:
+   ldx #0
+   iny
+   bra print__str8_loop
+print__str8_unescaped:
+   lda (ZP_PTR_1),y
+   cmp #$5C ; backslash char
+   bne print__str8_unescaped_print
+   ; else: set escape flag and continue
+   ldx #1
+   iny
+   bra print__str8_loop
+print__str8_unescaped_print:
+   jsr CHROUT
+   iny
+   bra print__str8_loop
+print__str8_done:
+   rts
+
+
+_print__u16:
+   ;-----------------------------------------------------;
+   ; X = LOW BYTE NUMBER TO BE PRINTED                   ;
+   ; Y = HIGH BYTE NUMBER TO BE PRINTED                  ;
+   ;-----------------------------------------------------;
+   txa
+   sta ZP_PTR_1 ; store the low byte of the number
+   tya
+   sta ZP_PTR_1+1 ; store the high byte of the number
+
+   ;-----------------------------------------------------;
+   ; We will store base ten values as bytes within the   ;
+   ; first three general purpose registers.              ;
+   ;-----------------------------------------------------;
+   ldx #0 ; tracks if all numbers should be printed
+   lda #0
+   sta r0L ; b10 - byte 1
+   sta r0H ; b10 - byte 2
+   sta r1L ; b10 - byte 3
+   sta r1H ; b10 - byte 4
+   sta r2L ; b10 - byte 5
+
+   lda ZP_PTR_1
+   and #$01
+   cmp #$01
+   bne _print__u16__add_bit_2
+   ;
+   lda #$01
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_2:
+   lda ZP_PTR_1
+   and #$02
+   cmp #$02
+   bne _print__u16__add_bit_3
+   ;
+   lda #$02
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_3:
+   lda ZP_PTR_1
+   and #$04
+   cmp #$04
+   bne _print__u16__add_bit_4
+   ;
+   lda #$04
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_4:
+   lda ZP_PTR_1
+   and #$08
+   cmp #$08
+   bne _print__u16__add_bit_5
+   ;
+   lda #$08
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_5:
+   lda ZP_PTR_1
+   and #$10
+   cmp #$10
+   bne _print__u16__add_bit_6
+   ;
+   ; add 1 to tens place
+   lda #1
+   clc
+   adc r0H
+   sta r0H
+   ; add 6 to ones place
+   lda #6
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_6:
+   lda ZP_PTR_1
+   and #$20
+   cmp #$20
+   bne _print__u16__add_bit_7
+   ;
+   ; add 3 to tens place
+   lda #3
+   clc
+   adc r0H
+   sta r0H
+   ; add 2 to ones place
+   lda #2
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_7:
+   lda ZP_PTR_1
+   and #$40
+   cmp #$40
+   bne _print__u16__add_bit_8
+   ;
+   ; add 6 to tens place
+   lda #6
+   clc
+   adc r0H
+   sta r0H
+   ; add 4 to ones place
+   lda #4
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_8:
+   lda ZP_PTR_1
+   and #$80
+   cmp #$80
+   bne _print__u16__add_bit_9
+   ;
+   ; add 1 to hundreds place
+   lda #1
+   clc
+   adc r1L
+   sta r1L
+   ; add 2 to tens place
+   lda #2
+   clc
+   adc r0H
+   sta r0H
+   ; add 8 to ones place
+   lda #8
+   clc
+   adc r0L
+   sta r0L
+;---------------------------------------------------------
+_print__u16__add_bit_9:
+   lda ZP_PTR_1+1
+   and #$01
+   cmp #$01
+   bne _print__u16__add_bit_10
+   ;
+   ; add 2 to hundreds place
+   lda #2
+   clc
+   adc r1L
+   sta r1L
+   ; add 5 to tens place
+   lda #5
+   clc
+   adc r0H
+   sta r0H
+   ; add 6 to ones place
+   lda #6
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_10:
+   lda ZP_PTR_1+1
+   and #$02
+   cmp #$02
+   bne _print__u16__add_bit_11
+   ;
+   ; add 5 to hundreds place
+   lda #5
+   clc
+   adc r1L
+   sta r1L
+   ; add 1 to tens place
+   lda #1
+   clc
+   adc r0H
+   sta r0H
+   ; add 2 to ones place
+   lda #2
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_11:
+   lda ZP_PTR_1+1
+   and #$04
+   cmp #$04
+   bne _print__u16__add_bit_12
+   ;
+   ; add 1 to thousands place
+   lda #1
+   clc
+   adc r1H
+   sta r1H
+   ; add 2 to tens place
+   lda #2
+   clc
+   adc r0H
+   sta r0H
+   ; add 4 to ones place
+   lda #4
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_12:
+   lda ZP_PTR_1+1
+   and #$08
+   cmp #$08
+   bne _print__u16__add_bit_13
+   ;
+   ; add 2 to thousands place
+   lda #2
+   clc
+   adc r1H
+   sta r1H
+   ; add 4 to tens place
+   lda #4
+   clc
+   adc r0H
+   sta r0H
+   ; add 8 to ones place
+   lda #8
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_13:
+   lda ZP_PTR_1+1
+   and #$10
+   cmp #$10
+   bne _print__u16__add_bit_14
+   ;
+   ; add 4 to thousands place
+   lda #4
+   clc
+   adc r1H
+   sta r1H
+   ; add 9 to tens place
+   lda #9
+   clc
+   adc r0H
+   sta r0H
+   ; add 6 to ones place
+   lda #6
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_14:
+   lda ZP_PTR_1+1
+   and #$20
+   cmp #$20
+   bne _print__u16__add_bit_15
+   ;
+   ; add 8 to thousands place
+   lda #8
+   clc
+   adc r1H
+   sta r1H
+   ; add 1 to hundreds place
+   lda #1
+   clc
+   adc r1L
+   sta r1L
+   ; add 9 to tens place
+   lda #9
+   clc
+   adc r0H
+   sta r0H
+   ; add 2 to ones place
+   lda #2
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_15:
+   lda ZP_PTR_1+1
+   and #$40
+   cmp #$40
+   bne _print__u16__add_bit_16
+   ;
+   ; add 1 to ten-thousands place
+   lda #1
+   clc
+   adc r2L
+   sta r2L
+   ; add 6 to thousands place
+   lda #6
+   clc
+   adc r1H
+   sta r1H
+   ; add 3 to hundreds place
+   lda #3
+   clc
+   adc r1L
+   sta r1L
+   ; add 8 to tens place
+   lda #8
+   clc
+   adc r0H
+   sta r0H
+   ; add 4 to ones place
+   lda #4
+   clc
+   adc r0L
+   sta r0L
+_print__u16__add_bit_16:
+   lda ZP_PTR_1+1
+   and #$80
+   cmp #$80
+   bne _print__u16__carry_1s
+   ;
+   ; add 3 to ten-thousands place
+   lda #3
+   clc
+   adc r2L
+   sta r2L
+   ; add 2 to thousands place
+   lda #2
+   clc
+   adc r1H
+   sta r1H
+   ; add 7 to hundreds place
+   lda #7
+   clc
+   adc r1L
+   sta r1L
+   ; add 6 to tens place
+   lda #6
+   clc
+   adc r0H
+   sta r0H
+   ; add 8 to ones place
+   lda #8
+   clc
+   adc r0L
+   sta r0L
+
+
+_print__u16__carry_1s:
+   ; check byte 1 (1s place) for carries
+   lda r0L
+   sec
+   sbc #10
+   bmi _print__u16__carry_10s
+   ; else: carry a ten and try again
+   lda r0L
+   sec
+   sbc #10
+   sta r0L
+   lda r0H
+   clc
+   adc #1
+   sta r0H
+   jmp _print__u16__carry_1s
+
+_print__u16__carry_10s:
+   ; check byte 2 (10s place) for carries
+   lda r0H
+   sec
+   sbc #10
+   bmi _print__u16__carry_100s
+   ; else: carry over value and try again
+   lda r0H
+   sec
+   sbc #10
+   sta r0H
+   lda r1L
+   clc
+   adc #1
+   sta r1L
+   jmp _print__u16__carry_10s
+
+_print__u16__carry_100s:
+   ; check byte 3 (100s place) for carries
+   lda r1L
+   sec
+   sbc #10
+   bmi _print__u16__carry_1000s
+   ; else: carry over value and try again
+   lda r1L
+   sec
+   sbc #10
+   sta r1L
+   lda r1H
+   clc
+   adc #1
+   sta r1H
+   jmp _print__u16__carry_100s
+
+_print__u16__carry_1000s:
+   ; check byte 3 (1000s place) for carries
+   lda r1H
+   sec
+   sbc #10
+   bmi _print__u16__show_values
+   ; else: carry over value and try again
+   lda r1H
+   sec
+   sbc #10
+   sta r1H
+   lda r2L
+   clc
+   adc #1
+   sta r2L
+   jmp _print__u16__carry_1000s
+
+
+_print__u16__show_values:
+   ;-----------------------------------------------------;
+   ; Finally print out the calculated base 10 value.     ;
+   ;-----------------------------------------------------;
+   ; b10 byte 5
+   lda r2L
+   cmp #0
+   beq _print__u16__show_byte_4
+   ;
+   lda r2L
+   clc
+   adc #$30 ; point to 0 + remainder
+   jsr CHROUT
+   ; set x to 1 to indicate that a char was printed
+   ldx #1
+
+_print__u16__show_byte_4:
+   ; b10 byte 4
+   cpx #1
+   beq _print__u16__show_byte_4_always
+   lda r1H
+   cmp #0
+   beq _print__u16__show_byte_3
+   ldx #1
+_print__u16__show_byte_4_always:
+   lda r1H
+   clc
+   adc #$30 ; point to 0 + remainder
+   jsr CHROUT
+
+_print__u16__show_byte_3:
+   ; b10 byte 3
+   cpx #1
+   beq _print__u16__show_byte_3_always
+   lda r1L
+   cmp #0
+   beq _print__u16__show_byte_2
+   ldx #1
+_print__u16__show_byte_3_always:
+   lda r1L
+   clc
+   adc #$30 ; point to 0 + remainder
+   jsr CHROUT
+
+_print__u16__show_byte_2:
+   ; b10 byte 2
+   cpx #1
+   beq _print__u16__show_byte_2_always
+   lda r0H
+   cmp #0
+   beq _print__u16__show_byte_1
+   ldx #1
+_print__u16__show_byte_2_always:
+   lda r0H
+   clc
+   adc #$30 ; point to 0 + remainder
+   jsr CHROUT
+
+_print__u16__show_byte_1:
+   ; b10 byte 1
+   lda r0L
+   clc
+   adc #$30 ; point to 0 + remainder
+   jsr CHROUT
+
+   rts
+
+
+_setout__file:
+   ; change the default output to a file write
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO FILE TO BE SET AS DEFAULT.     ;
+   ;-----------------------------------------------------;
+   ; load channel number into A
+   ldy #2
+   lda (ZP_PTR_1),y
+   tax
+   jsr CHKOUT
+   rts
+
+
+_shutdown:
+   ; shut off the system immediately
+   ldx #$42
+   ldy #$01
+   lda #$00
+   jsr $FEC9
+   rts
+
+
+;--------------------------------------------------------;
+; MAIN FUNCTION                                          ;
+;--------------------------------------------------------;
+fn_main: 
+   ; set output mode to ISO
+   lda #$0F
+   jsr BSOUT
+
+   ; setup__file .f 'w' "@:07_type_u16__binary.utest"
+   ; ... f.mode = 1
+   ldx #0
+   lda #1
+   sta var__main__f,X
+
+   ; ... f.device = 8
+   inx
+   lda #8
+   sta var__main__f,X
+
+   ; ... f.channel = 1
+   inx
+   lda #1
+   sta var__main__f,X
+
+   ; ... f.status = 0
+   inx
+   lda #0
+   sta var__main__f,X
+
+   ; ... f.name = "@:07_type_u16__binary.utest"
+   inx
+   lda #<str8_0x0000
+   sta var__main__f,X
+   inx
+   lda #>str8_0x0000
+   sta var__main__f,X
+
+   ; open__file .f
+   lda #<var__main__f
+   sta ZP_PTR_1
+   lda #>var__main__f
+   sta ZP_PTR_1+1
+   jsr _open__file
+
+   ; setout__file .f
+   lda #<var__main__f
+   sta ZP_PTR_1
+   lda #>var__main__f
+   sta ZP_PTR_1+1
+   jsr _setout__file
+
+   ; print__str8 "#-------------------------------------#"
+   lda #<str8_0x0001
+   sta ZP_PTR_1
+   lda #>str8_0x0001
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "# u16 specified as binary numbers     #"
+   lda #<str8_0x0002
+   sta ZP_PTR_1
+   lda #>str8_0x0002
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "#-------------------------------------#"
+   lda #<str8_0x0003
+   sta ZP_PTR_1
+   lda #>str8_0x0003
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "*** print out a few binary u8 values (as u16)***"
+   lda #<str8_0x0004
+   sta ZP_PTR_1
+   lda #>str8_0x0004
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00000000
+   lda #<0
+   sta var__main__a
+   lda #>0
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00000000 (0)  :   "
+   lda #<str8_0x0005
+   sta ZP_PTR_1
+   lda #>str8_0x0005
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00000001
+   lda #<1
+   sta var__main__a
+   lda #>1
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00000001 (1)  :   "
+   lda #<str8_0x0006
+   sta ZP_PTR_1
+   lda #>str8_0x0006
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00000010
+   lda #<2
+   sta var__main__a
+   lda #>2
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00000010 (2)  :   "
+   lda #<str8_0x0007
+   sta ZP_PTR_1
+   lda #>str8_0x0007
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00000100
+   lda #<4
+   sta var__main__a
+   lda #>4
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00000100 (4)  :   "
+   lda #<str8_0x0008
+   sta ZP_PTR_1
+   lda #>str8_0x0008
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00001000
+   lda #<8
+   sta var__main__a
+   lda #>8
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00001000 (8)  :   "
+   lda #<str8_0x0009
+   sta ZP_PTR_1
+   lda #>str8_0x0009
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00010000
+   lda #<16
+   sta var__main__a
+   lda #>16
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00010000 (16) :  "
+   lda #<str8_0x000A
+   sta ZP_PTR_1
+   lda #>str8_0x000A
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b00100000
+   lda #<32
+   sta var__main__a
+   lda #>32
+   sta var__main__a+1
+
+   ; print__str8 " * 0b00100000 (32) :  "
+   lda #<str8_0x000B
+   sta ZP_PTR_1
+   lda #>str8_0x000B
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b01000000
+   lda #<64
+   sta var__main__a
+   lda #>64
+   sta var__main__a+1
+
+   ; print__str8 " * 0b01000000 (64) :  "
+   lda #<str8_0x000C
+   sta ZP_PTR_1
+   lda #>str8_0x000C
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b10000000
+   lda #<128
+   sta var__main__a
+   lda #>128
+   sta var__main__a+1
+
+   ; print__str8 " * 0b10000000 (128): "
+   lda #<str8_0x000D
+   sta ZP_PTR_1
+   lda #>str8_0x000D
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b11111111
+   lda #<255
+   sta var__main__a
+   lda #>255
+   sta var__main__a+1
+
+   ; print__str8 " * 0b11111111 (255): "
+   lda #<str8_0x000E
+   sta ZP_PTR_1
+   lda #>str8_0x000E
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "*** print out a few binary u8 values (as u16); no leading zeros ***"
+   lda #<str8_0x000F
+   sta ZP_PTR_1
+   lda #>str8_0x000F
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0
+   lda #<0
+   sta var__main__a
+   lda #>0
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0       (0) :  "
+   lda #<str8_0x0010
+   sta ZP_PTR_1
+   lda #>str8_0x0010
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1
+   lda #<1
+   sta var__main__a
+   lda #>1
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1       (1) :  "
+   lda #<str8_0x0011
+   sta ZP_PTR_1
+   lda #>str8_0x0011
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b10
+   lda #<2
+   sta var__main__a
+   lda #>2
+   sta var__main__a+1
+
+   ; print__str8 " * 0b10      (2) :  "
+   lda #<str8_0x0012
+   sta ZP_PTR_1
+   lda #>str8_0x0012
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b100
+   lda #<4
+   sta var__main__a
+   lda #>4
+   sta var__main__a+1
+
+   ; print__str8 " * 0b100     (4) :  "
+   lda #<str8_0x0013
+   sta ZP_PTR_1
+   lda #>str8_0x0013
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000
+   lda #<8
+   sta var__main__a
+   lda #>8
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000    (8) :  "
+   lda #<str8_0x0014
+   sta ZP_PTR_1
+   lda #>str8_0x0014
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b10000
+   lda #<16
+   sta var__main__a
+   lda #>16
+   sta var__main__a+1
+
+   ; print__str8 " * 0b10000   (16): "
+   lda #<str8_0x0015
+   sta ZP_PTR_1
+   lda #>str8_0x0015
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b100000
+   lda #<32
+   sta var__main__a
+   lda #>32
+   sta var__main__a+1
+
+   ; print__str8 " * 0b100000  (32): "
+   lda #<str8_0x0016
+   sta ZP_PTR_1
+   lda #>str8_0x0016
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000000
+   lda #<64
+   sta var__main__a
+   lda #>64
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000000 (64): "
+   lda #<str8_0x0017
+   sta ZP_PTR_1
+   lda #>str8_0x0017
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "*** print out a few binary u16 values***"
+   lda #<str8_0x0018
+   sta ZP_PTR_1
+   lda #>str8_0x0018
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000000000
+   lda #<0
+   sta var__main__a
+   lda #>0
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000000000 (0)    :     "
+   lda #<str8_0x0019
+   sta ZP_PTR_1
+   lda #>str8_0x0019
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000000001
+   lda #<1
+   sta var__main__a
+   lda #>1
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000000001 (1)    :     "
+   lda #<str8_0x001A
+   sta ZP_PTR_1
+   lda #>str8_0x001A
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000000010
+   lda #<2
+   sta var__main__a
+   lda #>2
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000000010 (2)    :     "
+   lda #<str8_0x001B
+   sta ZP_PTR_1
+   lda #>str8_0x001B
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000000100
+   lda #<4
+   sta var__main__a
+   lda #>4
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000000100 (4)    :     "
+   lda #<str8_0x001C
+   sta ZP_PTR_1
+   lda #>str8_0x001C
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000001000
+   lda #<8
+   sta var__main__a
+   lda #>8
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000001000 (8)    :     "
+   lda #<str8_0x001D
+   sta ZP_PTR_1
+   lda #>str8_0x001D
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000010000
+   lda #<16
+   sta var__main__a
+   lda #>16
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000010000 (16)   :    "
+   lda #<str8_0x001E
+   sta ZP_PTR_1
+   lda #>str8_0x001E
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000000100000
+   lda #<32
+   sta var__main__a
+   lda #>32
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000000100000 (32)   :    "
+   lda #<str8_0x001F
+   sta ZP_PTR_1
+   lda #>str8_0x001F
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000001000000
+   lda #<64
+   sta var__main__a
+   lda #>64
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000001000000 (64)   :    "
+   lda #<str8_0x0020
+   sta ZP_PTR_1
+   lda #>str8_0x0020
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000010000000
+   lda #<128
+   sta var__main__a
+   lda #>128
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000010000000 (128)  :   "
+   lda #<str8_0x0021
+   sta ZP_PTR_1
+   lda #>str8_0x0021
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000000100000000
+   lda #<256
+   sta var__main__a
+   lda #>256
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000000100000000 (256)  :   "
+   lda #<str8_0x0022
+   sta ZP_PTR_1
+   lda #>str8_0x0022
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000001000000000
+   lda #<512
+   sta var__main__a
+   lda #>512
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000001000000000 (512)  :   "
+   lda #<str8_0x0023
+   sta ZP_PTR_1
+   lda #>str8_0x0023
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000010000000000
+   lda #<1024
+   sta var__main__a
+   lda #>1024
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000010000000000 (1024) :  "
+   lda #<str8_0x0024
+   sta ZP_PTR_1
+   lda #>str8_0x0024
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0000100000000000
+   lda #<2048
+   sta var__main__a
+   lda #>2048
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0000100000000000 (2048) :  "
+   lda #<str8_0x0025
+   sta ZP_PTR_1
+   lda #>str8_0x0025
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0001000000000000
+   lda #<4096
+   sta var__main__a
+   lda #>4096
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0001000000000000 (4096) :  "
+   lda #<str8_0x0026
+   sta ZP_PTR_1
+   lda #>str8_0x0026
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0010000000000000
+   lda #<8192
+   sta var__main__a
+   lda #>8192
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0010000000000000 (8192) :  "
+   lda #<str8_0x0027
+   sta ZP_PTR_1
+   lda #>str8_0x0027
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b0100000000000000
+   lda #<16384
+   sta var__main__a
+   lda #>16384
+   sta var__main__a+1
+
+   ; print__str8 " * 0b0100000000000000 (16384): "
+   lda #<str8_0x0028
+   sta ZP_PTR_1
+   lda #>str8_0x0028
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000000000000000
+   lda #<32768
+   sta var__main__a
+   lda #>32768
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000000000000000 (32768): "
+   lda #<str8_0x0029
+   sta ZP_PTR_1
+   lda #>str8_0x0029
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1111111111111111
+   lda #<65535
+   sta var__main__a
+   lda #>65535
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1111111111111111 (65535): "
+   lda #<str8_0x002A
+   sta ZP_PTR_1
+   lda #>str8_0x002A
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__endl
+   jsr _print__endl
+
+   ; print__str8 "*** print out a few binary u16; no leading zeros ***"
+   lda #<str8_0x002B
+   sta ZP_PTR_1
+   lda #>str8_0x002B
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b100000000
+   lda #<256
+   sta var__main__a
+   lda #>256
+   sta var__main__a+1
+
+   ; print__str8 " * 0b100000000          (256):   "
+   lda #<str8_0x002C
+   sta ZP_PTR_1
+   lda #>str8_0x002C
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000000000
+   lda #<512
+   sta var__main__a
+   lda #>512
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000000000         (512):   "
+   lda #<str8_0x002D
+   sta ZP_PTR_1
+   lda #>str8_0x002D
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b10000000000
+   lda #<1024
+   sta var__main__a
+   lda #>1024
+   sta var__main__a+1
+
+   ; print__str8 " * 0b10000000000       (1024):  "
+   lda #<str8_0x002E
+   sta ZP_PTR_1
+   lda #>str8_0x002E
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b100000000000
+   lda #<2048
+   sta var__main__a
+   lda #>2048
+   sta var__main__a+1
+
+   ; print__str8 " * 0b100000000000      (2048):  "
+   lda #<str8_0x002F
+   sta ZP_PTR_1
+   lda #>str8_0x002F
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000000000000
+   lda #<4096
+   sta var__main__a
+   lda #>4096
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000000000000     (4096):  "
+   lda #<str8_0x0030
+   sta ZP_PTR_1
+   lda #>str8_0x0030
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b10000000000000
+   lda #<8192
+   sta var__main__a
+   lda #>8192
+   sta var__main__a+1
+
+   ; print__str8 " * 0b10000000000000    (8192):  "
+   lda #<str8_0x0031
+   sta ZP_PTR_1
+   lda #>str8_0x0031
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b100000000000000
+   lda #<16384
+   sta var__main__a
+   lda #>16384
+   sta var__main__a+1
+
+   ; print__str8 " * 0b100000000000000  (16384): "
+   lda #<str8_0x0032
+   sta ZP_PTR_1
+   lda #>str8_0x0032
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; equals__u16_u16 .a 0b1000000000000000
+   lda #<32768
+   sta var__main__a
+   lda #>32768
+   sta var__main__a+1
+
+   ; print__str8 " * 0b1000000000000000 (32768): "
+   lda #<str8_0x0033
+   sta ZP_PTR_1
+   lda #>str8_0x0033
+   sta ZP_PTR_1+1
+   jsr _print__str8
+
+   ; print__u16 .a
+   ldx var__main__a
+   ldy var__main__a+1
+   jsr _print__u16
+
+   ; print__endl
+   jsr _print__endl
+
+   ; close__file .f
+   lda #<var__main__f
+   sta ZP_PTR_1
+   lda #>var__main__f
+   sta ZP_PTR_1+1
+   jsr _close__file
+
+   ; shutdown
+   jsr _shutdown
+
+   rts
+

@@ -1,0 +1,128 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    arr8__u8,5 a = 5,3,20,10,15
+    var__file outfile
+    var__bool _cmpres
+    var__ptr _ptr
+    var__u8 _temp_u8
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+
+    # outfile.create("04_array_conditionals.utest");
+    setup__file .outfile 'w' "@:04_array_conditionals.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# TEST OUT ARRAY VALUES IN CONDITIONALS #");
+    setout__file .outfile
+    print__str8 "# TEST OUT ARRAY VALUES IN CONDITIONALS #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 5 < 3: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 5 < 3: "
+    setout__default
+
+    # if' a[0]  a[1]  < {
+    ref__arr8 ._ptr .a 0
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_0 ._temp_u8
+    ref__arr8 ._ptr .a 1
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_1 ._temp_u8
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if 20 - 10 < 15: ", endl=false);
+    setout__file .outfile
+    print__str8 "if 20 - 10 < 15: "
+    setout__default
+
+    # if' a[2]  a[3] - a[4] < {
+    ref__arr8 ._ptr .a 2
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_0 ._temp_u8
+    ref__arr8 ._ptr .a 3
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_1 ._temp_u8
+    minus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    ref__arr8 ._ptr .a 4
+    load__u8 ._temp_u8 ._ptr
+    equals__u8_u8 ._stk_8_1 ._temp_u8
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

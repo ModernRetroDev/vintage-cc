@@ -1,0 +1,159 @@
+fn main
+	# declarations
+	var__file f
+	var__u8 a
+	var__u8 b
+
+	setup__file  .f  'w'  "@:07_type_u8__hex.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-----------------------------------------#"
+	print__endl
+	print__str8 "# u8 specified as hexadecimal numbers     #"
+	print__endl
+	print__str8 "#-----------------------------------------#"
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values***"
+	print__endl
+
+	equals__u8_u8  .a  0x00
+	print__str8 " * 0x00 (0)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x01
+	print__str8 " * 0x01 (1)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x02
+	print__str8 " * 0x02 (2)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x04
+	print__str8 " * 0x04 (4)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x08
+	print__str8 " * 0x08 (8)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x10
+	print__str8 " * 0x10 (16) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x20
+	print__str8 " * 0x20 (32) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x40
+	print__str8 " * 0x40 (64) :  "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x80
+	print__str8 " * 0x80 (128): "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xFF
+	print__str8 " * 0xFF (255): "
+	print__u8 .a
+	print__endl
+	print__endl
+
+	print__str8 "*** print out a few binary u8 values; no leading zeros ***"
+	print__endl
+
+	equals__u8_u8  .a  0x0
+	print__str8 " * 0x0 (0)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x1
+	print__str8 " * 0x1 (1)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x2
+	print__str8 " * 0x2 (2)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x3
+	print__str8 " * 0x3 (3)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x4
+	print__str8 " * 0x4 (4)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x5
+	print__str8 " * 0x5 (5)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x6
+	print__str8 " * 0x6 (6)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x7
+	print__str8 " * 0x7 (7)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x8
+	print__str8 " * 0x8 (8)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0x9
+	print__str8 " * 0x9 (9)  :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xA
+	print__str8 " * 0xA (10) :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xB
+	print__str8 " * 0xB (11) :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xC
+	print__str8 " * 0xC (12) :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xD
+	print__str8 " * 0xD (13) :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xE
+	print__str8 " * 0xE (14) :   "
+	print__u8 .a
+	print__endl
+
+	equals__u8_u8  .a  0xF
+	print__str8 " * 0xF (15) :   "
+	print__u8 .a
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

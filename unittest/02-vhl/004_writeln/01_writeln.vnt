@@ -1,0 +1,26 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let outfile: file;
+
+	// open/create/append
+	outfile.create("01_writeln.utest");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# TEST OUT WRITELN FUNCTION (I.E., FILE WRITING) #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("Hello World!");
+
+	outfile.close();
+	shutdown();
+}

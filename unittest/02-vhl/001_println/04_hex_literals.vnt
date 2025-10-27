@@ -1,0 +1,48 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let a: u16;
+	let outfile: file;
+
+	outfile.create("04_hex_literals.utest");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("*** print out a few binary u16 values***");
+	a = 0x0000;
+	outfile.writeln(" * 0x0000     (0) :   {}", a);
+	a = 0x0001;
+	outfile.writeln(" * 0x0001     (1) :   {}", a);
+	a = 0x0002;
+	outfile.writeln(" * 0x0002     (2) :   {}", a);
+	a = 0x0004;
+	outfile.writeln(" * 0x0004     (4) :   {}", a);
+	a = 0x0008;
+	outfile.writeln(" * 0x0008     (8) :   {}", a);
+	a = 0x0010;
+	outfile.writeln(" * 0x0010    (16) :   {}", a);
+	a = 0x0020;
+	outfile.writeln(" * 0x0020    (32) :   {}", a);
+	a = 0x0040;
+	outfile.writeln(" * 0x0040    (64) :   {}", a);
+	a = 0x0080;
+	outfile.writeln(" * 0x0080   (128) :   {}", a);
+	a = 0x0100;
+	outfile.writeln(" * 0x0100   (256) :   {}", a);
+	a = 0xFFFF;
+	outfile.writeln(" * 0xFFFF (65535) :   {}", a);
+
+	outfile.close();
+	shutdown();
+}

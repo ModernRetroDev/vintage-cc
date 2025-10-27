@@ -1,0 +1,266 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__u8 a
+    var__u8 b
+    var__u8 c
+    var__u16 d
+    var__u16 e
+    var__u16 f
+    var__file outfile
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u8 _stk_8_2
+    var__u16 _stk_16_0
+    var__u16 _stk_16_1
+    var__u16 _stk_16_2
+
+    equals__u8_u8 .a 5
+    equals__u8_u8 .b 7
+    equals__u8_u8 .c 0
+    equals__u16_u16 .d 1000
+    equals__u16_u16 .e 500
+    equals__u16_u16 .f 0
+
+    # outfile.create("01_rpn_eval.utest");
+    setup__file .outfile 'w' "@:01_rpn_eval.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# TEST OUT RPN EVALUATION (I.E. MATH) #");
+    setout__file .outfile
+    print__str8 "# TEST OUT RPN EVALUATION (I.E. MATH) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("RPN math using u8 values");
+    setout__file .outfile
+    print__str8 "RPN math using u8 values"
+    print__endl
+    setout__default
+
+    # outfile.writeln("------------------------");
+    setout__file .outfile
+    print__str8 "------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln("a = {}, b = {}", a, b);
+    setout__file .outfile
+    print__str8 "a = "
+    print__u8 .a
+    print__str8 ", b = "
+    print__u8 .b
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # c = a b +;
+    equals__u8_u8 ._stk_8_0 .a
+    equals__u8_u8 ._stk_8_1 .b
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .c ._stk_8_0
+
+    # outfile.writeln("a ({}) + b ({}) = {}", a, b, c);
+    setout__file .outfile
+    print__str8 "a ("
+    print__u8 .a
+    print__str8 ") + b ("
+    print__u8 .b
+    print__str8 ") = "
+    print__u8 .c
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # c = a b + b + a -;
+    equals__u8_u8 ._stk_8_0 .a
+    equals__u8_u8 ._stk_8_1 .b
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .b
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .a
+    minus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .c ._stk_8_0
+
+    # outfile.writeln("a b + b + a - = {}", c);
+    setout__file .outfile
+    print__str8 "a b + b + a - = "
+    print__u8 .c
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # c = a b b + + a -;
+    equals__u8_u8 ._stk_8_0 .a
+    equals__u8_u8 ._stk_8_1 .b
+    equals__u8_u8 ._stk_8_2 .b
+    plus_equals__u8_u8 ._stk_8_1 ._stk_8_2
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 ._stk_8_1 .a
+    minus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .c ._stk_8_0
+
+    # outfile.writeln("a b b + + a - = {}", c);
+    setout__file .outfile
+    print__str8 "a b b + + a - = "
+    print__u8 .c
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("RPN math using u16 values");
+    setout__file .outfile
+    print__str8 "RPN math using u16 values"
+    print__endl
+    setout__default
+
+    # outfile.writeln("-------------------------");
+    setout__file .outfile
+    print__str8 "-------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln("d = {}, e = {}", d, e);
+    setout__file .outfile
+    print__str8 "d = "
+    print__u16 .d
+    print__str8 ", e = "
+    print__u16 .e
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # f = d e +;
+    equals__u16_u16 ._stk_16_0 .d
+    equals__u16_u16 ._stk_16_1 .e
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .f ._stk_16_0
+
+    # outfile.writeln("d e + = {}", f);
+    setout__file .outfile
+    print__str8 "d e + = "
+    print__u16 .f
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # f = d d e + +;
+    equals__u16_u16 ._stk_16_0 .d
+    equals__u16_u16 ._stk_16_1 .d
+    equals__u16_u16 ._stk_16_2 .e
+    plus_equals__u16_u16 ._stk_16_1 ._stk_16_2
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .f ._stk_16_0
+
+    # outfile.writeln("d d e + + = {}", f);
+    setout__file .outfile
+    print__str8 "d d e + + = "
+    print__u16 .f
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("RPN math using u8/u16 values");
+    setout__file .outfile
+    print__str8 "RPN math using u8/u16 values"
+    print__endl
+    setout__default
+
+    # outfile.writeln("----------------------------");
+    setout__file .outfile
+    print__str8 "----------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # f = d e a + +;
+    equals__u16_u16 ._stk_16_0 .d
+    equals__u16_u16 ._stk_16_1 .e
+    equals__u16_u8 ._stk_16_2 .a
+    plus_equals__u16_u16 ._stk_16_1 ._stk_16_2
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .f ._stk_16_0
+
+    # outfile.writeln("d e a + + = {}", f);
+    setout__file .outfile
+    print__str8 "d e a + + = "
+    print__u16 .f
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

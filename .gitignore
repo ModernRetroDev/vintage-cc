@@ -1,3 +1,4 @@
 /target
 *.s.list
 UTEST.PRG
+unittest/02-vhl/*/*.s

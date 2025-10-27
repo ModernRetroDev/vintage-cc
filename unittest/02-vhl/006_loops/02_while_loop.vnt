@@ -1,0 +1,32 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let ctr: u8;
+	let array: [u8;10] = [2,4,6,8,10,12,14,16,18,20];
+	let outfile: file;
+
+	outfile.create("02_while_loop.utest");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	ctr = 0;
+	while ctr 10 < {
+		outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.close();
+	shutdown();
+}

@@ -1,0 +1,168 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let a: u16 = 2000;
+	let b: u16 = 1000;
+	let c: u16 = 1500;
+	let outfile: file;
+
+	outfile.create("02_conditionals_u16.utest");
+
+	outfile.writeln("#---------------------------------------------#");
+	outfile.writeln("# TEST OUT CONDITIONALS (IF / ELSE IF / ELSE) #");
+	outfile.writeln("#---------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("if 500 < 300: ", endl=false);
+	if 500  300  < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 2000 - 1000 < 1500: ", endl=false);
+	if 2000  1000 - 1500 < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("As variables");
+	outfile.writeln("------------");
+	outfile.writeln("if 2000 - 1000 < 1500: ", endl=false);
+	if a  b - c < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+	outfile.writeln();
+
+
+
+	outfile.writeln("if / elif / else:");
+	outfile.writeln("----------------");
+	outfile.writeln("if 500 < 300; elif 300 < 500; else: ", endl=false);
+
+	if 500 300 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 300 500 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+
+
+	outfile.writeln("if 300 < 500; elif 500 < 300; else: ", endl=false);
+	if 300 500 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 500 300 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+
+
+
+	outfile.writeln("if 300 < 300; elif 300 < 300; else: ", endl=false);
+	if 300 300 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 300 300 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+	outfile.writeln();
+
+
+	outfile.writeln("other comparison types:");
+	outfile.writeln("-----------------------");
+	outfile.writeln("if 500 > 300: ", endl=false);
+	if 500 300 > {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 300 > 500: ", endl=false);
+	if 300 500 > {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 == 500: ", endl=false);
+	if 500 500 == {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 == 300: ", endl=false);
+	if 500 300 == {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 != 500: ", endl=false);
+	if 500 500 != {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 != 300: ", endl=false);
+	if 500 300 != {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 >= 300: ", endl=false);
+	if 500 300 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 500 >= 500: ", endl=false);
+	if 500 500 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 300 >= 500: ", endl=false);
+	if 300 500 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.close();
+	shutdown();
+}
