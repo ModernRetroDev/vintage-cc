@@ -1,10 +1,22 @@
 ;[BUILTIN-BLOCK-START]
 _open__file:
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO FILE TO BE OPENED.             ;
+   ; ZP_PTR_1 = POINTS TO FILE PTR TO BE OPENED.         ;
    ;-----------------------------------------------------;
    ; CLOBBERS ZP_PTR_2 and ZP_PTR_3.                     ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; set ZP_PTR_2 to point to the str8 filename
    ldy #04
    lda (ZP_PTR_1),y

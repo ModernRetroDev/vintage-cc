@@ -299,8 +299,20 @@ str8_0x0016: ; type: str8
 _close__file:
    ; close an open file
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO FILE TO BE CLOSED.             ;
+   ; ZP_PTR_1 = POINTS TO A FILE PTR TO BE CLOSED.       ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; load channel number into A
    ldy #2
    lda (ZP_PTR_1),y
@@ -371,10 +383,22 @@ _eval_lteq__u16__out:
 
 _open__file:
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO FILE TO BE OPENED.             ;
+   ; ZP_PTR_1 = POINTS TO FILE PTR TO BE OPENED.         ;
    ;-----------------------------------------------------;
    ; CLOBBERS ZP_PTR_2 and ZP_PTR_3.                     ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; set ZP_PTR_2 to point to the str8 filename
    ldy #04
    lda (ZP_PTR_1),y
@@ -567,9 +591,21 @@ print__str8_done:
 
 _setout__file:
    ; change the default output to a file write
-   ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO FILE TO BE SET AS DEFAULT.     ;
-   ;-----------------------------------------------------;
+   ;-------------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO FILE PTR TO BE SET AS DEFAULT.   ;
+   ;-------------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; load channel number into A
    ldy #2
    lda (ZP_PTR_1),y
@@ -829,27 +865,15 @@ fn_main:
 
    ; open__file .f
    lda #<var__main__f
-   sta ZP_PTR_2
-   lda #>var__main__f
-   sta ZP_PTR_2+1
-   ldy #0
-   lda (ZP_PTR_2),y
    sta ZP_PTR_1
-   iny
-   lda (ZP_PTR_2),y
+   lda #>var__main__f
    sta ZP_PTR_1+1
    jsr _open__file
 
    ; setout__file .f
    lda #<var__main__f
-   sta ZP_PTR_2
-   lda #>var__main__f
-   sta ZP_PTR_2+1
-   ldy #0
-   lda (ZP_PTR_2),y
    sta ZP_PTR_1
-   iny
-   lda (ZP_PTR_2),y
+   lda #>var__main__f
    sta ZP_PTR_1+1
    jsr _setout__file
 
@@ -1435,14 +1459,8 @@ fn_main:
 
    ; close__file .f
    lda #<var__main__f
-   sta ZP_PTR_2
-   lda #>var__main__f
-   sta ZP_PTR_2+1
-   ldy #0
-   lda (ZP_PTR_2),y
    sta ZP_PTR_1
-   iny
-   lda (ZP_PTR_2),y
+   lda #>var__main__f
    sta ZP_PTR_1+1
    jsr _close__file
 
