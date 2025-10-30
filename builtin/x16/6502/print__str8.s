@@ -2,8 +2,20 @@
 _print__str8:
    ; print out a string of characters
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO STRING TO BE PRINTED.          ;
+   ; ZP_PTR_1 = POINTS TO STRING POINTER.                ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; zero out iteration counter, Y
    ldy #0
    ; zero out escape char indicator, X

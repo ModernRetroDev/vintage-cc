@@ -13,7 +13,21 @@ _open__file:
    lda (ZP_PTR_1),y
    sta ZP_PTR_2+1
 
-   ; ZP_PTR_2 now points to the str8 filename
+   ; ZP_PTR_2 now points to the str8 filename pointer
+
+   ; save the location that it points to in ZP_PTR_3
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3+1
+
+   ; store a copy of that location in to ZP_PTR_2
+   lda ZP_PTR_3
+   sta ZP_PTR_2
+   lda ZP_PTR_3+1
+   sta ZP_PTR_2+1
 
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc

@@ -15,6 +15,7 @@
 ; VARIABLE DEFINITIONS                                   ;
 ;--------------------------------------------------------;
 str8_0x0000: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $0C ; length (u8)
    .byte $0C ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -32,6 +33,7 @@ var__main__f: ; type: file
    .byte $00, $00 ; fname (u16)
 
 str8_0x0001: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $11 ; length (u8)
    .byte $11 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -41,6 +43,7 @@ str8_0x0001: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0002: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $33 ; length (u8)
    .byte $33 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -54,6 +57,7 @@ str8_0x0002: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0003: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $33 ; length (u8)
    .byte $33 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -67,6 +71,7 @@ str8_0x0003: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0004: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $33 ; length (u8)
    .byte $33 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -116,7 +121,21 @@ _open__file:
    lda (ZP_PTR_1),y
    sta ZP_PTR_2+1
 
-   ; ZP_PTR_2 now points to the str8 filename
+   ; ZP_PTR_2 now points to the str8 filename pointer
+
+   ; save the location that it points to in ZP_PTR_3
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3+1
+
+   ; store a copy of that location in to ZP_PTR_2
+   lda ZP_PTR_3
+   sta ZP_PTR_2
+   lda ZP_PTR_3+1
+   sta ZP_PTR_2+1
 
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
@@ -179,8 +198,20 @@ _print__endl:
 _print__str8:
    ; print out a string of characters
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO STRING TO BE PRINTED.          ;
+   ; ZP_PTR_1 = POINTS TO STRING POINTER.                ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; zero out iteration counter, Y
    ldy #0
    ; zero out escape char indicator, X
@@ -265,6 +296,52 @@ _shutdown:
 
 
 ;--------------------------------------------------------;
+; INIT FUNCTION                                          ;
+;--------------------------------------------------------;
+fn__init: 
+   ; ptr_init for `str8_0x0000`
+   ldx #0
+   lda #<(str8_0x0000+2)
+   sta str8_0x0000,X
+   inx
+   lda #>(str8_0x0000+2)
+   sta str8_0x0000,X
+
+   ; ptr_init for `str8_0x0001`
+   ldx #0
+   lda #<(str8_0x0001+2)
+   sta str8_0x0001,X
+   inx
+   lda #>(str8_0x0001+2)
+   sta str8_0x0001,X
+
+   ; ptr_init for `str8_0x0002`
+   ldx #0
+   lda #<(str8_0x0002+2)
+   sta str8_0x0002,X
+   inx
+   lda #>(str8_0x0002+2)
+   sta str8_0x0002,X
+
+   ; ptr_init for `str8_0x0003`
+   ldx #0
+   lda #<(str8_0x0003+2)
+   sta str8_0x0003,X
+   inx
+   lda #>(str8_0x0003+2)
+   sta str8_0x0003,X
+
+   ; ptr_init for `str8_0x0004`
+   ldx #0
+   lda #<(str8_0x0004+2)
+   sta str8_0x0004,X
+   inx
+   lda #>(str8_0x0004+2)
+   sta str8_0x0004,X
+
+   rts
+
+;--------------------------------------------------------;
 ; FUNCTION fn_print_hello
 ;--------------------------------------------------------;
 fn_print_hello: 
@@ -287,6 +364,9 @@ fn_main:
    ; set output mode to ISO
    lda #$0F
    jsr BSOUT
+
+   ; run init fn
+   jsr fn__init
 
    ; setup__file .f 'w' "@:01_simple.utest"
    ; ... f.ptr_addr[0] = #<(var__main__f+2)

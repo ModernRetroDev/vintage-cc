@@ -31,6 +31,9 @@ fn as_type_file(part: LinePart) -> bool {
 		outputs::get_active_fn(), 
 		varname);
 
+	file_bytes.push(0); // .ptr_addr[0]
+	file_bytes.push(0); // .ptr_addr[1]
+	//
 	file_bytes.push(0); // .mode
 	file_bytes.push(0); // .device
 	file_bytes.push(0); // .channel
@@ -122,6 +125,9 @@ fn as_type_str8(part: LinePart) -> bool {
 			part.ln_no );
 		return true;
 	}
+
+	str_bytes.push(0); // .ptr_addr[0]
+	str_bytes.push(0); // .ptr_addr[1]
 
 	strval_part = subsequent.get_next_str();
 	match strval_part {

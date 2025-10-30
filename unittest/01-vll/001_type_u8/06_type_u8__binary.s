@@ -29,6 +29,7 @@ var__main__b: ; type: u8
    .byte $00
 
 str8_0x0000: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $1A ; length (u8)
    .byte $1A ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -39,6 +40,7 @@ str8_0x0000: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0001: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $26 ; length (u8)
    .byte $26 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -50,6 +52,7 @@ str8_0x0001: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0002: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $26 ; length (u8)
    .byte $26 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -61,6 +64,7 @@ str8_0x0002: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0003: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $26 ; length (u8)
    .byte $26 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -72,6 +76,7 @@ str8_0x0003: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0004: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $27 ; length (u8)
    .byte $27 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -83,6 +88,7 @@ str8_0x0004: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0005: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $17 ; length (u8)
    .byte $17 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -93,6 +99,7 @@ str8_0x0005: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0006: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $17 ; length (u8)
    .byte $17 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -103,6 +110,7 @@ str8_0x0006: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0007: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $17 ; length (u8)
    .byte $17 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -113,6 +121,7 @@ str8_0x0007: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0008: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $17 ; length (u8)
    .byte $17 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -123,6 +132,7 @@ str8_0x0008: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0009: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $17 ; length (u8)
    .byte $17 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -133,6 +143,7 @@ str8_0x0009: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000A: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $16 ; length (u8)
    .byte $16 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -143,6 +154,7 @@ str8_0x000A: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000B: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $16 ; length (u8)
    .byte $16 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -153,6 +165,7 @@ str8_0x000B: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000C: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $16 ; length (u8)
    .byte $16 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -163,6 +176,7 @@ str8_0x000C: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000D: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $15 ; length (u8)
    .byte $15 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -173,6 +187,7 @@ str8_0x000D: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000E: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $15 ; length (u8)
    .byte $15 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -183,6 +198,7 @@ str8_0x000E: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000F: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $3A ; length (u8)
    .byte $3A ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -196,6 +212,7 @@ str8_0x000F: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0010: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $14 ; length (u8)
    .byte $14 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -205,6 +222,7 @@ str8_0x0010: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0011: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $14 ; length (u8)
    .byte $14 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -214,6 +232,7 @@ str8_0x0011: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0012: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $14 ; length (u8)
    .byte $14 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -223,6 +242,7 @@ str8_0x0012: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0013: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $14 ; length (u8)
    .byte $14 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -232,6 +252,7 @@ str8_0x0013: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0014: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $14 ; length (u8)
    .byte $14 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -241,6 +262,7 @@ str8_0x0014: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0015: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $13 ; length (u8)
    .byte $13 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -250,6 +272,7 @@ str8_0x0015: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0016: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $13 ; length (u8)
    .byte $13 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -259,6 +282,7 @@ str8_0x0016: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0017: ; type: str8
+   .byte $00, $00 ; ptr_addr (u16)
    .byte $13 ; length (u8)
    .byte $13 ; alloc (u8)
    .byte $01 ; element size (u8)
@@ -434,7 +458,21 @@ _open__file:
    lda (ZP_PTR_1),y
    sta ZP_PTR_2+1
 
-   ; ZP_PTR_2 now points to the str8 filename
+   ; ZP_PTR_2 now points to the str8 filename pointer
+
+   ; save the location that it points to in ZP_PTR_3
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_3+1
+
+   ; store a copy of that location in to ZP_PTR_2
+   lda ZP_PTR_3
+   sta ZP_PTR_2
+   lda ZP_PTR_3+1
+   sta ZP_PTR_2+1
 
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
@@ -497,8 +535,20 @@ _print__endl:
 _print__str8:
    ; print out a string of characters
    ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO STRING TO BE PRINTED.          ;
+   ; ZP_PTR_1 = POINTS TO STRING POINTER.                ;
    ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_2
+   lda ZP_PTR_1+1
+   sta ZP_PTR_2+1
+
+   ldy #0
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_2),y
+   sta ZP_PTR_1+1
+
    ; zero out iteration counter, Y
    ldy #0
    ; zero out escape char indicator, X
@@ -642,12 +692,213 @@ _shutdown:
 
 
 ;--------------------------------------------------------;
+; INIT FUNCTION                                          ;
+;--------------------------------------------------------;
+fn__init: 
+   ; ptr_init for `str8_0x0000`
+   ldx #0
+   lda #<(str8_0x0000+2)
+   sta str8_0x0000,X
+   inx
+   lda #>(str8_0x0000+2)
+   sta str8_0x0000,X
+
+   ; ptr_init for `str8_0x0001`
+   ldx #0
+   lda #<(str8_0x0001+2)
+   sta str8_0x0001,X
+   inx
+   lda #>(str8_0x0001+2)
+   sta str8_0x0001,X
+
+   ; ptr_init for `str8_0x0002`
+   ldx #0
+   lda #<(str8_0x0002+2)
+   sta str8_0x0002,X
+   inx
+   lda #>(str8_0x0002+2)
+   sta str8_0x0002,X
+
+   ; ptr_init for `str8_0x0003`
+   ldx #0
+   lda #<(str8_0x0003+2)
+   sta str8_0x0003,X
+   inx
+   lda #>(str8_0x0003+2)
+   sta str8_0x0003,X
+
+   ; ptr_init for `str8_0x0004`
+   ldx #0
+   lda #<(str8_0x0004+2)
+   sta str8_0x0004,X
+   inx
+   lda #>(str8_0x0004+2)
+   sta str8_0x0004,X
+
+   ; ptr_init for `str8_0x0005`
+   ldx #0
+   lda #<(str8_0x0005+2)
+   sta str8_0x0005,X
+   inx
+   lda #>(str8_0x0005+2)
+   sta str8_0x0005,X
+
+   ; ptr_init for `str8_0x0006`
+   ldx #0
+   lda #<(str8_0x0006+2)
+   sta str8_0x0006,X
+   inx
+   lda #>(str8_0x0006+2)
+   sta str8_0x0006,X
+
+   ; ptr_init for `str8_0x0007`
+   ldx #0
+   lda #<(str8_0x0007+2)
+   sta str8_0x0007,X
+   inx
+   lda #>(str8_0x0007+2)
+   sta str8_0x0007,X
+
+   ; ptr_init for `str8_0x0008`
+   ldx #0
+   lda #<(str8_0x0008+2)
+   sta str8_0x0008,X
+   inx
+   lda #>(str8_0x0008+2)
+   sta str8_0x0008,X
+
+   ; ptr_init for `str8_0x0009`
+   ldx #0
+   lda #<(str8_0x0009+2)
+   sta str8_0x0009,X
+   inx
+   lda #>(str8_0x0009+2)
+   sta str8_0x0009,X
+
+   ; ptr_init for `str8_0x000A`
+   ldx #0
+   lda #<(str8_0x000A+2)
+   sta str8_0x000A,X
+   inx
+   lda #>(str8_0x000A+2)
+   sta str8_0x000A,X
+
+   ; ptr_init for `str8_0x000B`
+   ldx #0
+   lda #<(str8_0x000B+2)
+   sta str8_0x000B,X
+   inx
+   lda #>(str8_0x000B+2)
+   sta str8_0x000B,X
+
+   ; ptr_init for `str8_0x000C`
+   ldx #0
+   lda #<(str8_0x000C+2)
+   sta str8_0x000C,X
+   inx
+   lda #>(str8_0x000C+2)
+   sta str8_0x000C,X
+
+   ; ptr_init for `str8_0x000D`
+   ldx #0
+   lda #<(str8_0x000D+2)
+   sta str8_0x000D,X
+   inx
+   lda #>(str8_0x000D+2)
+   sta str8_0x000D,X
+
+   ; ptr_init for `str8_0x000E`
+   ldx #0
+   lda #<(str8_0x000E+2)
+   sta str8_0x000E,X
+   inx
+   lda #>(str8_0x000E+2)
+   sta str8_0x000E,X
+
+   ; ptr_init for `str8_0x000F`
+   ldx #0
+   lda #<(str8_0x000F+2)
+   sta str8_0x000F,X
+   inx
+   lda #>(str8_0x000F+2)
+   sta str8_0x000F,X
+
+   ; ptr_init for `str8_0x0010`
+   ldx #0
+   lda #<(str8_0x0010+2)
+   sta str8_0x0010,X
+   inx
+   lda #>(str8_0x0010+2)
+   sta str8_0x0010,X
+
+   ; ptr_init for `str8_0x0011`
+   ldx #0
+   lda #<(str8_0x0011+2)
+   sta str8_0x0011,X
+   inx
+   lda #>(str8_0x0011+2)
+   sta str8_0x0011,X
+
+   ; ptr_init for `str8_0x0012`
+   ldx #0
+   lda #<(str8_0x0012+2)
+   sta str8_0x0012,X
+   inx
+   lda #>(str8_0x0012+2)
+   sta str8_0x0012,X
+
+   ; ptr_init for `str8_0x0013`
+   ldx #0
+   lda #<(str8_0x0013+2)
+   sta str8_0x0013,X
+   inx
+   lda #>(str8_0x0013+2)
+   sta str8_0x0013,X
+
+   ; ptr_init for `str8_0x0014`
+   ldx #0
+   lda #<(str8_0x0014+2)
+   sta str8_0x0014,X
+   inx
+   lda #>(str8_0x0014+2)
+   sta str8_0x0014,X
+
+   ; ptr_init for `str8_0x0015`
+   ldx #0
+   lda #<(str8_0x0015+2)
+   sta str8_0x0015,X
+   inx
+   lda #>(str8_0x0015+2)
+   sta str8_0x0015,X
+
+   ; ptr_init for `str8_0x0016`
+   ldx #0
+   lda #<(str8_0x0016+2)
+   sta str8_0x0016,X
+   inx
+   lda #>(str8_0x0016+2)
+   sta str8_0x0016,X
+
+   ; ptr_init for `str8_0x0017`
+   ldx #0
+   lda #<(str8_0x0017+2)
+   sta str8_0x0017,X
+   inx
+   lda #>(str8_0x0017+2)
+   sta str8_0x0017,X
+
+   rts
+
+;--------------------------------------------------------;
 ; MAIN FUNCTION                                          ;
 ;--------------------------------------------------------;
 fn_main: 
    ; set output mode to ISO
    lda #$0F
    jsr BSOUT
+
+   ; run init fn
+   jsr fn__init
 
    ; setup__file .f 'w' "@:06_type_u8__binary.utest"
    ; ... f.ptr_addr[0] = #<(var__main__f+2)

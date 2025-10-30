@@ -30,6 +30,7 @@ struct FnBlock {
     var_values:     Vec<Vec<u8>>,
     //
     lines_vardefs:  Vec<String>,
+    lines_ptr_init: Vec<String>,
     lines_main:     Vec<String>,
 }
 
@@ -59,6 +60,7 @@ fn new_fn_block(fn_name: &str) -> FnBlock {
         var_values     : Vec::new(),
         //
         lines_vardefs  : Vec::new(),
+        lines_ptr_init : Vec::new(),
         lines_main     : Vec::new(),
     }
 }
@@ -218,7 +220,16 @@ impl FnBlock {
             self.lines_main.insert(4, "   ; set output mode to ISO".to_string());
             self.lines_main.insert(5, "   lda #$0F".to_string());
             self.lines_main.insert(6, "   jsr BSOUT".to_string());
-            self.lines_main.insert(7, "".to_string());
+            unsafe {
+                if HAS_INIT_FN {
+                    self.lines_main.insert(7,  "".to_string());
+                    self.lines_main.insert(8,  "   ; run init fn".to_string());
+                    self.lines_main.insert(9,  "   jsr fn__init".to_string());
+                    self.lines_main.insert(10, "".to_string());
+                } else {
+                    self.lines_main.insert(7, "".to_string());
+                }
+            }
 
             self.lines_main.push("   rts".to_string());
             self.lines_main.push("".to_string());
@@ -259,6 +270,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
+                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                self.lines_vardefs.push(format!(
                     "   .byte ${:02X} ; length (u8)", varlen));
                 self.lines_vardefs.push(format!(
                     "   .byte ${:02X} ; alloc (u8)", varlen));
@@ -267,6 +280,15 @@ impl FnBlock {
                 self.lines_vardefs.push(
                     "   ; data start".to_string());
 
+                self.lines_ptr_init.push(
+                    format!("   ; ptr_init for `{}`", varname));
+                self.lines_ptr_init.push(format!("   ldx #0"));
+                self.lines_ptr_init.push(format!("   lda #<({}+2)", varname));
+                self.lines_ptr_init.push(format!("   sta {},X", varname));
+                self.lines_ptr_init.push(        "   inx".to_string());
+                self.lines_ptr_init.push(format!("   lda #>({}+2)", varname));
+                self.lines_ptr_init.push(format!("   sta {},X", varname));
+                self.lines_ptr_init.push(        "".to_string());
                 //------------------------------------------------------------//
                 // Write out contents of the string ten bytes at a time.      //
                 //------------------------------------------------------------//
@@ -432,7 +454,7 @@ impl FnBlock {
     }
 }
 
-
+static mut HAS_INIT_FN:         bool = false;
 static mut ACTIVE_FN:           String = String::new();
 static mut PLATFORM:            String = String::new();
 static mut OUTPUT_FILENAME:     String = String::new();
@@ -440,6 +462,7 @@ static mut FN_BLOCKS:           Vec<FnBlock> = Vec::new();
 static mut LINES_PLATFORM_BP:   Vec<String>  = Vec::new();
 static mut LINES_BUILTIN_FNS:   Vec<String>  = Vec::new();
 static mut LINES_VARIABLE_DEFS: Vec<String> = Vec::new();
+static mut LINES_INIT_FN:       Vec<String> = Vec::new();
 
 
 pub fn fn_is_defined(fn_name: &str) -> bool {
@@ -723,6 +746,36 @@ fn write_variable_defs(outfile: &mut File) {
     }
 }
 
+fn write_init_fn(outfile: &mut File) {
+    //------------------------------------------------------------------------//
+    // Write out the contents of the initilization function.                  //
+    //------------------------------------------------------------------------//
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            for ln in fn_blk.lines_ptr_init.iter() {
+                LINES_INIT_FN.push(ln.to_string());
+            }
+        }
+
+        if LINES_INIT_FN.len() == 0 {
+            return;
+        }
+
+        LINES_INIT_FN.insert(0, ";--------------------------------------------------------;".to_string());
+        LINES_INIT_FN.insert(1, "; INIT FUNCTION                                          ;".to_string());
+        LINES_INIT_FN.insert(2, ";--------------------------------------------------------;".to_string());
+        LINES_INIT_FN.insert(3, "fn__init: ".to_string());
+
+        LINES_INIT_FN.push("   rts".to_string());
+        LINES_INIT_FN.push("".to_string());
+
+        for ln in LINES_INIT_FN.iter() {
+            writeln!(outfile, "{}", ln).unwrap();
+        }
+        HAS_INIT_FN = true;
+    }
+}
+
 fn write_builtin_fns(mut outfile: &File) {
     //------------------------------------------------------------------------//
     // Write out the builtin (standard) functions.                            //
@@ -757,6 +810,7 @@ pub fn write() -> bool {
     write_platform_boilerplate(&mut outfile);
     write_variable_defs(&mut outfile);
     write_builtin_fns(&mut outfile);
+    write_init_fn(&mut outfile);
 
     unsafe {
         for fn_blk in &mut FN_BLOCKS {
