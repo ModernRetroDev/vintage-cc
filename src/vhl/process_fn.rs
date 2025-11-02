@@ -110,7 +110,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                     },
                     "file" => {
                         outputs::lines_vardecl_push(&format!(
-                            "    var__file _arg_{}__{}",
+                            "    ptr__file _arg_{}__{}",
                             fn_arg.arg_pos, fn_arg.arg_name));
                     },
                     _ => {

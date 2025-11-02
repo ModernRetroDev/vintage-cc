@@ -21,9 +21,14 @@ pub fn arr16_fullname(v: &str) -> String {
 pub fn var_fullname(v: &str) -> String {
     match v.matches(".").count() {
         1 => {
-            return format!("var__{}__{}", 
-                outputs::get_active_fn(), 
-                v.trim_start_matches("."));
+            let active_fn = outputs::get_active_fn();
+            let varname: String = v.trim_start_matches(".").to_string();
+
+            let vtype: String = match outputs::var_is_ptr(&active_fn, &varname) {
+                true  => { "ptr".to_string() },
+                false => { "var".to_string() },
+            };
+            return format!("{}__{}__{}", vtype, active_fn, varname);
         },
         2 => {
             let mut fn_name:  String = "".to_string();
@@ -40,7 +45,12 @@ pub fn var_fullname(v: &str) -> String {
 
                 ctr += 1;
             }
-            return format!("var__{}__{}", fn_name, var_name);
+            let vtype: String = match outputs::var_is_ptr(&fn_name, &var_name) {
+                true  => { "ptr".to_string() },
+                false => { "var".to_string() },
+            };
+
+            return format!("{}__{}__{}", vtype, fn_name, var_name);
         },
         _ => {
             return "".to_string();

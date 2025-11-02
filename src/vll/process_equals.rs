@@ -207,9 +207,9 @@ fn as_types_file_file(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype != "file" {
+    if vartype != "file" && vartype != "file:ptr" {
         println!(
-            "WARNING: ln:{} EQUALS: Expected a file type; got `{}`, which is type `{}`",
+            "WARNING: ln:{} EQUALS: LHS Expected a file type; got `{}`, which is type `{}`",
             part.ln_no, lhs, vartype)
     }
 
@@ -224,9 +224,9 @@ fn as_types_file_file(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype_rhs != "file" {
+    if vartype_rhs != "file" && vartype_rhs != "file:ptr" {
         println!(
-            "WARNING: ln:{} EQUALS: Expected a file type; got `{}`, which is type `{}`",
+            "WARNING: ln:{} EQUALS: RHS Expected a file type; got `{}`, which is type `{}`",
             part.ln_no, rhs, vartype_rhs)
     }
 

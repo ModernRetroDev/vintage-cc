@@ -34,6 +34,7 @@ pub mod process_minus_equals;
 pub mod process_open;
 pub mod process_plus_equals;
 pub mod process_print;
+pub mod process_ptr;
 pub mod process_ref;
 pub mod process_rshift;
 pub mod process_setout;

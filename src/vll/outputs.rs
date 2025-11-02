@@ -114,6 +114,23 @@ impl FnBlock {
         return None;
     }
 
+    pub fn var_is_ptr(&self, varname: &str) -> bool {
+        let mut ind: usize = 0;
+            for globvar in self.var_names.clone() {
+                // println!("~~~ `{}`", &globvar);
+                if varname == &globvar {
+                    let vtype: String = self.var_types[ind].clone();
+                    // println!("varname `{}` is type `{}`", &varname, &vtype);
+                    if self.var_types[ind].ends_with(":ptr") {
+                        return true;
+                    }
+                    return false;
+                }
+                ind += 1
+            }
+        return false;
+    }
+
     pub fn ifblocks_push(&mut self, ifblk: &str) {
         self.ifblk_levels.push(ifblk.to_string());
     }
@@ -362,6 +379,12 @@ impl FnBlock {
                 self.lines_ptr_init.push(format!("   lda #>({}+2)", varname));
                 self.lines_ptr_init.push(format!("   sta {},X", varname));
                 self.lines_ptr_init.push(        "".to_string());
+            } else if vartype.ends_with(":ptr") {
+                self.lines_vardefs.push(format!(
+                    "{}: ; type: {}", varname, vartype));
+                self.lines_vardefs.push(format!(
+                    "   .byte $00, $00"));
+                self.lines_vardefs.push("".to_string());
             } else {
                 println!("ERROR: Unhandled vardef output type `{vartype}`.");
                 return true;
@@ -474,6 +497,30 @@ static mut LINES_BUILTIN_FNS:   Vec<String>  = Vec::new();
 static mut LINES_VARIABLE_DEFS: Vec<String> = Vec::new();
 static mut LINES_INIT_FN:       Vec<String> = Vec::new();
 
+
+pub fn dump_varnames() {
+    unsafe {
+        println!("[VARNAMES]");
+        for fn_blk in FN_BLOCKS.iter() {
+            println!(" <{}>", fn_blk.fn_name);
+            for globvar in fn_blk.var_names.clone() {
+                println!("   - `{}`", &globvar);
+            }
+        }
+    }
+}
+
+pub fn var_is_ptr(fn_name: &str, varname: &str) -> bool {
+    let ptrname: String = format!("ptr__{}__{}", fn_name, varname);
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            if fn_blk.fn_name == fn_name {
+                return fn_blk.var_is_ptr(&ptrname);
+            }
+        }
+    }
+    return false;
+}
 
 pub fn fn_is_defined(fn_name: &str) -> bool {
     unsafe {

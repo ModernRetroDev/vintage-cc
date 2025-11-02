@@ -14,64 +14,68 @@ fn main
     equals__bool_bool .bool_false false
     equals__bool_bool .bool_true true
 
+    # outfile.create("02_complex.utest");
     setup__file .outfile 'w' "@:02_complex.utest"
     open__file .outfile
-    setout__file .outfile
+
     # outfile.writeln("#---------------------------------------------------------#");
+    setout__file .outfile
     print__str8 "#---------------------------------------------------------#"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("# PRINT COMPLEX LINES (STRINGS WITH LITERALS & VARIABLES) #");
+    setout__file .outfile
     print__str8 "# PRINT COMPLEX LINES (STRINGS WITH LITERALS & VARIABLES) #"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("#---------------------------------------------------------#");
+    setout__file .outfile
     print__str8 "#---------------------------------------------------------#"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln();
-    print__endl
-
     setout__file .outfile
+    print__endl
+    setout__default
+
     # outfile.writeln("The following are two bool variables (false and true):");
+    setout__file .outfile
     print__str8 "The following are two bool variables (false and true):"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("bool_false = `{}`", bool_false);
+    setout__file .outfile
     print__str8 "bool_false = `"
     print__bool .bool_false
     print__str8 "`"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("bool_true  = `{}`", bool_true);
+    setout__file .outfile
     print__str8 "bool_true  = `"
     print__bool .bool_true
     print__str8 "`"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln();
-    print__endl
-
     setout__file .outfile
+    print__endl
+    setout__default
+
     # outfile.writeln("Here are two vars on the same line:");
+    setout__file .outfile
     print__str8 "Here are two vars on the same line:"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("bool_false = `{}`, bool_true  = `{}`", bool_false, bool_true);
+    setout__file .outfile
     print__str8 "bool_false = `"
     print__bool .bool_false
     print__str8 "`, bool_true  = `"
@@ -80,23 +84,24 @@ fn main
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln();
-    print__endl
-
     setout__file .outfile
+    print__endl
+    setout__default
+
     # outfile.writeln("The following shows a suppressed endline (using endl=false):");
+    setout__file .outfile
     print__str8 "The following shows a suppressed endline (using endl=false):"
     print__endl
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("bool_false = ", endl=false);
+    setout__file .outfile
     print__str8 "bool_false = "
     setout__default
 
-    setout__file .outfile
     # outfile.writeln("{}", bool_false);
+    setout__file .outfile
     print__bool .bool_false
     print__endl
     setout__default

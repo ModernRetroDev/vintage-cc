@@ -402,6 +402,12 @@ impl LinePart {
         }
         return false
     }
+    pub fn is_ptr(&self) -> bool {
+        if self.next.starts_with("ptr__") {
+            return true
+        }
+        return false
+    }
     pub fn is_ref(&self) -> bool {
         if self.next.starts_with("ref__") {
             return true

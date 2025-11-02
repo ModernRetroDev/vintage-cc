@@ -37,6 +37,7 @@ use crate::vll::process_minus_equals;
 use crate::vll::process_open;
 use crate::vll::process_plus_equals;
 use crate::vll::process_print;
+use crate::vll::process_ptr;
 use crate::vll::process_ref;
 use crate::vll::process_rshift;
 use crate::vll::process_setout;
@@ -332,6 +333,12 @@ fn process_source(s: String) {
 		}
 		if next.is_print() {
 			if process_print::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_ptr() {
+			if process_ptr::now(next) {
 				return;
 			}
 			continue;

@@ -126,9 +126,6 @@ fn as_type_str8(part: LinePart) -> bool {
 		return true;
 	}
 
-	str_bytes.push(0); // .ptr_addr[0]
-	str_bytes.push(0); // .ptr_addr[1]
-
 	strval_part = subsequent.get_next_str();
 	match strval_part {
 		Some(strval_part) => {
