@@ -375,6 +375,7 @@ str8_0x001F: ; type: str8
 .global _print__str8
 .global _print__u8
 .global _setout__file
+.global _setup__file
 .global _shutdown
 
 
@@ -555,21 +556,7 @@ _open__file:
    lda (ZP_PTR_1),y
    sta ZP_PTR_2+1
 
-   ; ZP_PTR_2 now points to the str8 filename pointer
-
-   ; save the location that it points to in ZP_PTR_3
-   ldy #0
-   lda (ZP_PTR_2),y
-   sta ZP_PTR_3
-   iny
-   lda (ZP_PTR_2),y
-   sta ZP_PTR_3+1
-
-   ; store a copy of that location in to ZP_PTR_2
-   lda ZP_PTR_3
-   sta ZP_PTR_2
-   lda ZP_PTR_3+1
-   sta ZP_PTR_2+1
+   ; ZP_PTR_2 now points to the str8 filename
 
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
@@ -791,6 +778,68 @@ _setout__file:
    rts
 
 
+_setup__file:
+   ; configure a file (prior to opening)
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO A FILE PTR TO BE CONFIGURED.   ;
+   ; ZP_PTR_2 = POINTS TO A STRING PTR USED FOR FNAME.   ;
+   ;-----------------------------------------------------;
+   ; Get the location pointed to by the file pointer     ;
+   ; (save it to ZP_PTR_1)                               ;
+   ;-----------------------------------------------------;
+   lda ZP_PTR_1
+   sta ZP_PTR_3
+   lda ZP_PTR_1+1
+   sta ZP_PTR_3+1
+
+   ldy #0
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_1
+   iny
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_1+1
+   ;-----------------------------------------------------;
+   ; Get the location pointed to by the str8 pointer     ;
+   ; (save it to ZP_PTR_2)                               ;
+   ;-----------------------------------------------------;
+   lda ZP_PTR_2
+   sta ZP_PTR_3
+   lda ZP_PTR_2+1
+   sta ZP_PTR_3+1
+
+   ldy #0
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_2
+   iny
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_2+1
+
+   ; ... f.mode = 1
+   ldy #0
+   lda #1
+   sta (ZP_PTR_1),y
+   ; ... f.device = 8
+   iny
+   lda #8
+   sta (ZP_PTR_1),y
+   ; ... f.channel = 1
+   iny
+   lda #1
+   sta (ZP_PTR_1),y
+   ; ... f.status = 0
+   iny
+   lda #1
+   sta (ZP_PTR_1),y
+   ; ... f.name = ...
+   iny
+   lda ZP_PTR_2
+   sta (ZP_PTR_1),y
+   iny
+   lda ZP_PTR_2+1
+   sta (ZP_PTR_1),y
+   rts
+
+
 _shutdown:
    ; shut off the system immediately
    ldx #$42
@@ -804,6 +853,14 @@ _shutdown:
 ; INIT FUNCTION                                          ;
 ;--------------------------------------------------------;
 fn__init: 
+   ; ptr_init for `var__main__f`
+   ldx #0
+   lda #<(var__main__f+2)
+   sta var__main__f,X
+   inx
+   lda #>(var__main__f+2)
+   sta var__main__f,X
+
    ; ptr_init for `str8_0x0000`
    ldx #0
    lda #<(str8_0x0000+2)
@@ -1074,43 +1131,15 @@ fn_main:
    jsr fn__init
 
    ; setup__file .f 'w' "@:07_type_u8__hex.utest"
-   ; ... f.ptr_addr[0] = #<(var__main__f+2)
-   ldx #0
-   lda #<(var__main__f+2)
-   sta var__main__f,X
-
-   ; ... f.ptr_addr[1] = #>(var__main__f+2)
-   inx
-   lda #>(var__main__f+2)
-   sta var__main__f,X
-
-   ; ... f.mode = 1
-   inx
-   lda #1
-   sta var__main__f,X
-
-   ; ... f.device = 8
-   inx
-   lda #8
-   sta var__main__f,X
-
-   ; ... f.channel = 1
-   inx
-   lda #1
-   sta var__main__f,X
-
-   ; ... f.status = 0
-   inx
-   lda #0
-   sta var__main__f,X
-
-   ; ... f.name = "@:07_type_u8__hex.utest"
-   inx
+   lda #<var__main__f
+   sta ZP_PTR_1
+   lda #>var__main__f
+   sta ZP_PTR_1+1
    lda #<str8_0x0000
-   sta var__main__f,X
-   inx
+   sta ZP_PTR_2
    lda #>str8_0x0000
-   sta var__main__f,X
+   sta ZP_PTR_2+1
+   jsr _setup__file
 
    ; open__file .f
    lda #<var__main__f

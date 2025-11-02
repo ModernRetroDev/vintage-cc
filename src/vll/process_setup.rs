@@ -1,3 +1,4 @@
+use crate::vll::builtins;
 use crate::vll::get;
 use crate::vll::outputs;
 
@@ -16,6 +17,8 @@ fn as_type_file(part: LinePart) -> bool {
     let     fname_res:    String;
     let     value_str: String;
     let mut str_bytes: Vec<u8> = Vec::new();
+
+    builtins::mark_as_used(&part.next);
 
     // read in the file variable name
     if !retvar_part.is_varname() {
@@ -77,43 +80,17 @@ fn as_type_file(part: LinePart) -> bool {
 
     outputs::mainfn_append(&format!("   ; setup__file {} {} {}", 
         retvar, fmode, fname));
-    outputs::mainfn_append(&format!("   ; ... f.ptr_addr[0] = #<({}+2)", retvar_res));
-    outputs::mainfn_append(&format!("   ldx #0"));
-    outputs::mainfn_append(&format!("   lda #<({}+2)", retvar_res));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.ptr_addr[1] = #>({}+2)", retvar_res));
-    outputs::mainfn_append(         "   inx");
-    outputs::mainfn_append(&format!("   lda #>({}+2)", retvar_res));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.mode = {}", 1));
-    outputs::mainfn_append(         "   inx");
-    outputs::mainfn_append(&format!("   lda #1"));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.device = {}", 8));
-    outputs::mainfn_append(         "   inx");
-    outputs::mainfn_append(&format!("   lda #8"));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.channel = {}", 1));
-    outputs::mainfn_append(         "   inx");
-    outputs::mainfn_append(&format!("   lda #1"));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.status = {}", 0));
-    outputs::mainfn_append(         "   inx");
-    outputs::mainfn_append(&format!("   lda #0"));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append("");
-    outputs::mainfn_append(&format!("   ; ... f.name = {}", fname));
-    outputs::mainfn_append(         "   inx");
+    outputs::mainfn_append(&format!("   lda #<{}", retvar_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_1");
+    outputs::mainfn_append(&format!("   lda #>{}", retvar_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    //
     outputs::mainfn_append(&format!("   lda #<{}", fname_res));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
-    outputs::mainfn_append(         "   inx");
+    outputs::mainfn_append(         "   sta ZP_PTR_2");
     outputs::mainfn_append(&format!("   lda #>{}", fname_res));
-    outputs::mainfn_append(&format!("   sta {},X", retvar_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+    //
+    outputs::mainfn_append(         "   jsr _setup__file");
     outputs::mainfn_append("");
 
     return false;

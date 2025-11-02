@@ -352,6 +352,16 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "   .byte $00, $00 ; fname (u16)"));
                 self.lines_vardefs.push("".to_string());
+
+                self.lines_ptr_init.push(
+                    format!("   ; ptr_init for `{}`", varname));
+                self.lines_ptr_init.push(format!("   ldx #0"));
+                self.lines_ptr_init.push(format!("   lda #<({}+2)", varname));
+                self.lines_ptr_init.push(format!("   sta {},X", varname));
+                self.lines_ptr_init.push(        "   inx".to_string());
+                self.lines_ptr_init.push(format!("   lda #>({}+2)", varname));
+                self.lines_ptr_init.push(format!("   sta {},X", varname));
+                self.lines_ptr_init.push(        "".to_string());
             } else {
                 println!("ERROR: Unhandled vardef output type `{vartype}`.");
                 return true;
