@@ -1,4 +1,5 @@
 use crate::vhl::array;
+use crate::vhl::fn_args;
 use crate::vhl::outputs;
 
 use crate::vhl::line_part::LinePart;
@@ -93,9 +94,7 @@ pub fn now(part: LinePart) -> bool {
     // Determine the stack size required to accomplish this calculation.      //
     //------------------------------------------------------------------------//
     for epart in &eval_parts {
-        // println!("checking `{}`...", epart);
         if eval_part_is_op(&epart) {
-            // println!("   ^^^ is_op");
             if req_stk_sz == 0 {
                 println!(
                     "ERROR: ln:{} Operations can't be at start of RPN eval; got `{}`.",
@@ -131,8 +130,8 @@ pub fn now(part: LinePart) -> bool {
                 }
             },
             None => {
-                if epart.parse::<u8>().is_ok() {
-                } else if epart.parse::<u16>().is_ok() {
+                if fn_args::is_type_u8(part.ln_no, epart) {
+                } else if fn_args::is_type_u16(part.ln_no, epart) {
                     if req_elem_sz < 2 {
                         req_elem_sz = 2;
                     }
@@ -241,7 +240,7 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -263,7 +262,7 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -285,7 +284,7 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -307,7 +306,7 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -329,7 +328,7 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -351,7 +350,29 @@ pub fn now(part: LinePart) -> bool {
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} ._cmpres", 
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
+                                stk_basename, stk_prev));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+                },
+                "&&" => {
+                    if req_elem_sz == 1 {
+                        outputs::lines_main_push(
+                            &format!("    eval_logi_and__u8 .{}_{} .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    eval_logi_and__u16 ._cmpres .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                        outputs::lines_main_push(
+                            &format!("    equals__u16_bool .{}_{} ._cmpres", 
                                 stk_basename, stk_prev));
                     } else {
                         println!(
@@ -374,22 +395,21 @@ pub fn now(part: LinePart) -> bool {
         let epart_type: Option<String> = 
             get_evalpart_basetype(part.ln_no, &epart);
 
-        let resolved_arg: String;
-
-        if array::arg_is_array(&epart) {
-            match array::get_value(part.ln_no, &epart) {
-                Some(temp_var) => {
-                    resolved_arg = temp_var.clone();
-                },
-                None => { return true },
-            }
-        } else {
-            resolved_arg = epart.clone();
-        }
-
         match epart_type {
             Some(vtype) => {
+                let resolved_arg: String;
                 if vtype == "u8" {
+                    match fn_args::get_u8_value_str(part.ln_no, epart) {
+                        Some(u8val) => {
+                            resolved_arg = u8val.clone();
+                        },
+                        None => {
+                            println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+                                part.ln_no, epart);
+                            return true;
+                        }
+                    }
+
                     if req_elem_sz == 1 {
                         outputs::lines_main_push(
                             &format!("    equals__u8_u8 .{}_{} .{}", 
@@ -405,6 +425,17 @@ pub fn now(part: LinePart) -> bool {
                         return true;
                     }
                 } else if vtype == "u16" {
+                    match fn_args::get_u16_value_str(part.ln_no, epart) {
+                        Some(u16val) => {
+                            resolved_arg = u16val.clone();
+                        },
+                        None => {
+                            println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+                                part.ln_no, epart);
+                            return true;
+                        }
+                    }
+
                     if req_elem_sz == 2 {
                         outputs::lines_main_push(
                             &format!("    equals__u16_u16 .{}_{} .{}", 
@@ -418,7 +449,7 @@ pub fn now(part: LinePart) -> bool {
                 }
             },
             None => {
-                if epart.parse::<u8>().is_ok() {
+                if fn_args::is_type_u8(part.ln_no, epart) {
                     if req_elem_sz == 1 {
                         outputs::lines_main_push(
                             &format!("    equals__u8_u8 .{}_{} {}", 
@@ -433,7 +464,7 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no, req_elem_sz);
                         return true;
                     }
-                } else if epart.parse::<u16>().is_ok() {
+                } else if fn_args::is_type_u16(part.ln_no, epart) {
                     if req_elem_sz == 2 {
                         outputs::lines_main_push(
                             &format!("    equals__u16_u16 .{}_{} {}", 

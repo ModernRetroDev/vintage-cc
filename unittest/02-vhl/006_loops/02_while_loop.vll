@@ -78,6 +78,38 @@ fn main
     print__endl
     setout__default
 
+    # outfile.writeln("* iterate over a while loop 0x14 (20) times; print ctr")
+    setout__file .outfile
+    print__str8 "* iterate over a while loop 0x14 (20) times; print ctr"
+    print__endl
+    setout__default
+
+    # ctr = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .ctr ._stk_8_0
+
+    # while ctr 0x14 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .ctr
+    equals__u8_u8 ._stk_8_1 0x14
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # ctr = ctr 1 +;
+    increment__u8 .ctr
+    endloop
+
+    # outfile.writeln("ctr = {}", ctr);
+    setout__file .outfile
+    print__str8 "ctr = "
+    print__u8 .ctr
+    print__endl
+    setout__default
+
     close__file .outfile
     # shutdown();
     call shutdown
