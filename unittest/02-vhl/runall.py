@@ -27,6 +27,9 @@ for testgroup in testgroups:
 
 	os.chdir(testgroup)
 
-	subprocess.run(['python3', 'runall.py'])
+	try:
+		subprocess.run(['python3', 'runall.py'])
+	except:
+		pass
 	print()
 	print()

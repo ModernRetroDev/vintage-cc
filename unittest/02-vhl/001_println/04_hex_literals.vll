@@ -9,8 +9,13 @@ endfn
 fn main
     var__u16 a
     var__file outfile
+    var__u8 b
+    var__u16 c
     var__u8 _stk_8_0
     var__u16 _stk_16_0
+
+    equals__u8_u8 .b 0xA1
+    equals__u16_u16 .c 0x10A1
 
     # outfile.create("04_hex_literals.utest");
     setup__file .outfile 'w' "@:04_hex_literals.utest"
@@ -163,6 +168,31 @@ fn main
     setout__file .outfile
     print__str8 " * 0xFFFF (65535) :   "
     print__u16 .a
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print a u8 and u16 initialized w/hex values***");
+    setout__file .outfile
+    print__str8 "*** print a u8 and u16 initialized w/hex values***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" b = 0xA1   (161);  {}", b);
+    setout__file .outfile
+    print__str8 " b = 0xA1   (161);  "
+    print__u8 .b
+    print__endl
+    setout__default
+
+    # outfile.writeln(" c = 0x10A1 (4257); {}", c);
+    setout__file .outfile
+    print__str8 " c = 0x10A1 (4257); "
+    print__u16 .c
     print__endl
     setout__default
 
