@@ -15,6 +15,10 @@ fn main() {
 	//           ^^^^------- 161
 	let c: u16 = 0x10A1;
 	//           ^^^^^^----- 4257
+	let d: u8  = 0b11111111;
+	//           ^^^^------- 255
+	let e: u16 = 0b111111111;
+	//           ^^^^------- 511
 
 	outfile.create("04_hex_literals.utest");
 
@@ -51,6 +55,11 @@ fn main() {
 	outfile.writeln("*** print a u8 and u16 initialized w/hex values***");
 	outfile.writeln(" b = 0xA1   (161);  {}", b);
 	outfile.writeln(" c = 0x10A1 (4257); {}", c);
+	outfile.writeln();
+
+	outfile.writeln("*** print a u8 and u16 initialized w/binary values***");
+	outfile.writeln(" d = 0b11111111  (255); {}", d);
+	outfile.writeln(" e = 0b111111111 (511); {}", e);
 
 	outfile.close();
 	shutdown();
