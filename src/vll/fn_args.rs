@@ -115,6 +115,37 @@ fn get_uint_literal_value(part: &LinePart) -> Option<u64> {
     }
 }
 
+pub fn is_type_u8ptr(part: &LinePart) -> bool {
+    if part.is_varname() {
+        let part_res = get::var_fullname(&part.next);
+        //--------------------------------------------------------------------//
+        // Extract the variable name                                          //
+        //--------------------------------------------------------------------//
+        let vartype: String;
+        match outputs::get_vartype(&part_res) {
+            Some(vtype) => { vartype = vtype; },
+            None => { return false; },
+        }
+        if vartype == "u8:ptr" {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+pub fn get_u8ptr_str(part: &LinePart) -> Option<String> {
+    if !is_type_u8ptr(part) {
+        return None
+    }
+
+    if part.is_varname() {
+        return Some(get::var_fullname(&part.next));
+    }
+
+    return None;
+}
+
 pub fn is_type_u8(part: &LinePart) -> bool {
     if part.is_varname() {
         let part_res = get::var_fullname(&part.next);
@@ -246,6 +277,37 @@ pub fn get_u16_value_str(part: &LinePart) -> Option<String> {
             Some(value) => { return Some(format!("#{}", value)); }
             None =>        { return None; }
         };
+    }
+
+    return None;
+}
+
+pub fn is_type_u16ptr(part: &LinePart) -> bool {
+    if part.is_varname() {
+        let part_res = get::var_fullname(&part.next);
+        //--------------------------------------------------------------------//
+        // Extract the variable name                                          //
+        //--------------------------------------------------------------------//
+        let vartype: String;
+        match outputs::get_vartype(&part_res) {
+            Some(vtype) => { vartype = vtype; },
+            None => { return false; },
+        }
+        if vartype == "u16:ptr" {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+pub fn get_u16ptr_str(part: &LinePart) -> Option<String> {
+    if !is_type_u16ptr(part) {
+        return None
+    }
+
+    if part.is_varname() {
+        return Some(get::var_fullname(&part.next));
     }
 
     return None;

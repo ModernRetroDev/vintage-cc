@@ -147,6 +147,40 @@ fn as_type_u8(part: LinePart) -> bool {
     return false;
 }
 
+fn as_type_u8ptr(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u8");
+
+    if !fn_args::is_type_u8ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u8ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u8ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u8ptr {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(         "   jsr _print__u8");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 fn as_type_u8_x(part: LinePart) -> bool {
     let value      = part.get_next().next;
     let value_part = part.get_next();
@@ -228,6 +262,44 @@ fn as_type_u16(part: LinePart) -> bool {
     return false;
 }
 
+fn as_type_u16ptr(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u16");
+
+    if !fn_args::is_type_u16ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u16ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u16ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u16ptr value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u16ptr {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   tax"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   tay"));
+    outputs::mainfn_append(         "   jsr _print__u16");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 fn as_type_u16_x(part: LinePart) -> bool {
     let value      = part.get_next().next;
     let value_part = part.get_next();
@@ -300,11 +372,17 @@ pub fn now(part: LinePart) -> bool {
     } else if part.next == "print__u8_xx" {
         return as_type_u8_xx(part);
 
+    } else if part.next == "print__u8ptr" {
+        return as_type_u8ptr(part);
+
     } else if part.next == "print__u16" {
         return as_type_u16(part);
 
     } else if part.next == "print__u16_x" {
         return as_type_u16_x(part);
+
+    } else if part.next == "print__u16ptr" {
+        return as_type_u16ptr(part);
 
     } else {
         println!(

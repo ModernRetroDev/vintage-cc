@@ -1,0 +1,37 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	let outfile: file;
+	let bnk_u8:  u8@  = 0xA000;
+	let bnk_u16: u16@ = 0xA001;
+
+	outfile.create("01_pointer_vars.utest");
+
+	outfile.writeln("#-----------------------------------------------------#");
+	outfile.writeln("# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #");
+	outfile.writeln("#-----------------------------------------------------#");
+	outfile.writeln();
+
+	// values are dereferenced by default; both when setting and getting
+	bnk_u8  = 55;
+	bnk_u16 = 1337;
+
+	// outfile.writeln("bnk_u8  @0xA000 = `{}`", bnk_u8);
+	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
+	outfile.writeln("bnk_u16 @0xA001 = `{}`", bnk_u16);
+
+	// alternatively; the address can be changed as such
+	@bnk_u8 = 0xA003;
+	bnk_u8  = 0xFF;
+	outfile.writeln("bnk_u8  @0xA003 = `{}`", bnk_u8);
+
+	outfile.close();
+	shutdown();
+}

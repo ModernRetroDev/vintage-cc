@@ -1,0 +1,91 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    ptr__u8 bnk_u8
+    ptr__u16 bnk_u16
+    var__u8 _stk_8_0
+    var__u16 _stk_16_0
+
+    equals__ptr_u16 .bnk_u8 0xA000
+    equals__ptr_u16 .bnk_u16 0xA001
+
+    # outfile.create("01_pointer_vars.utest");
+    setup__file .outfile 'w' "@:01_pointer_vars.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-----------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #");
+    setout__file .outfile
+    print__str8 "# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-----------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # bnk_u8 = 55;
+    equals__u8_u8 ._stk_8_0 55
+    equals__u8ptr_u8 .bnk_u8 ._stk_8_0
+
+    # bnk_u16 = 1337;
+    equals__u16_u16 ._stk_16_0 1337
+    equals__u16ptr_u16 .bnk_u16 ._stk_16_0
+
+    # outfile.writeln("bnk_u8  @0xA000 = `{}`", bnk_u8);
+    setout__file .outfile
+    print__str8 "bnk_u8  @0xA000 = `"
+    print__u8ptr .bnk_u8
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln("bnk_u16 @0xA001 = `{}`", bnk_u16);
+    setout__file .outfile
+    print__str8 "bnk_u16 @0xA001 = `"
+    print__u16ptr .bnk_u16
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # bnk_u8 = 0xA003;
+    equals__u16_u16 ._stk_16_0 0xA003
+    equals__ptr_u16 .bnk_u8 ._stk_16_0
+
+    # bnk_u8 = 0xFF;
+    equals__u8_u8 ._stk_8_0 0xFF
+    equals__u8ptr_u8 .bnk_u8 ._stk_8_0
+
+    # outfile.writeln("bnk_u8  @0xA003 = `{}`", bnk_u8);
+    setout__file .outfile
+    print__str8 "bnk_u8  @0xA003 = `"
+    print__u8ptr .bnk_u8
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

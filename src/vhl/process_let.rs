@@ -169,6 +169,62 @@ fn as_type_file(_ln_no: u64, varname: &str, _init_val: Option<String>) -> bool {
     return false;
 }
 
+fn get_ptr_basetype(ptrtype: &str) -> Option<String> {
+    let mut btype: String = "".to_string();
+
+    for c in ptrtype.chars() {
+        if c == '@' {
+            return Some(btype);
+        }
+        btype.push(c);
+    }
+    return None;
+}
+
+fn as_type_ptr(ln_no: u64, varname: &str, ptrtype_str: &str, init_val: Option<String>) -> bool {
+
+    let ptrtype = match get_ptr_basetype(ptrtype_str) {
+        Some(btype) => { btype },
+        None => {
+            println!("ERROR: ln:{} Unable to determine basetype of pointer `{}`",
+                ln_no, ptrtype_str);
+            return true;
+        }
+    };
+
+    match init_val {
+        Some(ival) => {
+            match fn_args::get_u16_value_str(ln_no, &ival) {
+                Some(u16val) => {
+                    outputs::lines_vardef_push(&format!(
+                        "    equals__ptr_u16 .{} {}", varname, u16val));
+                },
+                None => {
+                    println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+                        ln_no, ival);
+                    return true;
+                }
+            }
+        },
+        None => {
+            if ! ptrtype_str.ends_with(";") {
+                println!(
+                    "ERROR: ln:{}: Line is missing a trailing line terminator.",
+                    ln_no);
+                return true;
+            }
+        }
+    }
+
+    outputs::lines_vardecl_push(&format!("    ptr__{} {}", &ptrtype, varname));
+
+    outputs::set_var_index(varname);
+    outputs::varnames_append(varname);
+    outputs::vartypes_append(&format!("{}:ptr", &ptrtype));
+
+    return false;
+}
+
 fn as_type_u8(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
     outputs::lines_vardecl_push(&format!("    var__u8 {}", varname));
 
@@ -515,6 +571,10 @@ pub fn now(part: LinePart) -> bool {
         }
 
         return as_type_array(part.ln_no, &varname, &type_str, init_value);
+    }
+
+    if vartype_str.ends_with("@") || vartype_str.ends_with("@;") {
+        return as_type_ptr(part.ln_no, &varname, &vartype_str, init_value);
     }
 
     match vartype_str {

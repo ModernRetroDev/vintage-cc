@@ -149,6 +149,7 @@ fn eval_is_decrement(part: LinePart) -> bool {
 
 pub fn now(part: LinePart) -> bool {
     let     varname:          String;
+    let     var_is_ref:       bool;
     let mut next:             LinePart;
     let mut eval_parts:       Vec<String>  = Vec::new();
     let mut cur_stk_sz:       u8 = 0;
@@ -156,7 +157,13 @@ pub fn now(part: LinePart) -> bool {
     let mut req_elem_sz:      u8 = 1;
     let mut terminated:       bool = false;
 
-    varname = part.next.clone();
+    if part.next.starts_with("@") {
+        var_is_ref = true;
+        varname = part.next[1..].to_string();
+    } else {
+        var_is_ref = false;
+        varname = part.next.clone();
+    }
 
     if outputs::get_vartype(&varname).is_none() {
         println!(
@@ -307,9 +314,26 @@ pub fn now(part: LinePart) -> bool {
     //------------------------------------------------------------------------//
     // Determine the element size required to accomplish this calculation.    //
     //------------------------------------------------------------------------//
-    match &get_evalpart_basetype(part.ln_no, &varname).unwrap()[..] {
+    let mut ptr_suffix: String = "".to_string();
+    let mut retval_btype: String = 
+        get_evalpart_basetype(part.ln_no, &varname).unwrap();
+
+    if var_is_ref {
+        if !retval_btype.ends_with(":ptr") {
+            println!(
+                "ERROR: ln:{} Reference addresses `@{}`may only be set for pointers.",
+                part.ln_no, varname);
+            return true;
+        }
+        retval_btype = "ptr".to_string();
+    } else if retval_btype.ends_with(":ptr") {
+        ptr_suffix = "ptr".to_string();
+        retval_btype = retval_btype[..retval_btype.len()-4].to_string();
+    }
+    match &retval_btype[..] {
         "u8"  => { req_elem_sz = 1; },
         "u16" => { req_elem_sz = 2; },
+        "ptr" => { req_elem_sz = 2; },
         _     => {
             println!(
                 "ERROR: ln:{} Unsupported vartype for `{}` in eval.",
@@ -370,8 +394,14 @@ pub fn now(part: LinePart) -> bool {
         }
     };
     let eq_fn: String = match req_elem_sz {
-        1 => { "equals__u8_u8".to_string() },
-        2 => { "equals__u16_u16".to_string() },
+        1 => { format!("equals__u8{}_u8", ptr_suffix) },
+        2 => { 
+            if retval_btype == "ptr" {
+                format!("equals__ptr_u16")
+            } else {
+                format!("equals__u16{}_u16", ptr_suffix)
+            }
+        },
         _ => {
             println!(
                 "ERROR: ln:{} Stack elements of size `{}` not currently supported (3).",

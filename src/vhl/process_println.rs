@@ -67,8 +67,20 @@ fn as_type_u8(u8_arg: &str) -> bool {
     return false;
 }
 
+fn as_type_u8ptr(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8ptr {}", u8_arg));
+
+    return false;
+}
+
 fn as_type_u16(u16_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__u16 {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16ptr(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16ptr {}", u16_arg));
 
     return false;
 }
@@ -579,8 +591,18 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
                                 return true;
                             }
                         },
+                        "u8:ptr" => {
+                            if as_type_u8ptr(&resolved_arg) {
+                                return true;
+                            }
+                        },
                         "u16" => {
                             if as_type_u16(&resolved_arg) {
+                                return true;
+                            }
+                        },
+                        "u16:ptr" => {
+                            if as_type_u16ptr(&resolved_arg) {
                                 return true;
                             }
                         },
