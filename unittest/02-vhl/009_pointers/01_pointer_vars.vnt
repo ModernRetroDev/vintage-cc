@@ -23,14 +23,17 @@ fn main() {
 	bnk_u8  = 55;
 	bnk_u16 = 1337;
 
-	// outfile.writeln("bnk_u8  @0xA000 = `{}`", bnk_u8);
-	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
-	outfile.writeln("bnk_u16 @0xA001 = `{}`", bnk_u16);
+	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8,  bnk_u8);
+	outfile.writeln("bnk_u16 @{} = `{}`", @bnk_u16, bnk_u16);
+	outfile.writeln();
 
 	// alternatively; the address can be changed as such
+	outfile.writeln("Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF");
+	outfile.writeln();
+
 	@bnk_u8 = 0xA003;
 	bnk_u8  = 0xFF;
-	outfile.writeln("bnk_u8  @0xA003 = `{}`", bnk_u8);
+	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
 
 	outfile.close();
 	shutdown();

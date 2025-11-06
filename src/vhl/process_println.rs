@@ -61,6 +61,12 @@ fn as_type_file(file_arg: &str) -> bool {
     return false;
 }
 
+fn as_type_ptr(ptr_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__ptr {}", ptr_arg));
+
+    return false;
+}
+
 fn as_type_u8(u8_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__u8 {}", u8_arg));
 
@@ -557,7 +563,7 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
                 return true;
             }
 
-            let single_arg: String = flw_args[flw_arg_ctr].clone();
+            let mut single_arg: String = flw_args[flw_arg_ctr].clone();
             flw_arg_ctr += 1;
 
             match resolve_supplied_arg(part.ln_no, &single_arg) {
@@ -572,56 +578,101 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
                 }
             };
 
-            match get_supplied_basetype(part.ln_no, &single_arg) {
-            // match outputs::get_vartype(&resolved_arg) {
-                Some(vartype) => {
-                    match &vartype[..] {
-                        "bool" => {
-                            if as_type_bool(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "file" => {
-                            if as_type_file(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "u8" => {
-                            if as_type_u8(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "u8:ptr" => {
-                            if as_type_u8ptr(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "u16" => {
-                            if as_type_u16(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "u16:ptr" => {
-                            if as_type_u16ptr(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        "str8" => {
-                            if as_type_str8(&resolved_arg) {
-                                return true;
-                            }
-                        },
-                        _ => {
-                            println!("[TODO] println(): Unsupported type `{}` for `{}`", 
-                                vartype, resolved_arg);
-                        }
+            let var_is_ref: bool;
+            if single_arg.starts_with("@") {
+                var_is_ref = true;
+                // println!("SINGLE ARG = `{}`", &single_arg);
+                single_arg = single_arg[1..].to_string();
+                // println!("SINGLE ARG2 = `{}`", &single_arg);
+
+                match resolve_supplied_arg(part.ln_no, &single_arg) {
+                    Some(resolved) => {
+                        resolved_arg = resolved;
+                    },
+                    None => {
+                        println!(
+                            "ERROR: ln:{} Println: Unable to resolve `{}`.",
+                            part.ln_no, single_arg);
+                        return true;
                     }
-                },
-                None => {
-                    println!(
-                        "ERROR: ln:{} Unknown variable `{}` passed to println().",
-                        part.ln_no, single_arg);
-                    return true;
+                };
+            } else {
+                var_is_ref = false;
+                single_arg = single_arg.clone();
+            }
+
+            if var_is_ref {
+                match get_supplied_basetype(part.ln_no, &single_arg) {
+                    Some(vartype) => {
+                        if !vartype.ends_with(":ptr") {
+                            println!(
+                                "ERROR: ln:{} Reference addresses `@{}`can only be grabbed from pointers.",
+                                part.ln_no, single_arg);
+                            return true;
+                        }
+                        if as_type_ptr(&resolved_arg) {
+                            return true;
+                        }
+                    },
+                    None => {
+                        println!(
+                            "ERROR: ln:{} Unknown variable `{}` passed to println().",
+                            part.ln_no, single_arg);
+                        return true;
+                    }
+                }
+            } else {
+                match get_supplied_basetype(part.ln_no, &single_arg) {
+                // match outputs::get_vartype(&resolved_arg) {
+                    Some(vartype) => {
+                        match &vartype[..] {
+                            "bool" => {
+                                if as_type_bool(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "file" => {
+                                if as_type_file(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "u8" => {
+                                if as_type_u8(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "u8:ptr" => {
+                                if as_type_u8ptr(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "u16" => {
+                                if as_type_u16(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "u16:ptr" => {
+                                if as_type_u16ptr(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            "str8" => {
+                                if as_type_str8(&resolved_arg) {
+                                    return true;
+                                }
+                            },
+                            _ => {
+                                println!("[TODO] println(): Unsupported type `{}` for `{}`", 
+                                    vartype, resolved_arg);
+                            }
+                        }
+                    },
+                    None => {
+                        println!(
+                            "ERROR: ln:{} Unknown variable `{}` passed to println().",
+                            part.ln_no, single_arg);
+                        return true;
+                    }
                 }
             }
         }

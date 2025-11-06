@@ -338,8 +338,8 @@ fn as_type_ptr(part: LinePart) -> bool {
     }
 
     outputs::mainfn_append(&format!("   ; print__ptr {}", value));
-    outputs::mainfn_append(&format!("   ldx #<{}", resolved));
-    outputs::mainfn_append(&format!("   ldy #>{}", resolved));
+    outputs::mainfn_append(&format!("   ldx {resolved}"));
+    outputs::mainfn_append(&format!("   ldy {resolved}+1"));
     outputs::mainfn_append(         "   jsr _print__ptr");
     outputs::mainfn_append("");
 
@@ -358,6 +358,9 @@ pub fn now(part: LinePart) -> bool {
         return as_type_endl(part);
 
     } else if part.next == "print__file" {
+        return as_type_ptr(part);
+
+    } else if part.next == "print__ptr" {
         return as_type_ptr(part);
 
     } else if part.next == "print__str8" {

@@ -1,1 +1,1 @@
-#-----------------------------------------------------## WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK ##-----------------------------------------------------#bnk_u8  @0xA000 = `55`bnk_u16 @0xA001 = `1337`
+#-----------------------------------------------------## WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK ##-----------------------------------------------------#bnk_u8  @0xA000 = `55`bnk_u16 @0xA001 = `1337`Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFFbnk_u8  @0xA003 = `255`

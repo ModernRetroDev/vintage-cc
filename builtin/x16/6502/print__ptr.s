@@ -1,4 +1,4 @@
-;REQUIRES  print__u8_x
+;REQUIRES  print__u8_xx
 ;
 ;[BUILTIN-BLOCK-START]
 _print__ptr:
@@ -8,7 +8,7 @@ _print__ptr:
    ;-----------------------------------------------------;
    lda #'0'
    jsr CHROUT
-   lda #'x'
+   lda #$78 ; 'x' char
    jsr CHROUT
 
    txa
@@ -16,8 +16,8 @@ _print__ptr:
    tya
    sta ZP_PTR_1+1 ; store the high byte of the number
 
-   jsr _print__u8_x ; print out high byte
+   jsr _print__u8_xx ; print out high byte
 
    lda ZP_PTR_1 ; load low byte of the number
-   jsr _print__u8_x ; print out low byte
+   jsr _print__u8_xx ; print out low byte
    rts

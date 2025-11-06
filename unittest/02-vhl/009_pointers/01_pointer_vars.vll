@@ -51,19 +51,39 @@ fn main
     equals__u16_u16 ._stk_16_0 1337
     equals__u16ptr_u16 .bnk_u16 ._stk_16_0
 
-    # outfile.writeln("bnk_u8  @0xA000 = `{}`", bnk_u8);
+    # outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8,  bnk_u8);
     setout__file .outfile
-    print__str8 "bnk_u8  @0xA000 = `"
+    print__str8 "bnk_u8  @"
+    print__ptr .bnk_u8
+    print__str8 " = `"
     print__u8ptr .bnk_u8
     print__str8 "`"
     print__endl
     setout__default
 
-    # outfile.writeln("bnk_u16 @0xA001 = `{}`", bnk_u16);
+    # outfile.writeln("bnk_u16 @{} = `{}`", @bnk_u16, bnk_u16);
     setout__file .outfile
-    print__str8 "bnk_u16 @0xA001 = `"
+    print__str8 "bnk_u16 @"
+    print__ptr .bnk_u16
+    print__str8 " = `"
     print__u16ptr .bnk_u16
     print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF");
+    setout__file .outfile
+    print__str8 "Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
     print__endl
     setout__default
 
@@ -75,9 +95,11 @@ fn main
     equals__u8_u8 ._stk_8_0 0xFF
     equals__u8ptr_u8 .bnk_u8 ._stk_8_0
 
-    # outfile.writeln("bnk_u8  @0xA003 = `{}`", bnk_u8);
+    # outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
     setout__file .outfile
-    print__str8 "bnk_u8  @0xA003 = `"
+    print__str8 "bnk_u8  @"
+    print__ptr .bnk_u8
+    print__str8 " = `"
     print__u8ptr .bnk_u8
     print__str8 "`"
     print__endl
