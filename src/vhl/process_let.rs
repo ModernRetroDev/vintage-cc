@@ -194,7 +194,7 @@ fn as_type_ptr(ln_no: u64, varname: &str, ptrtype_str: &str, init_val: Option<St
 
     match init_val {
         Some(ival) => {
-            match fn_args::get_u16_value_str(ln_no, &ival) {
+            match fn_args::get_u16_value_str(ln_no, &ival, false) {
                 Some(u16val) => {
                     outputs::lines_vardef_push(&format!(
                         "    equals__ptr_u16 .{} {}", varname, u16val));
@@ -230,7 +230,7 @@ fn as_type_u8(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
 
     match init_val {
         Some(ival) => {
-            match fn_args::get_u8_value_str(ln_no, &ival) {
+            match fn_args::get_u8_value_str(ln_no, &ival, false) {
                 Some(u8val) => {
                     outputs::lines_vardef_push(&format!(
                         "    equals__u8_u8 .{} {}", varname, u8val));
@@ -257,7 +257,7 @@ fn as_type_u16(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
 
     match init_val {
         Some(ival) => {
-            match fn_args::get_u16_value_str(ln_no, &ival) {
+            match fn_args::get_u16_value_str(ln_no, &ival, false) {
                 Some(u16val) => {
                     outputs::lines_vardef_push(&format!(
                         "    equals__u16_u16 .{} {}", varname, u16val));

@@ -1,0 +1,409 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    ptr__u8 bnk_u8
+    ptr__u16 bnk_u16
+    var__u8 std_u8
+    var__u16 std_u16
+    var__bool _cmpres
+    ptr__u8 _temp_ptr_u8
+    ptr__u16 _temp_ptr_u16
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u16 _stk_16_0
+    var__u16 _stk_16_1
+
+    equals__ptr_u16 .bnk_u8 0xA000
+    equals__ptr_u16 .bnk_u16 0xA001
+
+    # outfile.create("02_direct_pointers.utest");
+    setup__file .outfile 'w' "@:02_direct_pointers.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-----------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #");
+    setout__file .outfile
+    print__str8 "# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-----------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Set some initial values for 0xA000 and 0xA001");
+    setout__file .outfile
+    print__str8 "Set some initial values for 0xA000 and 0xA001"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------------------------------------");
+    setout__file .outfile
+    print__str8 "---------------------------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # bnk_u8 = 55;
+    equals__u8_u8 ._stk_8_0 55
+    equals__u8ptr_u8 .bnk_u8 ._stk_8_0
+
+    # bnk_u16 = 1337;
+    equals__u16_u16 ._stk_16_0 1337
+    equals__u16ptr_u16 .bnk_u16 ._stk_16_0
+
+    # outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8,  bnk_u8);
+    setout__file .outfile
+    print__str8 "bnk_u8  @"
+    print__ptr .bnk_u8
+    print__str8 " = `"
+    print__u8ptr .bnk_u8
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln("bnk_u16 @{} = `{}`", @bnk_u16, bnk_u16);
+    setout__file .outfile
+    print__str8 "bnk_u16 @"
+    print__ptr .bnk_u16
+    print__str8 " = `"
+    print__u16ptr .bnk_u16
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # std_u8 = bnk_u8;
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    # outfile.writeln("std_u8 = bnk_u8 = {}", std_u8);
+    setout__file .outfile
+    print__str8 "std_u8 = bnk_u8 = "
+    print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # std_u8 = bnk_u8 10 +;
+    equals__u8_u8 ._stk_8_1 10
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    # outfile.writeln("std_u8 = bnk_u8 + 10 = {}", std_u8);
+    setout__file .outfile
+    print__str8 "std_u8 = bnk_u8 + 10 = "
+    print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Directly access values using `rpn_eval` expressions");
+    setout__file .outfile
+    print__str8 "Directly access values using `rpn_eval` expressions"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------------------------------------------");
+    setout__file .outfile
+    print__str8 "---------------------------------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # std_u8 = u8@:0xA000;
+    equals__ptr_u16 ._temp_ptr_u8 0xA000
+    equals__u8_u8ptr ._stk_8_0 ._temp_ptr_u8
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    # outfile.writeln("std_u8 = u8@0xA000 = {}", std_u8);
+    setout__file .outfile
+    print__str8 "std_u8 = u8@0xA000 = "
+    print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # std_u8 = u8@:0xA000 10 +;
+    equals__ptr_u16 ._temp_ptr_u8 0xA000
+    equals__u8_u8ptr ._stk_8_0 ._temp_ptr_u8
+    equals__u8_u8 ._stk_8_1 10
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    # outfile.writeln("std_u8 = u8@0xA000 + 10 = {}", std_u8);
+    setout__file .outfile
+    print__str8 "std_u8 = u8@0xA000 + 10 = "
+    print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # std_u16 = u16@:0xA001;
+    equals__ptr_u16 ._temp_ptr_u16 0xA001
+    equals__u16_u16ptr ._stk_16_0 ._temp_ptr_u16
+    equals__u16_u16 .std_u16 ._stk_16_0
+
+    # outfile.writeln("std_u16 = u8@0xA001 = {}", std_u16);
+    setout__file .outfile
+    print__str8 "std_u16 = u8@0xA001 = "
+    print__u16 .std_u16
+    print__endl
+    setout__default
+
+    # std_u16 = u16@:0xA001 200 +;
+    equals__ptr_u16 ._temp_ptr_u16 0xA001
+    equals__u16_u16ptr ._stk_16_0 ._temp_ptr_u16
+    equals__u16_u8 ._stk_16_1 200
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .std_u16 ._stk_16_0
+
+    # outfile.writeln("std_u16 = u8@0xA001 + 200 = {}", std_u16);
+    setout__file .outfile
+    print__str8 "std_u16 = u8@0xA001 + 200 = "
+    print__u16 .std_u16
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Directly access values using `if` expressions");
+    setout__file .outfile
+    print__str8 "Directly access values using `if` expressions"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------------------------------------");
+    setout__file .outfile
+    print__str8 "---------------------------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("IS u8@0xA000 == 55: ... ", endl=false);
+    setout__file .outfile
+    print__str8 "IS u8@0xA000 == 55: ... "
+    setout__default
+
+    # if' u8@:0xA000 55 == {
+    equals__ptr_u16 ._temp_ptr_u8 0xA000
+    equals__u8_u8ptr ._stk_8_0 ._temp_ptr_u8
+    equals__u8_u8 ._stk_8_1 55
+    eval_eq__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    if ._cmpres
+
+    # outfile.writeln("YES");
+    setout__file .outfile
+    print__str8 "YES"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("NO");
+    setout__file .outfile
+    print__str8 "NO"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln("IS u16@0xA001 == 1337: ... ", endl=false);
+    setout__file .outfile
+    print__str8 "IS u16@0xA001 == 1337: ... "
+    setout__default
+
+    # if' u16@:0xA001 1337 == {
+    equals__ptr_u16 ._temp_ptr_u16 0xA001
+    equals__u16_u16ptr ._stk_16_0 ._temp_ptr_u16
+    equals__u16_u16 ._stk_16_1 1337
+    eval_eq__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("YES");
+    setout__file .outfile
+    print__str8 "YES"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("NO");
+    setout__file .outfile
+    print__str8 "NO"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Directly access values using `while` expressions");
+    setout__file .outfile
+    print__str8 "Directly access values using `while` expressions"
+    print__endl
+    setout__default
+
+    # outfile.writeln("------------------------------------------------");
+    setout__file .outfile
+    print__str8 "------------------------------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("for (std_u8 = 0; std_u8 < u8@:0xA000; std_u8 += 10) ...");
+    setout__file .outfile
+    print__str8 "for (std_u8 = 0; std_u8 < u8@:0xA000; std_u8 += 10) ..."
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # std_u8 = 0;
+    equals__u8_u8 ._stk_8_0 0
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    # while std_u8 u8@:0xA000 < {
+    loop
+    equals__u8_u8 ._stk_8_0 .std_u8
+    equals__ptr_u16 ._temp_ptr_u8 0xA000
+    equals__u8_u8ptr ._stk_8_1 ._temp_ptr_u8
+    eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
+    equals__bool_bool ._cmpres ._stk_8_0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" * std_u8 = {}", std_u8);
+    setout__file .outfile
+    print__str8 " * std_u8 = "
+    print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # std_u8 = std_u8 10 +;
+    equals__u8_u8 ._stk_8_0 .std_u8
+    equals__u8_u8 ._stk_8_1 10
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .std_u8 ._stk_8_0
+
+    endloop
+
+    # outfile.writeln(" * break");
+    setout__file .outfile
+    print__str8 " * break"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("for (std_u16 = 0; std_u16 < u16@:0xA001; std_u16 += 100) ...");
+    setout__file .outfile
+    print__str8 "for (std_u16 = 0; std_u16 < u16@:0xA001; std_u16 += 100) ..."
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # std_u16 = 0;
+    equals__u16_u8 ._stk_16_0 0
+    equals__u16_u16 .std_u16 ._stk_16_0
+
+    # while std_u16 u16@:0xA001 < {
+    loop
+    equals__u16_u16 ._stk_16_0 .std_u16
+    equals__ptr_u16 ._temp_ptr_u16 0xA001
+    equals__u16_u16ptr ._stk_16_1 ._temp_ptr_u16
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" * std_u16 = {}", std_u16);
+    setout__file .outfile
+    print__str8 " * std_u16 = "
+    print__u16 .std_u16
+    print__endl
+    setout__default
+
+    # std_u16 = std_u16 100 +;
+    equals__u16_u16 ._stk_16_0 .std_u16
+    equals__u16_u8 ._stk_16_1 100
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .std_u16 ._stk_16_0
+
+    endloop
+
+    # outfile.writeln(" * break");
+    setout__file .outfile
+    print__str8 " * break"
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

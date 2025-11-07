@@ -3,8 +3,25 @@ use crate::vhl::outputs;
 
 use crate::vhl::line_part::LinePart;
 
+fn is_direct_deref(epart: &str) -> bool {
+    return epart.contains("@:");
+}
 
-fn get_evalpart_basetype(ln_no: u64, epart: &str) -> Option<String> {
+fn get_direct_deref_str(epart: &str) -> String {
+    let stop_ind  = epart.find("@:").unwrap();
+    let start_ind = stop_ind + 2;
+
+    let btype:    String = epart[..stop_ind].to_string();
+    let address:  String = epart[start_ind..].to_string();
+    let tempname: String = format!("_temp_ptr_{}", btype);
+
+    outputs::mark_temptype_in_active_fn(&format!("ptr__{} {}", btype, tempname));
+    outputs::lines_main_push(
+        &format!("    equals__ptr_u16 .{} {}", tempname, address));
+    return tempname;
+}
+
+fn get_evalpart_basetype(ln_no: u64, epart: &str, deref_okay: bool) -> Option<String> {
     if array::arg_is_array(epart) {
         match array::get_arraytype_basetype(ln_no, epart) {
             Some(btype) => {
@@ -13,6 +30,15 @@ fn get_evalpart_basetype(ln_no: u64, epart: &str) -> Option<String> {
             None => {
                 return None;
             },
+        }
+    } else if deref_okay && epart.contains("@:") {
+        match epart.find("@:") {
+            Some(stop_ind) => {
+                return Some(epart[..stop_ind].to_string());
+            },
+            None => {
+                return None;
+            }
         }
     } else {
         match outputs::get_vartype(epart) {
@@ -148,8 +174,8 @@ fn get_uint_literal_value(epart: &str) -> Option<u64> {
     }
 }
 
-pub fn is_type_u8(ln_no: u64, epart: &str) -> bool {
-    match get_evalpart_basetype(ln_no, epart) {
+pub fn is_type_u8(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
+    match get_evalpart_basetype(ln_no, epart, deref_okay) {
         Some(btype) => {
             if btype == "u8" {
                 return true;
@@ -185,8 +211,8 @@ pub fn is_type_u8(ln_no: u64, epart: &str) -> bool {
     return false;
 }
 
-pub fn get_u8_value_str(ln_no: u64, epart: &str) -> Option<String> {
-    if !is_type_u8(ln_no, epart) {
+pub fn get_u8_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<String> {
+    if !is_type_u8(ln_no, epart, deref_okay) {
         return None
     }
 
@@ -196,13 +222,15 @@ pub fn get_u8_value_str(ln_no: u64, epart: &str) -> Option<String> {
         return Some(epart.to_string());
     } else if is_uint_literal(epart) {
         return Some(epart.to_string());
+    } else if is_direct_deref(epart) {
+        return Some(get_direct_deref_str(epart));
     } else {
         return resolve_varname(ln_no, epart);
     }
 }
 
-pub fn is_type_u16(ln_no: u64, epart: &str) -> bool {
-    match get_evalpart_basetype(ln_no, epart) {
+pub fn is_type_u16(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
+    match get_evalpart_basetype(ln_no, epart, deref_okay) {
         Some(btype) => {
             if btype == "u16" {
                 return true;
@@ -238,8 +266,8 @@ pub fn is_type_u16(ln_no: u64, epart: &str) -> bool {
     return false;
 }
 
-pub fn get_u16_value_str(ln_no: u64, epart: &str) -> Option<String> {
-    if !is_type_u16(ln_no, epart) {
+pub fn get_u16_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<String> {
+    if !is_type_u16(ln_no, epart, deref_okay) {
         return None
     }
 
@@ -249,6 +277,8 @@ pub fn get_u16_value_str(ln_no: u64, epart: &str) -> Option<String> {
         return Some(epart.to_string());
     } else if is_uint_literal(epart) {
         return Some(epart.to_string());
+    } else if is_direct_deref(epart) {
+        return Some(get_direct_deref_str(epart));
     } else {
         return resolve_varname(ln_no, epart);
     }

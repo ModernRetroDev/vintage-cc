@@ -21,6 +21,10 @@ fn eval_part_is_op(part: &str) -> bool {
     }
 }
 
+fn is_direct_deref(epart: &str) -> bool {
+    return epart.contains("@:");
+}
+
 fn get_evalpart_basetype(ln_no: u64, epart: &str) -> Option<String> {
     if array::arg_is_array(epart) {
         match array::get_arraytype_basetype(ln_no, epart) {
@@ -30,6 +34,15 @@ fn get_evalpart_basetype(ln_no: u64, epart: &str) -> Option<String> {
             None => {
                 return None;
             },
+        }
+    } else if epart.contains("@:") {
+        match epart.find("@:") {
+            Some(stop_ind) => {
+                return Some(epart[..stop_ind].to_string());
+            },
+            None => {
+                return None;
+            }
         }
     } else {
         match outputs::get_vartype(epart) {
@@ -119,8 +132,8 @@ pub fn now(part: LinePart) -> bool {
                 }
             },
             None => {
-                if fn_args::is_type_u8(part.ln_no, epart) {
-                } else if fn_args::is_type_u16(part.ln_no, epart) {
+                if fn_args::is_type_u8(part.ln_no, epart, true) {
+                } else if fn_args::is_type_u16(part.ln_no, epart, true) {
                     if req_elem_sz < 2 {
                         req_elem_sz = 2;
                     }
@@ -377,12 +390,16 @@ pub fn now(part: LinePart) -> bool {
 
         let epart_type: Option<String> = 
             get_evalpart_basetype(part.ln_no, &epart);
+        let epart_ptr_str = match is_direct_deref(&epart) {
+            true  => { "ptr".to_string() },
+            false => { "".to_string() },
+        };
 
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
                 if vtype == "u8" {
-                    match fn_args::get_u8_value_str(part.ln_no, epart) {
+                    match fn_args::get_u8_value_str(part.ln_no, epart, true) {
                         Some(u8val) => {
                             resolved_arg = u8val.clone();
                         },
@@ -395,12 +412,12 @@ pub fn now(part: LinePart) -> bool {
 
                     if req_elem_sz == 1 {
                         outputs::lines_main_push(
-                            &format!("    equals__u8_u8 .{}_{} .{}", 
-                                stk_basename, cur_stk_sz, resolved_arg));
+                            &format!("    equals__u8_u8{} .{}_{} .{}", 
+                                epart_ptr_str, stk_basename, cur_stk_sz, resolved_arg));
                     } else if req_elem_sz == 2 {
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u8 .{}_{} .{}", 
-                                stk_basename, cur_stk_sz, resolved_arg));
+                            &format!("    equals__u16_u8{} .{}_{} .{}", 
+                                epart_ptr_str, stk_basename, cur_stk_sz, resolved_arg));
                     } else {
                         println!(
                             "ERROR: ln:{} Stack elements of size `{}` not currently supported (2).",
@@ -408,7 +425,7 @@ pub fn now(part: LinePart) -> bool {
                         return true;
                     }
                 } else if vtype == "u16" {
-                    match fn_args::get_u16_value_str(part.ln_no, epart) {
+                    match fn_args::get_u16_value_str(part.ln_no, epart, true) {
                         Some(u16val) => {
                             resolved_arg = u16val.clone();
                         },
@@ -421,8 +438,8 @@ pub fn now(part: LinePart) -> bool {
 
                     if req_elem_sz == 2 {
                         outputs::lines_main_push(
-                            &format!("    equals__u16_u16 .{}_{} .{}", 
-                                stk_basename, cur_stk_sz, resolved_arg));
+                            &format!("    equals__u16_u16{} .{}_{} .{}", 
+                                epart_ptr_str, stk_basename, cur_stk_sz, resolved_arg));
                     } else {
                         println!(
                             "ERROR: ln:{} Stack elements of size `{}` not currently supported (3).",
@@ -432,7 +449,7 @@ pub fn now(part: LinePart) -> bool {
                 }
             },
             None => {
-                if fn_args::is_type_u8(part.ln_no, epart) {
+                if fn_args::is_type_u8(part.ln_no, epart, true) {
                     if req_elem_sz == 1 {
                         outputs::lines_main_push(
                             &format!("    equals__u8_u8 .{}_{} {}", 
@@ -447,7 +464,7 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no, req_elem_sz);
                         return true;
                     }
-                } else if fn_args::is_type_u16(part.ln_no, epart) {
+                } else if fn_args::is_type_u16(part.ln_no, epart, true) {
                     if req_elem_sz == 2 {
                         outputs::lines_main_push(
                             &format!("    equals__u16_u16 .{}_{} {}", 
