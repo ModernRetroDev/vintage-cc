@@ -76,14 +76,9 @@ fn main
     print__endl
     setout__default
 
-    # outfile.writeln("Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF");
+    # outfile.writeln("*** Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF ***");
     setout__file .outfile
-    print__str8 "Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF"
-    print__endl
-    setout__default
-
-    # outfile.writeln();
-    setout__file .outfile
+    print__str8 "*** Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF ***"
     print__endl
     setout__default
 
@@ -95,13 +90,68 @@ fn main
     equals__u8_u8 ._stk_8_0 0xFF
     equals__u8ptr_u8 .bnk_u8 ._stk_8_0
 
-    # outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
+    # outfile.writeln("bnk_u8  @{} = `0x{:X}`", @bnk_u8, bnk_u8);
     setout__file .outfile
     print__str8 "bnk_u8  @"
     print__ptr .bnk_u8
-    print__str8 " = `"
-    print__u8ptr .bnk_u8
+    print__str8 " = `0x"
+    print__u8ptr_xx .bnk_u8
     print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** Setting `bnk_u8 = 0b10101010` ***");
+    setout__file .outfile
+    print__str8 "*** Setting `bnk_u8 = 0b10101010` ***"
+    print__endl
+    setout__default
+
+    # bnk_u8 = 0b10101010;
+    equals__u8_u8 ._stk_8_0 0b10101010
+    equals__u8ptr_u8 .bnk_u8 ._stk_8_0
+
+    # outfile.writeln("bnk_u8  @{} = `0b{:b}`", @bnk_u8, bnk_u8);
+    setout__file .outfile
+    print__str8 "bnk_u8  @"
+    print__ptr .bnk_u8
+    print__str8 " = `0b"
+    print__u8ptr_b .bnk_u8
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** Setting `bnk_u16 = 0b1111000011110000` ***");
+    setout__file .outfile
+    print__str8 "*** Setting `bnk_u16 = 0b1111000011110000` ***"
+    print__endl
+    setout__default
+
+    # bnk_u16 = 0b1111000011110000;
+    equals__u16_u16 ._stk_16_0 0b1111000011110000
+    equals__u16ptr_u16 .bnk_u16 ._stk_16_0
+
+    # outfile.writeln("bnk_u16  @{} = `0b{:b}`", @bnk_u16, bnk_u16);
+    setout__file .outfile
+    print__str8 "bnk_u16  @"
+    print__ptr .bnk_u16
+    print__str8 " = `0b"
+    print__u16ptr_b .bnk_u16
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
     print__endl
     setout__default
 

@@ -73,8 +73,44 @@ fn as_type_u8(u8_arg: &str) -> bool {
     return false;
 }
 
+fn as_type_u8_b(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8_b {}", u8_arg));
+
+    return false;
+}
+
+fn as_type_u8_x(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8_x {}", u8_arg));
+
+    return false;
+}
+
+fn as_type_u8_xx(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8_xx {}", u8_arg));
+
+    return false;
+}
+
 fn as_type_u8ptr(u8_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__u8ptr {}", u8_arg));
+
+    return false;
+}
+
+fn as_type_u8ptr_b(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8ptr_b {}", u8_arg));
+
+    return false;
+}
+
+fn as_type_u8ptr_x(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8ptr_x {}", u8_arg));
+
+    return false;
+}
+
+fn as_type_u8ptr_xx(u8_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u8ptr_xx {}", u8_arg));
 
     return false;
 }
@@ -85,8 +121,44 @@ fn as_type_u16(u16_arg: &str) -> bool {
     return false;
 }
 
+fn as_type_u16_b(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16_b {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16_x(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16_x {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16_xx(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16_xx {}", u16_arg));
+
+    return false;
+}
+
 fn as_type_u16ptr(u16_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__u16ptr {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16ptr_b(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16ptr_b {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16ptr_x(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16ptr_x {}", u16_arg));
+
+    return false;
+}
+
+fn as_type_u16ptr_xx(u16_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__u16ptr_xx {}", u16_arg));
 
     return false;
 }
@@ -127,71 +199,6 @@ fn get_variable_name(part: &LinePart) -> Option<String> {
     }
     return None;
 }
-
-// fn as_type_u8_x(part: LinePart) -> bool {
-//  let value      = part.get_next().next;
-//  let value_part = part.get_next();
-//  let resolved: String;
-
-//  builtins::mark_as_used(&part.next);
-
-//  if value_part.is_varname() {
-//      resolved = get::var_fullname(&value);
-//  } else {
-//      resolved = format!("#{}", value);
-//  }
-
-//  outputs::lines_main_push(&format!("   ; print__u8_x {}", value));
-//  outputs::lines_main_push(&format!("   lda {}", resolved));
-//  outputs::lines_main_push(         "   jsr _print__u8_x");
-//  outputs::lines_main_push("");
-
-//  return false;
-// }
-
-// fn as_type_u8_xx(part: LinePart) -> bool {
-//  let value      = part.get_next().next;
-//  let value_part = part.get_next();
-//  let resolved: String;
-
-//  builtins::mark_as_used(&part.next);
-
-//  if value_part.is_varname() {
-//      resolved = get::var_fullname(&value);
-//  } else {
-//      resolved = format!("#{}", value);
-//  }
-
-//  outputs::lines_main_push(&format!("   ; print__u8_X {}", value));
-//  outputs::lines_main_push(&format!("   lda {}", resolved));
-//  outputs::lines_main_push(         "   jsr _print__u8_xx");
-//  outputs::lines_main_push("");
-
-//  return false;
-// }
-
-// fn as_type_u16_x(part: LinePart) -> bool {
-//  let value      = part.get_next().next;
-//  let value_part = part.get_next();
-//  let resolved: String;
-
-//  builtins::mark_as_used(&part.next);
-
-//  if value_part.is_varname() {
-//      resolved = get::var_fullname(&value);
-//  } else {
-//      println!("ERROR/TODO: Non variable U16 print on LN {}", part.ln_no);
-//      return true;
-//  }
-
-//  outputs::lines_main_push(&format!("   ; print__u16_x {}", value));
-//  outputs::lines_main_push(&format!("   ldx {resolved}"));
-//  outputs::lines_main_push(&format!("   ldy {resolved}+1"));
-//  outputs::lines_main_push(         "   jsr _print__u16_x");
-//  outputs::lines_main_push("");
-
-//  return false;
-// }
 
 fn resolve_supplied_arg(ln_no: u64, supplied: &str) -> Option<String> {
     let resolved_arg: String;
@@ -623,7 +630,6 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
                 }
             } else {
                 match get_supplied_basetype(part.ln_no, &single_arg) {
-                // match outputs::get_vartype(&resolved_arg) {
                     Some(vartype) => {
                         match &vartype[..] {
                             "bool" => {
@@ -637,23 +643,123 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
                                 }
                             },
                             "u8" => {
-                                if as_type_u8(&resolved_arg) {
-                                    return true;
+                                match &grp[..] {
+                                    "$" => {
+                                        if as_type_u8(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:b" => {
+                                        if as_type_u8_b(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:x" => {
+                                        if as_type_u8_x(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:X" => {
+                                        if as_type_u8_xx(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    _ => {
+                                        println!(
+                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u8 `{}`.",
+                                            part.ln_no, &grp[1..], single_arg);
+                                        return true;
+                                    }
                                 }
                             },
                             "u8:ptr" => {
-                                if as_type_u8ptr(&resolved_arg) {
-                                    return true;
+                                match &grp[..] {
+                                    "$" => {
+                                        if as_type_u8ptr(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:b" => {
+                                        if as_type_u8ptr_b(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:x" => {
+                                        if as_type_u8ptr_x(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:X" => {
+                                        if as_type_u8ptr_xx(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    _ => {
+                                        println!(
+                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u8ptr `{}`.",
+                                            part.ln_no, &grp[1..], single_arg);
+                                        return true;
+                                    }
                                 }
                             },
                             "u16" => {
-                                if as_type_u16(&resolved_arg) {
-                                    return true;
+                                match &grp[..] {
+                                    "$" => {
+                                        if as_type_u16(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:b" => {
+                                        if as_type_u16_b(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:x" => {
+                                        if as_type_u16_x(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:X" => {
+                                        if as_type_u16_xx(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    _ => {
+                                        println!(
+                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u16 `{}`.",
+                                            part.ln_no, &grp[1..], single_arg);
+                                        return true;
+                                    }
                                 }
                             },
                             "u16:ptr" => {
-                                if as_type_u16ptr(&resolved_arg) {
-                                    return true;
+                                match &grp[..] {
+                                    "$" => {
+                                        if as_type_u16ptr(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:b" => {
+                                        if as_type_u16ptr_b(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:x" => {
+                                        if as_type_u16ptr_x(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    "$:X" => {
+                                        if as_type_u16ptr_xx(&resolved_arg) {
+                                            return true;
+                                        }
+                                    },
+                                    _ => {
+                                        println!(
+                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u16ptr `{}`.",
+                                            part.ln_no, &grp[1..], single_arg);
+                                        return true;
+                                    }
                                 }
                             },
                             "str8" => {
@@ -688,15 +794,5 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
 
     // } else if part.next == "print__char" {
     //  return as_type_char(part);
-
-    // } else if part.next == "print__u8_x" {
-    //  return as_type_u8_x(part);
-
-    // } else if part.next == "print__u8_xx" {
-    //  return as_type_u8_xx(part);
-
-    // } else if part.next == "print__u16_x" {
-    //  return as_type_u16_x(part);
-
     return false
 }

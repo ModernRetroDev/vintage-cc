@@ -1,0 +1,157 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    var__u8 a
+    var__u8 b
+    var__u8 c
+    var__u8 d
+    var__u8 e
+    var__u16 a16
+    var__u16 b16
+    var__u16 c16
+    var__u16 d16
+    var__u16 e16
+
+    equals__u8_u8 .a 0b10101010
+    equals__u8_u8 .b 0b11111111
+    equals__u8_u8 .c 0b00000000
+    equals__u8_u8 .d 0b11110000
+    equals__u8_u8 .e 0b00001111
+    equals__u16_u16 .a16 0b1010101010101010
+    equals__u16_u16 .b16 0b1111111111111111
+    equals__u16_u16 .c16 0b0000000000000000
+    equals__u16_u16 .d16 0b1111000011110000
+    equals__u16_u16 .e16 0b0000111100001111
+
+    # outfile.create("06_binary.utest");
+    setup__file .outfile 'w' "@:06_binary.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-----------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# PRINT VALUES IN BINARY FORM #");
+    setout__file .outfile
+    print__str8 "# PRINT VALUES IN BINARY FORM #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-----------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print out a few binary u8 values***");
+    setout__file .outfile
+    print__str8 "*** print out a few binary u8 values***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * a (0b10101010) = 0b{:b}", a);
+    setout__file .outfile
+    print__str8 " * a (0b10101010) = 0b"
+    print__u8_b .a
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * b (0b11111111) = 0b{:b}", b);
+    setout__file .outfile
+    print__str8 " * b (0b11111111) = 0b"
+    print__u8_b .b
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * c (0b00000000) = 0b{:b}", c);
+    setout__file .outfile
+    print__str8 " * c (0b00000000) = 0b"
+    print__u8_b .c
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * d (0b11110000) = 0b{:b}", d);
+    setout__file .outfile
+    print__str8 " * d (0b11110000) = 0b"
+    print__u8_b .d
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * e (0b00001111) = 0b{:b}", e);
+    setout__file .outfile
+    print__str8 " * e (0b00001111) = 0b"
+    print__u8_b .e
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print out a few binary u16 values***");
+    setout__file .outfile
+    print__str8 "*** print out a few binary u16 values***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * a16 (0b1010101010101010) = 0b{:b}", a16);
+    setout__file .outfile
+    print__str8 " * a16 (0b1010101010101010) = 0b"
+    print__u16_b .a16
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * b16 (0b1111111111111111) = 0b{:b}", b16);
+    setout__file .outfile
+    print__str8 " * b16 (0b1111111111111111) = 0b"
+    print__u16_b .b16
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * c16 (0b0000000000000000) = 0b{:b}", c16);
+    setout__file .outfile
+    print__str8 " * c16 (0b0000000000000000) = 0b"
+    print__u16_b .c16
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * d16 (0b1111000011110000) = 0b{:b}", d16);
+    setout__file .outfile
+    print__str8 " * d16 (0b1111000011110000) = 0b"
+    print__u16_b .d16
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * e16 (0b0000111100001111) = 0b{:b}", e16);
+    setout__file .outfile
+    print__str8 " * e16 (0b0000111100001111) = 0b"
+    print__u16_b .e16
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

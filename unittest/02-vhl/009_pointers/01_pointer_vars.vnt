@@ -28,12 +28,22 @@ fn main() {
 	outfile.writeln();
 
 	// alternatively; the address can be changed as such
-	outfile.writeln("Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF");
-	outfile.writeln();
+	outfile.writeln("*** Setting `@bnk_u8 = 0xA003` and bank_u8 = 0xFF ***");
 
 	@bnk_u8 = 0xA003;
 	bnk_u8  = 0xFF;
-	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8, bnk_u8);
+	outfile.writeln("bnk_u8  @{} = `0x{:X}`", @bnk_u8, bnk_u8);
+	outfile.writeln();
+
+	outfile.writeln("*** Setting `bnk_u8 = 0b10101010` ***");
+	bnk_u8  = 0b10101010;
+	outfile.writeln("bnk_u8  @{} = `0b{:b}`", @bnk_u8, bnk_u8);
+	outfile.writeln();
+
+	outfile.writeln("*** Setting `bnk_u16 = 0b1111000011110000` ***");
+	bnk_u16  = 0b1111000011110000;
+	outfile.writeln("bnk_u16  @{} = `0b{:b}`", @bnk_u16, bnk_u16);
+	outfile.writeln();
 
 	outfile.close();
 	shutdown();

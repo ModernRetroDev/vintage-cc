@@ -1,0 +1,66 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	// declarations
+	let a: u16;
+	let outfile: file;
+	let b: u8  = 0xA1;
+	//           ^^^^------- 161
+	let c: u16 = 0x10A1;
+	//           ^^^^^^----- 4257
+	let d: u8  = 0b11111111;
+	//           ^^^^------- 255
+	let e: u16 = 0b111111111;
+	//           ^^^^------- 511
+
+	outfile.create("05_hex_style.utest");
+
+	outfile.writeln("#--------------------------------------#");
+	outfile.writeln("# PRINT VALUES IN A HEXADECIMAL FORMAT #");
+	outfile.writeln("#--------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("*** print out a few binary u16 values***");
+	a = 0x0000;
+	outfile.writeln(" * 0x0000     (0) :   0x{:X}", a);
+	a = 0x0001;
+	outfile.writeln(" * 0x0001     (1) :   0x{:X}", a);
+	a = 0x0002;
+	outfile.writeln(" * 0x0002     (2) :   0x{:X}", a);
+	a = 0x0004;
+	outfile.writeln(" * 0x0004     (4) :   0x{:X}", a);
+	a = 0x0008;
+	outfile.writeln(" * 0x0008     (8) :   0x{:X}", a);
+	a = 0x0010;
+	outfile.writeln(" * 0x0010    (16) :   0x{:X}", a);
+	a = 0x0020;
+	outfile.writeln(" * 0x0020    (32) :   0x{:X}", a);
+	a = 0x0040;
+	outfile.writeln(" * 0x0040    (64) :   0x{:X}", a);
+	a = 0x0080;
+	outfile.writeln(" * 0x0080   (128) :   0x{:X}", a);
+	a = 0x0100;
+	outfile.writeln(" * 0x0100   (256) :   0x{:X}", a);
+	a = 0xFFFF;
+	outfile.writeln(" * 0xFFFF (65535) :   0x{:X}", a);
+	outfile.writeln();
+
+	outfile.writeln("*** print a u8 and u16 initialized w/hex values***");
+	outfile.writeln(" b = 0xA1   (161);  0x{:X}", b);
+	outfile.writeln(" c = 0x10A1 (4257); 0x{:X}", c);
+	outfile.writeln();
+
+	outfile.writeln("*** print a u8 and u16 initialized w/binary values***");
+	outfile.writeln(" d = 0b11111111  (255); 0x{:X}", d);
+	outfile.writeln(" e = 0b111111111 (511); 0x{:X}", e);
+
+	outfile.close();
+	shutdown();
+}
