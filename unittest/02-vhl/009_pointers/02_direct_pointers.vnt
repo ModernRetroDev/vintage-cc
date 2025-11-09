@@ -11,6 +11,8 @@ fn main() {
 	let outfile: file;
 	let bnk_u8:  u8@  = 0xA000;
 	let bnk_u16: u16@ = 0xA001;
+	let chk_u8:  u8@;
+	let chk_u16: u16@;
 	let std_u8:  u8;
 	let std_u16: u16;
 
@@ -42,6 +44,18 @@ fn main() {
 
 	std_u8 = bnk_u8 10 +;
 	outfile.writeln("std_u8 = bnk_u8 + 10 = {}", std_u8);
+	outfile.writeln();
+
+	outfile.writeln("Directly set values using `rpn_eval` expressions");
+	outfile.writeln("---------------------------------------------------");
+	outfile.writeln();
+
+	u8@:0xA008 = 0xFF;
+	@chk_u8 = 0xA008;
+	outfile.writeln("u8@0xA008 = 0xFF; 0x{:X}", chk_u8);
+	u16@:0xA00A = 6969;
+	@chk_u16 = 0xA00A;
+	outfile.writeln("u16@0xA00A = 6969; {}", chk_u16);
 	outfile.writeln();
 
 	outfile.writeln("Directly access values using `rpn_eval` expressions");

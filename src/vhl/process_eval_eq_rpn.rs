@@ -165,14 +165,16 @@ fn eval_is_decrement(part: LinePart) -> bool {
 }
 
 pub fn now(part: LinePart) -> bool {
-    let     varname:          String;
-    let     var_is_ref:       bool;
-    let mut next:             LinePart;
-    let mut eval_parts:       Vec<String>  = Vec::new();
-    let mut cur_stk_sz:       u8 = 0;
-    let mut req_stk_sz:       u8 = 0;
-    let mut req_elem_sz:      u8 = 1;
-    let mut terminated:       bool = false;
+    let     varname:      String;
+    let     var_is_ref:   bool;
+    let     var_is_deref: bool;
+    let mut next:         LinePart;
+    let mut eval_parts:   Vec<String>  = Vec::new();
+    let mut cur_stk_sz:   u8 = 0;
+    let mut req_stk_sz:   u8 = 0;
+    let mut req_elem_sz:  u8 = 1;
+    let mut terminated:   bool = false;
+    let mut deref_btype:  String = "".to_string();
 
     if part.next.starts_with("@") {
         var_is_ref = true;
@@ -182,11 +184,15 @@ pub fn now(part: LinePart) -> bool {
         varname = part.next.clone();
     }
 
-    if outputs::get_vartype(&varname).is_none() {
+    if is_direct_deref(&varname) {
+        var_is_deref = true;
+    } else if outputs::get_vartype(&varname).is_none() {
         println!(
             "ERROR: ln:{} Unable to save evaluated value to undeclared variable `{}`.",
             part.ln_no, varname);
         return true;
+    } else {
+        var_is_deref = false;
     }
 
     next = part.get_next();
@@ -335,7 +341,9 @@ pub fn now(part: LinePart) -> bool {
     let mut retval_btype: String = 
         get_evalpart_basetype(part.ln_no, &varname).unwrap();
 
-    if var_is_ref {
+    if var_is_deref {
+        deref_btype = retval_btype.clone();
+    } else if var_is_ref {
         if !retval_btype.ends_with(":ptr") {
             println!(
                 "ERROR: ln:{} Reference addresses `@{}`may only be set for pointers.",
@@ -664,6 +672,38 @@ pub fn now(part: LinePart) -> bool {
         if array::store_value(part.ln_no, &varname, &eval_final) {
             return true;
         }
+    } else if var_is_deref {
+        let tempptr: String;
+        let deref_eq_fn: String;
+
+        if deref_btype == "u8" {
+            deref_eq_fn = "equals__u8ptr_u8".to_string();
+            tempptr = match fn_args::get_u8_value_str(part.ln_no, &varname, true) {
+                Some(tempstr) => { tempstr }
+                None => {
+                    println!("ERROR: ln:{} Failed to get u8 deref of `{}`",
+                        part.ln_no, varname);
+                    return true;
+                }
+            }
+        } else if deref_btype == "u16" {
+            deref_eq_fn = "equals__u16ptr_u16".to_string();
+            tempptr = match fn_args::get_u16_value_str(part.ln_no, &varname, true) {
+                Some(tempstr) => { tempstr }
+                None => {
+                    println!("ERROR: ln:{} Failed to get u16 deref of `{}`",
+                        part.ln_no, varname);
+                    return true;
+                }
+            }
+        } else {
+            println!("ERROR: ln:{} Unsupported type for deref of `{}`, got {}",
+                part.ln_no, varname, deref_btype);
+            return true;
+        }
+
+        outputs::lines_main_push(
+            &format!("    {} .{} .{}_0", deref_eq_fn, tempptr, stk_basename));
     } else {
         outputs::lines_main_push(
             &format!("    {} .{} .{}_0", eq_fn, varname, stk_basename));

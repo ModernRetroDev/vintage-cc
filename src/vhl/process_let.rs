@@ -207,12 +207,13 @@ fn as_type_ptr(ln_no: u64, varname: &str, ptrtype_str: &str, init_val: Option<St
             }
         },
         None => {
-            if ! ptrtype_str.ends_with(";") {
-                println!(
-                    "ERROR: ln:{}: Line is missing a trailing line terminator.",
-                    ln_no);
-                return true;
-            }
+            // if ! ptrtype_str.ends_with(";") {
+            //     println!("ptrtype_str = `{}`", ptrtype_str);
+            //     println!(
+            //         "ERROR: ln:{}: Line is missing a trailing line terminator.",
+            //         ln_no);
+            //     return true;
+            // }
         }
     }
 

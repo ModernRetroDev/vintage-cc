@@ -10,6 +10,8 @@ fn main
     var__file outfile
     ptr__u8 bnk_u8
     ptr__u16 bnk_u16
+    ptr__u8 chk_u8
+    ptr__u16 chk_u16
     var__u8 std_u8
     var__u16 std_u16
     var__bool _cmpres
@@ -119,6 +121,60 @@ fn main
     setout__file .outfile
     print__str8 "std_u8 = bnk_u8 + 10 = "
     print__u8 .std_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("Directly set values using `rpn_eval` expressions");
+    setout__file .outfile
+    print__str8 "Directly set values using `rpn_eval` expressions"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------------------------------------------");
+    setout__file .outfile
+    print__str8 "---------------------------------------------------"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # u8@:0xA008 = 0xFF;
+    equals__u8_u8 ._stk_8_0 0xFF
+    equals__ptr_u16 ._temp_ptr_u8 0xA008
+    equals__u8ptr_u8 ._temp_ptr_u8 ._stk_8_0
+
+    # chk_u8 = 0xA008;
+    equals__u16_u16 ._stk_16_0 0xA008
+    equals__ptr_u16 .chk_u8 ._stk_16_0
+
+    # outfile.writeln("u8@0xA008 = 0xFF; 0x{:X}", chk_u8);
+    setout__file .outfile
+    print__str8 "u8@0xA008 = 0xFF; 0x"
+    print__u8ptr_xx .chk_u8
+    print__endl
+    setout__default
+
+    # u16@:0xA00A = 6969;
+    equals__u16_u16 ._stk_16_0 6969
+    equals__ptr_u16 ._temp_ptr_u16 0xA00A
+    equals__u16ptr_u16 ._temp_ptr_u16 ._stk_16_0
+
+    # chk_u16 = 0xA00A;
+    equals__u16_u16 ._stk_16_0 0xA00A
+    equals__ptr_u16 .chk_u16 ._stk_16_0
+
+    # outfile.writeln("u16@0xA00A = 6969; {}", chk_u16);
+    setout__file .outfile
+    print__str8 "u16@0xA00A = 6969; "
+    print__u16ptr .chk_u16
     print__endl
     setout__default
 
