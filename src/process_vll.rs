@@ -7,6 +7,7 @@ use crate::vll::line_part::LinePart;
 use crate::vll::builtins;
 use crate::vll::process_arr8;
 use crate::vll::process_arr16;
+use crate::vll::process_bitwise_or;
 use crate::vll::process_break;
 use crate::vll::process_call;
 use crate::vll::process_close;
@@ -149,6 +150,12 @@ fn process_source(s: String) {
 		}
 		if next.is_arr16() {
 			if process_arr16::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_bitwise_or() {
+			if process_bitwise_or::now(next) {
 				return;
 			}
 			continue;

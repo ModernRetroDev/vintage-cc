@@ -1,0 +1,185 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn print_sum
+    var__u8 _arg_0__a
+    var__u8 _arg_1__b
+    ptr__file _arg_2__outfile
+    var__u8 combined
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+
+    equals__u8_u8 .combined 0
+
+    # combined = a b +;
+    equals__u8_u8 ._stk_8_0 ._arg_0__a
+    equals__u8_u8 ._stk_8_1 ._arg_1__b
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .combined ._stk_8_0
+
+    # outfile.writeln("{} + {} = {}", a, b, combined);
+    setout__file ._arg_2__outfile
+    print__u8 ._arg_0__a
+    print__str8 " + "
+    print__u8 ._arg_1__b
+    print__str8 " = "
+    print__u8 .combined
+    print__endl
+    setout__default
+
+endfn
+
+fn main
+    var__u8 x
+    var__u8 y
+    var__file outfile
+
+    equals__u8_u8 .x 10
+    equals__u8_u8 .y 20
+
+    # outfile.create("02_u8_args.utest");
+    setup__file .outfile 'w' "@:02_u8_args.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# CALL A FUNCTION (WITH ARGS, BUT NO RETURN VALUES) #");
+    setout__file .outfile
+    print__str8 "# CALL A FUNCTION (WITH ARGS, BUT NO RETURN VALUES) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("x = {}", x);
+    setout__file .outfile
+    print__str8 "x = "
+    print__u8 .x
+    print__endl
+    setout__default
+
+    # outfile.writeln("y = {}", y);
+    setout__file .outfile
+    print__str8 "y = "
+    print__u8 .y
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("print_sum(5, 3)");
+    setout__file .outfile
+    print__str8 "print_sum(5, 3)"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------");
+    setout__file .outfile
+    print__str8 "---------------"
+    print__endl
+    setout__default
+
+    # print_sum(5, 3, outfile);
+    equals__u8_u8 .print_sum._arg_0__a 5
+    equals__u8_u8 .print_sum._arg_1__b 3
+    equals__file_file .print_sum._arg_2__outfile .outfile
+    call print_sum
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("print_sum(x, y)");
+    setout__file .outfile
+    print__str8 "print_sum(x, y)"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------");
+    setout__file .outfile
+    print__str8 "---------------"
+    print__endl
+    setout__default
+
+    # print_sum(x, y, outfile);
+    equals__u8_u8 .print_sum._arg_0__a .x
+    equals__u8_u8 .print_sum._arg_1__b .y
+    equals__file_file .print_sum._arg_2__outfile .outfile
+    call print_sum
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("print_sum(5, x)")
+    setout__file .outfile
+    print__str8 "print_sum(5, x)"
+    print__endl
+    setout__default
+
+    # outfile.writeln("---------------");
+    setout__file .outfile
+    print__str8 "---------------"
+    print__endl
+    setout__default
+
+    # print_sum(5, x, outfile);
+    equals__u8_u8 .print_sum._arg_0__a 5
+    equals__u8_u8 .print_sum._arg_1__b .x
+    equals__file_file .print_sum._arg_2__outfile .outfile
+    call print_sum
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

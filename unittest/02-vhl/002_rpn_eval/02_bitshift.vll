@@ -30,21 +30,21 @@ fn main
     setup__file .outfile 'w' "@:02_bitshift.utest"
     open__file .outfile
 
-    # outfile.writeln("#-----------------------------#");
+    # outfile.writeln("#-----------------------------------#");
     setout__file .outfile
-    print__str8 "#-----------------------------#"
+    print__str8 "#-----------------------------------#"
     print__endl
     setout__default
 
-    # outfile.writeln("# PRINT VALUES IN BINARY FORM #");
+    # outfile.writeln("# TEST BITSHIFTING OF U8/U16 VALUES #");
     setout__file .outfile
-    print__str8 "# PRINT VALUES IN BINARY FORM #"
+    print__str8 "# TEST BITSHIFTING OF U8/U16 VALUES #"
     print__endl
     setout__default
 
-    # outfile.writeln("#-----------------------------#");
+    # outfile.writeln("#-----------------------------------#");
     setout__file .outfile
-    print__str8 "#-----------------------------#"
+    print__str8 "#-----------------------------------#"
     print__endl
     setout__default
 

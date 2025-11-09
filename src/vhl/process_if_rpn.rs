@@ -9,6 +9,9 @@ fn eval_part_is_op(part: &str) -> bool {
     match part {
         "+"  => { return true },
         "-"  => { return true },
+        "|"  => { return true },
+        "<<" => { return true },
+        ">>" => { return true },
         "<"  => { return true },
         ">"  => { return true },
         "<=" => { return true },
@@ -214,6 +217,60 @@ pub fn now(part: LinePart) -> bool {
                     } else if req_elem_sz == 2 {
                         outputs::lines_main_push(
                             &format!("    minus_equals__u16_u16 .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+                },
+                "|" => {
+                    if req_elem_sz == 1 {
+                        outputs::lines_main_push(
+                            &format!("    bitwise_or__u8 .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    bitwise_or__u16 .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+                },
+                "<<" => {
+                    if req_elem_sz == 1 {
+                        outputs::lines_main_push(
+                            &format!("    lshift__u8_n .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    lshift__u16_n .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+                },
+                ">>" => {
+                    if req_elem_sz == 1 {
+                        outputs::lines_main_push(
+                            &format!("    rshift__u8_n .{}_{} .{}_{}", 
+                                stk_basename, stk_prev,
+                                stk_basename, stk_cur));
+                    } else if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    rshift__u16_n .{}_{} .{}_{}", 
                                 stk_basename, stk_prev,
                                 stk_basename, stk_cur));
                     } else {

@@ -5,6 +5,7 @@ pub mod get;
 pub mod process_arr8;
 pub mod process_arr16;
 pub mod process_break;
+pub mod process_bitwise_or;
 pub mod process_call;
 pub mod process_close;
 pub mod process_else;

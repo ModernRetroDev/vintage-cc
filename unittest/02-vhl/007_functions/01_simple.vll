@@ -1,0 +1,39 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn print_hello
+    # println("Hello world!");
+    print__str8 "Hello world!"
+    print__endl
+
+endfn
+
+fn main
+    # println("#-------------------------------------------------#");
+    print__str8 "#-------------------------------------------------#"
+    print__endl
+
+    # println("# CALL A SIMPLE FUNCTION (NO ARGS, RETURN VALUES) #");
+    print__str8 "# CALL A SIMPLE FUNCTION (NO ARGS, RETURN VALUES) #"
+    print__endl
+
+    # println("#-------------------------------------------------#");
+    print__str8 "#-------------------------------------------------#"
+    print__endl
+
+    # println();
+    print__endl
+
+    # print_hello();
+    call print_hello
+
+    # shutdown();
+    call shutdown
+
+endfn
+

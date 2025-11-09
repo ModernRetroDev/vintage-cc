@@ -19,9 +19,9 @@ fn main() {
 
 	outfile.create("02_bitshift.utest");
 
-	outfile.writeln("#-----------------------------#");
-	outfile.writeln("# PRINT VALUES IN BINARY FORM #");
-	outfile.writeln("#-----------------------------#");
+	outfile.writeln("#-----------------------------------#");
+	outfile.writeln("# TEST BITSHIFTING OF U8/U16 VALUES #");
+	outfile.writeln("#-----------------------------------#");
 	outfile.writeln();
 
 	outfile.writeln("*** print out a few binary u8 values ***");

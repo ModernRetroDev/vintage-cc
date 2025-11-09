@@ -57,9 +57,9 @@ fn main
     print__endl
     setout__default
 
-    # outfile.writeln("*** print out a few binary u8 values***");
+    # outfile.writeln("*** print out a few binary u8 values ***");
     setout__file .outfile
-    print__str8 "*** print out a few binary u8 values***"
+    print__str8 "*** print out a few binary u8 values ***"
     print__endl
     setout__default
 
@@ -103,9 +103,9 @@ fn main
     print__endl
     setout__default
 
-    # outfile.writeln("*** print out a few binary u16 values***");
+    # outfile.writeln("*** print out a few binary u16 values ***");
     setout__file .outfile
-    print__str8 "*** print out a few binary u16 values***"
+    print__str8 "*** print out a few binary u16 values ***"
     print__endl
     setout__default
 

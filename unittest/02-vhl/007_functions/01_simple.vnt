@@ -1,0 +1,22 @@
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn print_hello() {
+	println("Hello world!");
+}
+
+fn main() {
+	println("#-------------------------------------------------#");
+	println("# CALL A SIMPLE FUNCTION (NO ARGS, RETURN VALUES) #");
+	println("#-------------------------------------------------#");
+	println();
+
+	print_hello();
+	shutdown();
+}
