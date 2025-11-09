@@ -1,0 +1,166 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    var__u8 a
+    var__u8 b
+    var__u8 res
+    var__u16 a16
+    var__u16 b16
+    var__u16 r16
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u16 _stk_16_0
+    var__u16 _stk_16_1
+
+    equals__u8_u8 .a 0b10101010
+    equals__u8_u8 .b 0b11110000
+    equals__u16_u16 .a16 0b1010101010101010
+    equals__u16_u16 .b16 0b1111000011110000
+
+    # outfile.create("04_bitwise_and.utest");
+    setup__file .outfile 'w' "@:04_bitwise_and.utest"
+    open__file .outfile
+
+    # outfile.writeln("#---------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# TEST USAGE OF BITWISE AND #");
+    setout__file .outfile
+    print__str8 "# TEST USAGE OF BITWISE AND #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#---------------------------#");
+    setout__file .outfile
+    print__str8 "#---------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** Test bitwise_and with u8 values ***");
+    setout__file .outfile
+    print__str8 "*** Test bitwise_and with u8 values ***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * a (0b10101010) = 0b{:b}", a);
+    setout__file .outfile
+    print__str8 " * a (0b10101010) = 0b"
+    print__u8_b .a
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * b (0b11110000) = 0b{:b}", b);
+    setout__file .outfile
+    print__str8 " * b (0b11110000) = 0b"
+    print__u8_b .b
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # res = a b &;
+    equals__u8_u8 ._stk_8_0 .a
+    equals__u8_u8 ._stk_8_1 .b
+    bitwise_and__u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .res ._stk_8_0
+
+    # outfile.writeln(" * a b &; (0b10100000) = 0b{:b}", res);
+    setout__file .outfile
+    print__str8 " * a b &; (0b10100000) = 0b"
+    print__u8_b .res
+    print__endl
+    setout__default
+
+    # res = a 0b00001111 &;
+    equals__u8_u8 ._stk_8_0 .a
+    equals__u8_u8 ._stk_8_1 0b00001111
+    bitwise_and__u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .res ._stk_8_0
+
+    # outfile.writeln(" * a 0b00001111 &; (0b00001010) = 0b{:b}", res);
+    setout__file .outfile
+    print__str8 " * a 0b00001111 &; (0b00001010) = 0b"
+    print__u8_b .res
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** Test bitwise_and with u16 values ***");
+    setout__file .outfile
+    print__str8 "*** Test bitwise_and with u16 values ***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * a16 (0b1010101010101010) = 0b{:b}", a16);
+    setout__file .outfile
+    print__str8 " * a16 (0b1010101010101010) = 0b"
+    print__u16_b .a16
+    print__endl
+    setout__default
+
+    # outfile.writeln(" * b16 (0b1111000011110000) = 0b{:b}", b16);
+    setout__file .outfile
+    print__str8 " * b16 (0b1111000011110000) = 0b"
+    print__u16_b .b16
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # r16 = a16 b16 &;
+    equals__u16_u16 ._stk_16_0 .a16
+    equals__u16_u16 ._stk_16_1 .b16
+    bitwise_and__u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .r16 ._stk_16_0
+
+    # outfile.writeln(" * a16 b16 &; (0b1010000010100000) = 0b{:b}", r16);
+    setout__file .outfile
+    print__str8 " * a16 b16 &; (0b1010000010100000) = 0b"
+    print__u16_b .r16
+    print__endl
+    setout__default
+
+    # r16 = a16 0b0000000011111111 &;
+    equals__u16_u16 ._stk_16_0 .a16
+    equals__u16_u8 ._stk_16_1 0b0000000011111111
+    bitwise_and__u16 ._stk_16_0 ._stk_16_1
+    equals__u16_u16 .r16 ._stk_16_0
+
+    # outfile.writeln(" * b16 0b0000000011111111 | (0b0000000010101010) = 0b{:b}", r16);
+    setout__file .outfile
+    print__str8 " * b16 0b0000000011111111 | (0b0000000010101010) = 0b"
+    print__u16_b .r16
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

@@ -216,6 +216,12 @@ impl LinePart {
         }
         return false
     }
+    pub fn is_bitwise_and(&self) -> bool {
+        if self.next.starts_with("bitwise_and__") {
+            return true
+        }
+        return false
+    }
     pub fn is_bitwise_or(&self) -> bool {
         if self.next.starts_with("bitwise_or__") {
             return true
