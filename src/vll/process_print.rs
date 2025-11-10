@@ -614,6 +614,287 @@ fn as_type_u16ptr_xx(part: LinePart) -> bool {
     return false;
 }
 
+fn as_type_u24(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used(&part.next);
+
+    if value_part.is_varname() {
+        resolved = get::var_fullname(&value);
+    } else {
+        println!("ERROR/TODO: Non variable u24 print on LN {}", part.ln_no);
+        return true;
+    }
+
+    outputs::mainfn_append(&format!("   ; print__u24 {}", value));
+    outputs::mainfn_append(&format!("   ldx {resolved}"));
+    outputs::mainfn_append(&format!("   ldy {resolved}+1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+2"));
+    outputs::mainfn_append(         "   jsr _print__u24");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24ptr(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u24");
+
+    if !fn_args::is_type_u24ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u24ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u24ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24ptr value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u24ptr {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+1"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+2"));
+    //
+    outputs::mainfn_append(&format!("   ldx r0"));
+    outputs::mainfn_append(&format!("   ldy r0+1"));
+    outputs::mainfn_append(&format!("   lda r0+2"));
+    //
+    outputs::mainfn_append(         "   jsr _print__u24");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24_b(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used(&part.next);
+
+    if value_part.is_varname() {
+        resolved = get::var_fullname(&value);
+    } else {
+        println!("ERROR/TODO: Non variable u24 print on LN {}", part.ln_no);
+        return true;
+    }
+
+    outputs::mainfn_append(&format!("   ; print__u24_b {}", value));
+    outputs::mainfn_append(&format!("   ldx {resolved}"));
+    outputs::mainfn_append(&format!("   ldy {resolved}+1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+2"));
+    outputs::mainfn_append(         "   jsr _print__u24_b");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24ptr_b(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u24_b");
+
+    if !fn_args::is_type_u24ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u24ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u24ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24ptr value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u24ptr_b {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+1"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+2"));
+    //
+    outputs::mainfn_append(&format!("   ldx r0"));
+    outputs::mainfn_append(&format!("   ldy r0+1"));
+    outputs::mainfn_append(&format!("   lda r0+2"));
+    //
+    outputs::mainfn_append(         "   jsr _print__u24_b");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24_x(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used(&part.next);
+
+    if value_part.is_varname() {
+        resolved = get::var_fullname(&value);
+    } else {
+        println!("ERROR/TODO: Non variable u24 print on LN {}", part.ln_no);
+        return true;
+    }
+
+    outputs::mainfn_append(&format!("   ; print__u24_x {}", value));
+    outputs::mainfn_append(&format!("   ldx {resolved}"));
+    outputs::mainfn_append(&format!("   ldy {resolved}+1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+2"));
+    outputs::mainfn_append(         "   jsr _print__u24_x");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24ptr_x(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u24_x");
+
+    if !fn_args::is_type_u24ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u24ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u24ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24ptr value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u24ptr_x {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+1"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+2"));
+    //
+    outputs::mainfn_append(&format!("   ldx r0"));
+    outputs::mainfn_append(&format!("   ldy r0+1"));
+    outputs::mainfn_append(&format!("   lda r0+2"));
+    //
+    outputs::mainfn_append(         "   jsr _print__u24_x");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24_xx(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used(&part.next);
+
+    if value_part.is_varname() {
+        resolved = get::var_fullname(&value);
+    } else {
+        println!("ERROR/TODO: Non variable u24 print on LN {}", part.ln_no);
+        return true;
+    }
+
+    outputs::mainfn_append(&format!("   ; print__u24_xx {}", value));
+    outputs::mainfn_append(&format!("   ldx {resolved}"));
+    outputs::mainfn_append(&format!("   ldy {resolved}+1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+2"));
+    outputs::mainfn_append(         "   jsr _print__u24_xx");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24ptr_xx(part: LinePart) -> bool {
+    let value      = part.get_next().next;
+    let value_part = part.get_next();
+    let resolved: String;
+
+    builtins::mark_as_used("print__u24_xx");
+
+    if !fn_args::is_type_u24ptr(&value_part) {
+        println!("ERROR: ln:{} Expected a u24ptr type; got `{}`",
+            part.ln_no, value_part.next);
+        return true;
+    }
+    match fn_args::get_u24ptr_str(&value_part) {
+        Some(val_str) => { resolved = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24ptr value of `{}`",
+                part.ln_no, value_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; print__u24ptr_xx {}", value));
+    outputs::mainfn_append(&format!("   lda {resolved}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {resolved}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+1"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta r0+2"));
+    //
+    outputs::mainfn_append(&format!("   ldx r0"));
+    outputs::mainfn_append(&format!("   ldy r0+1"));
+    outputs::mainfn_append(&format!("   lda r0+2"));
+    //
+    outputs::mainfn_append(         "   jsr _print__u24_xx");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+
 fn as_type_ptr(part: LinePart) -> bool {
     let value      = part.get_next().next;
     let value_part = part.get_next();
@@ -704,6 +985,30 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "print__u16ptr_xx" {
         return as_type_u16ptr_xx(part);
+
+    } else if part.next == "print__u24" {
+        return as_type_u24(part);
+
+    } else if part.next == "print__u24_b" {
+        return as_type_u24_b(part);
+
+    } else if part.next == "print__u24_x" {
+        return as_type_u24_x(part);
+
+    } else if part.next == "print__u24_xx" {
+        return as_type_u24_xx(part);
+
+    } else if part.next == "print__u24ptr" {
+        return as_type_u24ptr(part);
+
+    } else if part.next == "print__u24ptr_b" {
+        return as_type_u24ptr_b(part);
+
+    } else if part.next == "print__u24ptr_x" {
+        return as_type_u24ptr_x(part);
+
+    } else if part.next == "print__u24ptr_xx" {
+        return as_type_u24ptr_xx(part);
 
     } else {
         println!(

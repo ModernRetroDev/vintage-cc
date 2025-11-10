@@ -312,3 +312,102 @@ pub fn get_u16ptr_str(part: &LinePart) -> Option<String> {
 
     return None;
 }
+
+pub fn is_type_u24(part: &LinePart) -> bool {
+    if part.is_varname() {
+        let part_res = get::var_fullname(&part.next);
+        //--------------------------------------------------------------------//
+        // Extract the variable name                                          //
+        //--------------------------------------------------------------------//
+        let vartype: String;
+        match outputs::get_vartype(&part_res) {
+            Some(vtype) => { vartype = vtype; },
+            None => { return false; },
+        }
+        if vartype == "u24" {
+            return true;
+        }
+        return false;
+    } else if is_binary_literal(&part) {
+        let value = get_binary_literal_value(&part).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    } else if is_hex_literal(&part) {
+        let value = get_hex_literal_value(&part).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    } else if is_uint_literal(&part) {
+        let value = get_uint_literal_value(&part).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+pub fn get_u24_value_str(part: &LinePart) -> Option<String> {
+    if !is_type_u24(part) {
+        return None
+    }
+
+    if part.is_varname() {
+        return Some(get::var_fullname(&part.next));
+    } else if is_binary_literal(&part) {
+        match get_binary_literal_value(&part) {
+            Some(value) => { return Some(format!("#{}", value)); }
+            None =>        { return None; }
+        };
+    } else if is_hex_literal(&part) {
+        match get_hex_literal_value(&part) {
+            Some(value) => { return Some(format!("#{}", value)); }
+            None =>        { return None; }
+        };
+    } else if is_uint_literal(&part) {
+        match get_uint_literal_value(&part) {
+            Some(value) => { return Some(format!("#{}", value)); }
+            None =>        { return None; }
+        };
+    }
+
+    return None;
+}
+
+pub fn is_type_u24ptr(part: &LinePart) -> bool {
+    if part.is_varname() {
+        let part_res = get::var_fullname(&part.next);
+        //--------------------------------------------------------------------//
+        // Extract the variable name                                          //
+        //--------------------------------------------------------------------//
+        let vartype: String;
+        match outputs::get_vartype(&part_res) {
+            Some(vtype) => { vartype = vtype; },
+            None => { return false; },
+        }
+        if vartype == "u24:ptr" {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+pub fn get_u24ptr_str(part: &LinePart) -> Option<String> {
+    if !is_type_u24ptr(part) {
+        return None
+    }
+
+    if part.is_varname() {
+        return Some(get::var_fullname(&part.next));
+    }
+
+    return None;
+}

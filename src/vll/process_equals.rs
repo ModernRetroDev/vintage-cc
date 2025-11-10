@@ -513,6 +513,246 @@ fn as_types_u16ptr_u16(part: LinePart) -> bool {
     return false;
 }
 
+fn as_types_u24_u24(part: LinePart) -> bool {
+    let lhs      = part.get_next().next;
+    let lhs_part = part.get_next();
+    let rhs      = lhs_part.get_next().next;
+    let rhs_part = lhs_part.get_next();
+    let lhs_res:  String;
+    let rhs_res:  String;
+
+    if !lhs_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, lhs);
+        return true;
+    }
+    lhs_res = get::var_fullname(&lhs);
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    let vartype: String;
+    match outputs::get_vartype(&lhs_res) {
+        Some(vtype) => { vartype = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype != "u24" {
+        println!(
+            "WARNING: ln:{} EQUALS: Expected a u24 type; got `{}`, which is type `{}`",
+            part.ln_no, lhs, vartype)
+    }
+
+    if !fn_args::is_type_u24(&rhs_part) {
+        println!(
+            "ERROR: ln:{} EQUALS: Expected a u24 type; got `{}` instead.",
+            part.ln_no, rhs);
+        return true;
+    }
+    match fn_args::get_u24_value_str(&rhs_part) {
+        Some(val_str) => { rhs_res = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+                part.ln_no, rhs_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; equals__u24_u24 {} {}",
+        lhs, rhs));
+
+    if rhs_res.starts_with("#") {
+        let rhs_val = &rhs_res[1..].parse::<i64>().unwrap();
+        let rhs_hexstr: String = format!("{:06X}", rhs_val);
+        // b0 is the low byte
+        let rhs_hex_b0 = &rhs_hexstr[4..6];
+        // b1 is the med byte
+        let rhs_hex_b1 = &rhs_hexstr[2..4];
+        // b2 is the high byte
+        let rhs_hex_b2 = &rhs_hexstr[0..2];
+
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b0}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b1}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b2}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+2"));
+    } else {
+        outputs::mainfn_append(&format!("   lda {rhs_res}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+1"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+2"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+2"));
+    }
+
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_types_u24_u24ptr(part: LinePart) -> bool {
+    let lhs      = part.get_next().next;
+    let lhs_part = part.get_next();
+    let rhs      = lhs_part.get_next().next;
+    let rhs_part = lhs_part.get_next();
+    let lhs_res:  String;
+    let rhs_res:  String;
+
+    if !lhs_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, lhs);
+        return true;
+    }
+    lhs_res = get::var_fullname(&lhs);
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    let vartype: String;
+    match outputs::get_vartype(&lhs_res) {
+        Some(vtype) => { vartype = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype != "u24" {
+        println!(
+            "WARNING: ln:{} EQUALS: Expected a u24 type; got `{}`, which is type `{}`",
+            part.ln_no, lhs, vartype)
+    }
+
+    let vartype_rhs: String;
+    rhs_res = get::var_fullname(&rhs);
+    match outputs::get_vartype(&rhs_res) {
+        Some(vtype) => { vartype_rhs = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype_rhs != "u24:ptr" {
+        println!(
+            "WARNING: ln:{} EQUALS: Expected a u24ptr type; got `{}`, which is type `{}`",
+            part.ln_no, rhs, vartype_rhs)
+    }
+
+    outputs::mainfn_append(&format!("   ; equals__u24_u24ptr {} {}",
+        lhs, rhs));
+
+    outputs::mainfn_append(&format!("   lda {rhs_res}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {rhs_res}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+    //
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta {lhs_res}"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+    outputs::mainfn_append(&format!("   iny"));
+    outputs::mainfn_append(&format!("   lda (ZP_PTR_1),y"));
+    outputs::mainfn_append(&format!("   sta {lhs_res}+2"));
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_types_u24ptr_u24(part: LinePart) -> bool {
+    let lhs      = part.get_next().next;
+    let lhs_part = part.get_next();
+    let rhs      = lhs_part.get_next().next;
+    let rhs_part = lhs_part.get_next();
+    let lhs_res:  String;
+    let rhs_res:  String;
+
+    if !lhs_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, lhs);
+        return true;
+    }
+    lhs_res = get::var_fullname(&lhs);
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    let vartype: String;
+    match outputs::get_vartype(&lhs_res) {
+        Some(vtype) => { vartype = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype != "u24:ptr" {
+        println!(
+            "WARNING: ln:{} EQUALS: Expected a u24ptr type; got `{}`, which is type `{}`",
+            part.ln_no, lhs, vartype)
+    }
+
+    if !fn_args::is_type_u24(&rhs_part) {
+        return true;
+    }
+    match fn_args::get_u24_value_str(&rhs_part) {
+        Some(val_str) => { rhs_res = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+                part.ln_no, rhs_part.next);
+            return true;
+        },
+    };
+
+    outputs::mainfn_append(&format!("   ; equals__u24ptr_u24 {} {}",
+        lhs, rhs));
+    outputs::mainfn_append(&format!("   lda {lhs_res}"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1"));
+    outputs::mainfn_append(&format!("   lda {lhs_res}+1"));
+    outputs::mainfn_append(&format!("   sta ZP_PTR_1+1"));
+    outputs::mainfn_append(&format!("   ldy #0"));
+
+    if rhs_res.starts_with("#") {
+        let rhs_val = &rhs_res[1..].parse::<i64>().unwrap();
+        let rhs_hexstr: String = format!("{:06X}", rhs_val);
+        // b0 is the low byte
+        let rhs_hex_b0 = &rhs_hexstr[4..6];
+        // b1 is the med byte
+        let rhs_hex_b1 = &rhs_hexstr[2..4];
+        // b2 is the high byte
+        let rhs_hex_b2 = &rhs_hexstr[0..2];
+
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b0}"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+        outputs::mainfn_append(&format!("   iny"));
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b1}"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+        outputs::mainfn_append(&format!("   iny"));
+        outputs::mainfn_append(&format!("   lda #${rhs_hex_b2}"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+        outputs::mainfn_append(&format!("   iny"));
+    } else {
+        outputs::mainfn_append(&format!("   lda {rhs_res}"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+        outputs::mainfn_append(&format!("   iny"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+1"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+        outputs::mainfn_append(&format!("   iny"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+2"));
+        outputs::mainfn_append(&format!("   sta (ZP_PTR_1),y"));
+    }
+
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 fn as_types_file_file(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
@@ -681,6 +921,15 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "equals__u16ptr_u16" {
         return as_types_u16ptr_u16(part);
+
+    } else if part.next == "equals__u24_u24" {
+        return as_types_u24_u24(part);
+
+    } else if part.next == "equals__u24_u24ptr" {
+        return as_types_u24_u24ptr(part);
+
+    } else if part.next == "equals__u24ptr_u24" {
+        return as_types_u24ptr_u24(part);
 
     } else if part.next == "equals__u16_u8" {
         return as_types_u16_u8(part, false);

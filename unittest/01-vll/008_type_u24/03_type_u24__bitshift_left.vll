@@ -1,0 +1,191 @@
+fn main
+	# declarations
+	var__file f
+	var__u24 a
+
+	setup__file  .f  'w'  "@:03_type_u24__bitshift_left.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (small u24 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values < 255"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  0
+	lshift__u24  .a
+	print__str8 "0b:00000000 << 1   #   0 -->   0 (0x000000): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  1
+	lshift__u24  .a
+	print__str8 "0b:00000001 << 1   #   1 -->   2 (0x000002): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  2
+	lshift__u24  .a
+	print__str8 "0b:00000010 << 1   #   2 -->   4 (0x000004): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  4
+	lshift__u24  .a
+	print__str8 "0b:00000100 << 1   #   4 -->   8 (0x000008): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  8
+	lshift__u24  .a
+	print__str8 "0b:00001000 << 1   #   8 -->  16 (0x000010): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  16
+	lshift__u24  .a
+	print__str8 "0b:00010000 << 1   #  16 -->  32 (0x000020): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  32
+	lshift__u24  .a
+	print__str8 "0b:00100000 << 1   #  32 -->  64 (0x000040): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  64
+	lshift__u24  .a
+	print__str8 "0b:01000000 << 1   #  64 --> 128 (0x000080): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  128
+	lshift__u24  .a
+	print__str8 "0b:10000000 << 1   # 128 --> 256 (0x000100): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  255
+	lshift__u24  .a
+	print__str8 "0b:11111111 << 1   # 255 --> 510 (0x0001FE): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (mid u24 values)       #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values > 255"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  256
+	lshift__u24  .a
+	print__str8 "0b:1:00000000 << 1   # 256 -->  512 (0x000200): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  257
+	lshift__u24  .a
+	print__str8 "0b:1:00000001 << 1   # 257 -->  514 (0x000202): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  258
+	lshift__u24  .a
+	print__str8 "0b:1:00000010 << 1   # 258 -->  516 (0x000204): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  260
+	lshift__u24  .a
+	print__str8 "0b:1:00000100 << 1   # 260 -->  520 (0x000208): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  264
+	lshift__u24  .a
+	print__str8 "0b:1:00001000 << 1   # 264 -->  528 (0x000210): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  272
+	lshift__u24  .a
+	print__str8 "0b:1:00010000 << 1   # 272 -->  544 (0x000220): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  288
+	lshift__u24  .a
+	print__str8 "0b:1:00100000 << 1   # 288 -->  576 (0x000240): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  320
+	lshift__u24  .a
+	print__str8 "0b:1:01000000 << 1   # 320 -->  640 (0x000280): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  384
+	lshift__u24  .a
+	print__str8 "0b:1:10000000 << 1   # 384 -->  768 (0x000300): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  511
+	lshift__u24  .a
+	print__str8 "0b:1:11111111 << 1   # 511 --> 1022 (0x0003FE): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (large u24 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values > 0xFFFF"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  0b010101010101010101010101
+	lshift__u24  .a
+	print__str8 "0b010101010101010101010101 << 1; (0b101010101010101010101010): 0b"
+	print__u24_b .a
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

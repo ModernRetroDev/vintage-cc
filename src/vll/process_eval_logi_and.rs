@@ -78,122 +78,122 @@ fn as_types_u8(part: LinePart) -> bool {
     return false;
 }
 
-fn as_types_u16(part: LinePart) -> bool {
-    // let retvar      = part.get_next().next;
-    // let retvar_part = part.get_next();
-    // let lhs         = retvar_part.get_next().next;
-    // let lhs_part    = retvar_part.get_next();
-    // let rhs         = lhs_part.get_next().next;
-    // let rhs_part    = lhs_part.get_next();
-    // let rhs_isvar:    bool;
-    // let rhs_res:      String;
-    // let lhs_isvar:    bool;
-    // let lhs_res:      String;
-    // let retvar_res:   String;
+// fn as_types_u16(part: LinePart) -> bool {
+//     // let retvar      = part.get_next().next;
+//     // let retvar_part = part.get_next();
+//     // let lhs         = retvar_part.get_next().next;
+//     // let lhs_part    = retvar_part.get_next();
+//     // let rhs         = lhs_part.get_next().next;
+//     // let rhs_part    = lhs_part.get_next();
+//     // let rhs_isvar:    bool;
+//     // let rhs_res:      String;
+//     // let lhs_isvar:    bool;
+//     // let lhs_res:      String;
+//     // let retvar_res:   String;
 
-    // builtins::mark_as_used(&part.next);
+//     // builtins::mark_as_used(&part.next);
 
-    // if !retvar_part.is_varname() {
-    //  println!("ERROR: ln:{} Expected varname, got `{}`",
-    //      part.ln_no, retvar);
-    //  return true;
-    // }
-    // retvar_res = get::var_fullname(&retvar);
+//     // if !retvar_part.is_varname() {
+//     //  println!("ERROR: ln:{} Expected varname, got `{}`",
+//     //      part.ln_no, retvar);
+//     //  return true;
+//     // }
+//     // retvar_res = get::var_fullname(&retvar);
 
-    // lhs_isvar = lhs_part.is_varname();
-    // rhs_isvar = rhs_part.is_varname();
+//     // lhs_isvar = lhs_part.is_varname();
+//     // rhs_isvar = rhs_part.is_varname();
 
-    // if lhs_isvar {
-    //  lhs_res = get::var_fullname(&lhs);
-    //  let vtype = outputs::get_vartype(&lhs_res).unwrap();
-    //  if vtype != "u16" {
-    //      println!(
-    //          "WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
-    //          part.ln_no, lhs, vtype)
-    //  }
-    // } else {
-    //  lhs_res = lhs.clone();
-    // }
+//     // if lhs_isvar {
+//     //  lhs_res = get::var_fullname(&lhs);
+//     //  let vtype = outputs::get_vartype(&lhs_res).unwrap();
+//     //  if vtype != "u16" {
+//     //      println!(
+//     //          "WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
+//     //          part.ln_no, lhs, vtype)
+//     //  }
+//     // } else {
+//     //  lhs_res = lhs.clone();
+//     // }
 
-    // if rhs_isvar {
-    //  rhs_res = get::var_fullname(&rhs);
-    //  let vtype = outputs::get_vartype(&rhs_res).unwrap();
-    //  if vtype != "u16" {
-    //      println!(
-    //          "WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
-    //          part.ln_no, rhs, vtype)
-    //  }
-    // } else {
-    //  rhs_res = rhs.clone();
-    // }
+//     // if rhs_isvar {
+//     //  rhs_res = get::var_fullname(&rhs);
+//     //  let vtype = outputs::get_vartype(&rhs_res).unwrap();
+//     //  if vtype != "u16" {
+//     //      println!(
+//     //          "WARNING: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
+//     //          part.ln_no, rhs, vtype)
+//     //  }
+//     // } else {
+//     //  rhs_res = rhs.clone();
+//     // }
 
-    // outputs::mainfn_append(&format!("   ; eval_neq__u16 {retvar} {lhs} {rhs}"));
+//     // outputs::mainfn_append(&format!("   ; eval_neq__u16 {retvar} {lhs} {rhs}"));
 
-    // if !lhs_isvar && !rhs_isvar {
-    //  if lhs_res == rhs_res {
-    //      outputs::mainfn_append("   lda #1; always true");
-    //  } else {
-    //      outputs::mainfn_append("   lda #0; always false");
-    //  }
-    //  outputs::mainfn_append(&format!("   sta {}", retvar_res));
-    //  outputs::mainfn_append("");
-    //  return false;
-    // } else if lhs_isvar && rhs_isvar {
-    //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1");
-    //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
-    //  //
-    //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2");
-    //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
-    //  //
-    //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
-    //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
-    //  outputs::mainfn_append("");
-    // } else if lhs_isvar {
-    //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1");
-    //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
-    //  //
-    //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta r0");
-    //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta r0+1");
-    //  //
-    //  outputs::mainfn_append(&format!("   lda #<r0"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2");
-    //  outputs::mainfn_append(&format!("   lda #>r0"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
-    //  //
-    //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
-    //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
-    //  outputs::mainfn_append("");
-    // } else if rhs_isvar {
-    //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta r0");
-    //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
-    //  outputs::mainfn_append(         "   sta r0+1");
-    //  //
-    //  outputs::mainfn_append(&format!("   lda #<r0"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1");
-    //  outputs::mainfn_append(&format!("   lda #>r0"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
-    //  //
-    //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2");
-    //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
-    //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
-    //  //
-    //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
-    //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
-    //  outputs::mainfn_append("");
-    // }
+//     // if !lhs_isvar && !rhs_isvar {
+//     //  if lhs_res == rhs_res {
+//     //      outputs::mainfn_append("   lda #1; always true");
+//     //  } else {
+//     //      outputs::mainfn_append("   lda #0; always false");
+//     //  }
+//     //  outputs::mainfn_append(&format!("   sta {}", retvar_res));
+//     //  outputs::mainfn_append("");
+//     //  return false;
+//     // } else if lhs_isvar && rhs_isvar {
+//     //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1");
+//     //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+//     //  //
+//     //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2");
+//     //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+//     //  //
+//     //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
+//     //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
+//     //  outputs::mainfn_append("");
+//     // } else if lhs_isvar {
+//     //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1");
+//     //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+//     //  //
+//     //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta r0");
+//     //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta r0+1");
+//     //  //
+//     //  outputs::mainfn_append(&format!("   lda #<r0"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2");
+//     //  outputs::mainfn_append(&format!("   lda #>r0"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+//     //  //
+//     //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
+//     //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
+//     //  outputs::mainfn_append("");
+//     // } else if rhs_isvar {
+//     //  outputs::mainfn_append(&format!("   lda #<{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta r0");
+//     //  outputs::mainfn_append(&format!("   lda #>{lhs_res}"));
+//     //  outputs::mainfn_append(         "   sta r0+1");
+//     //  //
+//     //  outputs::mainfn_append(&format!("   lda #<r0"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1");
+//     //  outputs::mainfn_append(&format!("   lda #>r0"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+//     //  //
+//     //  outputs::mainfn_append(&format!("   lda #<{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2");
+//     //  outputs::mainfn_append(&format!("   lda #>{rhs_res}"));
+//     //  outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+//     //  //
+//     //  outputs::mainfn_append(         "   jsr _eval_neq__u16");
+//     //  outputs::mainfn_append(&format!("   sta {retvar_res}"));
+//     //  outputs::mainfn_append("");
+//     // }
 
-    return false;
-}
+//     return false;
+// }
 
 pub fn now(part: LinePart) -> bool {
     if part.next == "eval_logi_and__u8" {

@@ -1,0 +1,191 @@
+fn main
+	# declarations
+	var__file f
+	var__u24 a
+
+	setup__file  .f  'w'  "@:04_type_u24__bitshift_right.utest"
+	open__file   .f 
+	setout__file .f # set default output to .f
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (small u24 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values < 255"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  0
+	rshift__u24  .a
+	print__str8 "#   0 >>=   0 (0x000000): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  2
+	rshift__u24  .a
+	print__str8 "#   2 >>=   1 (0x000001): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  4
+	rshift__u24  .a
+	print__str8 "#   4 >>=   2 (0x000002): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  8
+	rshift__u24  .a
+	print__str8 "#   8 >>=   4 (0x000004): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  16
+	rshift__u24  .a
+	print__str8 "#  16 >>=   8 (0x000008): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  32
+	rshift__u24  .a
+	print__str8 "#  32 >>=  16 (0x000010): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  64
+	rshift__u24  .a
+	print__str8 "#  64 >>=  32 (0x000020): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  128
+	rshift__u24  .a
+	print__str8 "# 128 >>=  64 (0x000040): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  256
+	rshift__u24  .a
+	print__str8 "# 256 >>= 128 (0x000080): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  510
+	rshift__u24  .a
+	print__str8 "# 510 >>= 255 (0x0000FF): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (mid u24 values)       #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values > 255"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  512
+	rshift__u24  .a
+	print__str8 "#  512 >>= 256 (0x000100): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  514
+	rshift__u24  .a
+	print__str8 "#  514 >>= 257 (0x000101): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  516
+	rshift__u24  .a
+	print__str8 "#  516 >>= 258 (0x000102): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  520
+	rshift__u24  .a
+	print__str8 "#  520 >>= 260 (0x000104): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  528
+	rshift__u24  .a
+	print__str8 "#  528 >>= 264 (0x000108): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  544
+	rshift__u24  .a
+	print__str8 "#  544 >>= 272 (0x000110): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  576
+	rshift__u24  .a
+	print__str8 "#  576 >>= 288 (0x000120): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  640
+	rshift__u24  .a
+	print__str8 "#  640 >>= 320 (0x000140): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  768
+	rshift__u24  .a
+	print__str8 "#  768 >>= 384 (0x000180): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  1022
+	rshift__u24  .a
+	print__str8 "# 1022 >>= 511 (0x0001FF): 0x"
+	print__u24_xx .a
+	print__endl
+	print__endl
+
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# u24 bitshift (large u24 values)     #"
+	print__endl
+	print__str8 "#-------------------------------------#"
+	print__endl
+	print__str8 "# test out bitshift of u24 values > 0xFFFF"
+	print__endl
+	print__endl
+
+	equals__u24_u24  .a  0b101010101010101010101010
+	rshift__u24  .a
+	print__str8 "0b101010101010101010101010 >> 1; (0b010101010101010101010101): 0b"
+	print__u24_b .a
+	print__endl
+	print__endl
+
+	close__file .f
+	shutdown # turn off the system now
+
+endfn

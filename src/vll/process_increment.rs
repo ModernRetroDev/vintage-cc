@@ -68,6 +68,44 @@ fn as_type_u16(part: LinePart) -> bool {
 	return false
 }
 
+fn as_type_u24(part: LinePart) -> bool {
+	let thisvar      = part.get_next().next;
+	let thisvar_part = part.get_next();
+	let thisvar_res: String;
+
+	// read in the variable name
+	if !thisvar_part.is_varname() {
+		println!("ERROR: ln:{} Expected varname, got `{}`",
+			part.ln_no, thisvar);
+		return true;
+	}
+	thisvar_res = get::var_fullname(&thisvar);
+
+	let vtype = outputs::get_vartype(&thisvar_res).unwrap();
+	if vtype != "u24" {
+		println!(
+			"WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+			part.ln_no, thisvar, vtype)
+	}
+
+	outputs::mainfn_append(&format!("   ; increment__u24 {thisvar}"));
+	outputs::mainfn_append(&format!("   lda {thisvar_res}"));
+	outputs::mainfn_append(         "   clc ; clear carry");
+	outputs::mainfn_append(         "   adc #1");
+	outputs::mainfn_append(&format!("   sta {thisvar_res}"));
+	//
+	outputs::mainfn_append(&format!("   lda {thisvar_res}+1"));
+	outputs::mainfn_append(         "   adc #0");
+	outputs::mainfn_append(&format!("   sta {thisvar_res}+1"));
+	//
+	outputs::mainfn_append(&format!("   lda {thisvar_res}+2"));
+	outputs::mainfn_append(         "   adc #0");
+	outputs::mainfn_append(&format!("   sta {thisvar_res}+2"));
+	outputs::mainfn_append("");
+
+	return false
+}
+
 
 pub fn now(part: LinePart) -> bool {
 
@@ -76,6 +114,9 @@ pub fn now(part: LinePart) -> bool {
 
 	} else if part.next == "increment__u16" {
 		return as_type_u16(part);
+
+	} else if part.next == "increment__u24" {
+		return as_type_u24(part);
 
 	} else {
 		println!(

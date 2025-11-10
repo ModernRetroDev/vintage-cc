@@ -325,6 +325,242 @@ fn as_types_u16ptr_u16(part: LinePart) -> bool {
     return false;
 }
 
+fn as_types_u24_u8(part: LinePart) -> bool {
+    let varname      = part.get_next().next;
+    let varname_part = part.get_next();
+    let varname_res: String;
+    let adder        = varname_part.get_next().next;
+    let adder_part   = varname_part.get_next();
+    let adder_res: String;
+
+    builtins::mark_as_used("plus_equals__u24_u24d");
+
+    if !varname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, varname);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    varname_res = get::var_fullname(&varname);
+    match outputs::get_vartype(&varname_res) {
+        Some(vtype) => {
+            if vtype != "u24" {
+                println!(
+                    "WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+                    part.ln_no, varname, vtype)
+            }
+        },
+        None => {},
+    }
+
+    outputs::mainfn_append(&format!(
+        "   ; plus_equals__u24_u8 {varname} {adder}"));
+
+    if !fn_args::is_type_u8(&adder_part) {
+        return true;
+    }
+    match fn_args::get_u8_value_str(&adder_part) {
+        Some(val_str) => { adder_res = val_str; },
+        None => { return true; },
+    };
+
+    outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+    outputs::mainfn_append(         "   sta ZP_PTR_1");
+    outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+    outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    //
+    outputs::mainfn_append(&format!("   lda {adder_res}"));
+    outputs::mainfn_append(         "   sta r0");
+    outputs::mainfn_append(         "   lda #0");
+    outputs::mainfn_append(         "   sta r0+1");
+    outputs::mainfn_append(         "   lda #0");
+    outputs::mainfn_append(         "   sta r0+2");
+    //
+    outputs::mainfn_append(         "   jsr _plus_equals__u24_u24d");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_types_u24_u16(part: LinePart) -> bool {
+    let varname      = part.get_next().next;
+    let varname_part = part.get_next();
+    let varname_res: String;
+    let adder        = varname_part.get_next().next;
+    let adder_part   = varname_part.get_next();
+    let adder_res: String;
+
+    builtins::mark_as_used("plus_equals__u24_u24d");
+
+    if !varname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, varname);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    varname_res = get::var_fullname(&varname);
+    match outputs::get_vartype(&varname_res) {
+        Some(vtype) => {
+            if vtype != "u24" {
+                println!(
+                    "WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+                    part.ln_no, varname, vtype)
+            }
+        },
+        None => {},
+    }
+
+    outputs::mainfn_append(&format!(
+        "   ; plus_equals__u24_u16 {varname} {adder}"));
+
+    if !fn_args::is_type_u16(&adder_part) {
+        return true;
+    }
+    match fn_args::get_u16_value_str(&adder_part) {
+        Some(val_str) => { adder_res = val_str; },
+        None => { return true; },
+    };
+
+    if adder_part.is_varname() {
+        outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1");
+        outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+        //
+        outputs::mainfn_append(&format!("   lda {adder_res}"));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda {adder_res}+1"));
+        outputs::mainfn_append(         "   sta r0+1");
+        outputs::mainfn_append(         "   lda #0");
+        outputs::mainfn_append(         "   sta r0+2");
+        //
+        outputs::mainfn_append(         "   jsr _plus_equals__u24_u24d");
+    } else {
+        let adder_val = &adder_res[1..].parse::<i64>().unwrap();
+        let adder_hexstr: String = format!("{:04X}", adder_val);
+        // b0 is the low byte
+        let adder_hex_b0 = &adder_hexstr[2..4];
+        // b1 is the high byte
+        let adder_hex_b1 = &adder_hexstr[0..2];
+
+        outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1");
+        outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+        //
+        outputs::mainfn_append(&format!("   lda #${adder_hex_b0}"));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda #${adder_hex_b1}"));
+        outputs::mainfn_append(         "   sta r0+1");
+        outputs::mainfn_append(         "   lda #0");
+        outputs::mainfn_append(         "   sta r0+2");
+        //
+        outputs::mainfn_append(         "   jsr _plus_equals__u24_u24d");
+    }
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_types_u24_u24(part: LinePart) -> bool {
+    let varname      = part.get_next().next;
+    let varname_part = part.get_next();
+    let varname_res: String;
+    let adder        = varname_part.get_next().next;
+    let adder_part   = varname_part.get_next();
+    let adder_res: String;
+
+    if !varname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, varname);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    varname_res = get::var_fullname(&varname);
+    match outputs::get_vartype(&varname_res) {
+        Some(vtype) => {
+            if vtype != "u24" {
+                println!(
+                    "WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+                    part.ln_no, varname, vtype)
+            }
+        },
+        None => {},
+    }
+
+    outputs::mainfn_append(
+        &format!("   ; plus_equals__u24_u24 {varname} {adder}"));
+
+
+    if !fn_args::is_type_u24(&adder_part) {
+        println!(
+            "ERROR: ln:{} EQUALS: Expected a u24 type; got `{}` instead.",
+            part.ln_no, adder);
+        return true;
+    }
+    match fn_args::get_u24_value_str(&adder_part) {
+        Some(val_str) => { adder_res = val_str; },
+        None => {
+            println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+                part.ln_no, adder_part.next);
+            return true;
+        },
+    };
+
+    if adder_res.starts_with("#") {
+        builtins::mark_as_used("plus_equals__u24_u24d");
+
+        let adder_val = &adder_res[1..].parse::<i64>().unwrap();
+        let adder_hexstr: String = format!("{:06X}", adder_val);
+        // b0 is the low byte
+        let adder_hex_b0 = &adder_hexstr[4..6];
+        // b1 is the med byte
+        let adder_hex_b1 = &adder_hexstr[2..4];
+        // b2 is the high byte
+        let adder_hex_b2 = &adder_hexstr[0..2];
+
+        outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1");
+        outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+        //
+        outputs::mainfn_append(&format!("   lda #${adder_hex_b0}"));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda #${adder_hex_b1}"));
+        outputs::mainfn_append(         "   sta r0+1");
+        outputs::mainfn_append(&format!("   lda #${adder_hex_b2}"));
+        outputs::mainfn_append(         "   sta r0+2");
+        //
+        outputs::mainfn_append(         "   jsr _plus_equals__u24_u24d");
+    } else {
+        builtins::mark_as_used("plus_equals__u24_u24");
+
+        outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1");
+        outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+        //
+        outputs::mainfn_append(&format!("   lda #<{adder_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_2");
+        outputs::mainfn_append(&format!("   lda #>{adder_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+        //
+        outputs::mainfn_append(         "   jsr _plus_equals__u24_u24");
+    }
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 pub fn now(part: LinePart) -> bool {
 
     if part.next == "plus_equals__u8_u8" {
@@ -338,6 +574,15 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "plus_equals__u16ptr_u16" {
         return as_types_u16ptr_u16(part);
+
+    } else if part.next == "plus_equals__u24_u8" {
+        return as_types_u24_u8(part);
+
+    } else if part.next == "plus_equals__u24_u16" {
+        return as_types_u24_u16(part);
+
+    } else if part.next == "plus_equals__u24_u24" {
+        return as_types_u24_u24(part);
 
     } else {
         println!(

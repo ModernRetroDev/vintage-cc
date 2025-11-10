@@ -203,6 +203,123 @@ fn as_type_u16_n(part: LinePart) -> bool {
     return false;
 }
 
+fn as_type_u24(part: LinePart) -> bool {
+    let varname      = part.get_next().next;
+    let varname_part = part.get_next();
+    let varname_res: String;
+
+    if !varname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, varname);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    varname_res = get::var_fullname(&varname);
+    match outputs::get_vartype(&varname_res) {
+        Some(vtype) => {
+            if vtype != "u24" {
+                println!(
+                    "WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+                    part.ln_no, varname, vtype)
+            }
+        },
+        None => {},
+    }
+
+    outputs::mainfn_append(&format!("   ; rshift__u24 {varname}"));
+    outputs::mainfn_append(&format!("   lda {varname_res}+2"));
+    outputs::mainfn_append(         "   lsr");
+    outputs::mainfn_append(&format!("   sta {varname_res}+2"));
+    outputs::mainfn_append(&format!("   lda {varname_res}+1"));
+    outputs::mainfn_append(         "   ror");
+    outputs::mainfn_append(&format!("   sta {varname_res}+1"));
+    outputs::mainfn_append(&format!("   lda {varname_res}"));
+    outputs::mainfn_append(         "   ror");
+    outputs::mainfn_append(&format!("   sta {varname_res}"));
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_type_u24_n(part: LinePart) -> bool {
+    let varname      = part.get_next().next;
+    let varname_part = part.get_next();
+    let varname_res: String;
+    let shift        = varname_part.get_next().next;
+    let shift_part   = varname_part.get_next();
+    let shift_res: String;
+
+    builtins::mark_as_used(&part.next);
+
+    if !varname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, varname);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    varname_res = get::var_fullname(&varname);
+    match outputs::get_vartype(&varname_res) {
+        Some(vtype) => {
+            if vtype != "u24" {
+                println!(
+                    "WARNING: ln:{} Expected a u24 type; got `{}`, which is type `{}`",
+                    part.ln_no, varname, vtype)
+            }
+        },
+        None => {},
+    }
+
+    outputs::mainfn_append(&format!("   ; rshift__u24_n {varname} {shift}"));
+
+    if shift_part.is_varname() {
+        shift_res = get::var_fullname(&shift);
+        // we will only ever take the low byte from whatever variable
+
+        outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1");
+        outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+        //
+        outputs::mainfn_append(&format!("   lda #<{shift_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_2");
+        outputs::mainfn_append(&format!("   lda #>{shift_res}"));
+        outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+        //
+        outputs::mainfn_append(&format!("   ldy #0"));
+        outputs::mainfn_append(&format!("   lda (ZP_PTR_2),y"));
+        outputs::mainfn_append(&format!("   tax"));
+        //
+        outputs::mainfn_append(         "   jsr _rshift__u24_n");
+
+    } else {
+        let shift_val = shift.parse::<i64>().unwrap();
+        if shift_val <= 0xFF {
+
+            outputs::mainfn_append(&format!("   lda #<{varname_res}"));
+            outputs::mainfn_append(         "   sta ZP_PTR_1");
+            outputs::mainfn_append(&format!("   lda #>{varname_res}"));
+            outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+            //
+            outputs::mainfn_append(&format!("   ldx #{shift}"));
+            outputs::mainfn_append(         "   jsr _rshift__u24_n");
+
+        } else {
+            println!("ERROR: ln:{} Direct shift of U8 value `{}` exceeds bounds.",
+                part.ln_no, shift);
+            return true;
+        }
+    }
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 pub fn now(part: LinePart) -> bool {
 
     if part.next == "rshift__u8" {
@@ -216,6 +333,12 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "rshift__u16_n" {
         return as_type_u16_n(part);
+
+    } else if part.next == "rshift__u24" {
+        return as_type_u24(part);
+
+    } else if part.next == "rshift__u24_n" {
+        return as_type_u24_n(part);
 
     } else {
         println!(

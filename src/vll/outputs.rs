@@ -353,6 +353,12 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "   .byte $00, $00"));
                 self.lines_vardefs.push("".to_string());
+            } else if vartype == "u24".to_string() {
+                self.lines_vardefs.push(format!(
+                    "{}: ; type: {}", varname, vartype));
+                self.lines_vardefs.push(format!(
+                    "   .byte $00, $00, $00"));
+                self.lines_vardefs.push("".to_string());
             } else if vartype == "file".to_string() {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));

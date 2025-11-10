@@ -109,6 +109,27 @@ fn as_type_u16(part: LinePart) -> bool {
 	return false;
 }
 
+fn as_type_u24(part: LinePart) -> bool {
+	let     globname: String;
+	let     varname = part.get_next().next;
+	let mut u24_bytes: Vec<u8> = Vec::new();
+
+	globname = format!("var__{}__{}", 
+		outputs::get_active_fn(), 
+		varname);
+
+	u24_bytes.push(0);
+	u24_bytes.push(0);
+	u24_bytes.push(0);
+
+	outputs::set_var_index(&globname);
+	outputs::varnames_append(&globname);
+	outputs::vartypes_append("u24");
+	outputs::varvalues_append(u24_bytes);
+
+	return false;
+}
+
 fn as_type_str8(part: LinePart) -> bool {
 	let     globname:    String;
 	let     strval_part: Option<LinePart>;
@@ -173,6 +194,9 @@ pub fn now(part: LinePart) -> bool {
 
 	} else if part.next == "var__u16" {
 		return as_type_u16(part);
+
+	} else if part.next == "var__u24" {
+		return as_type_u24(part);
 
 	} else if part.next == "var__str8" {
 		return as_type_str8(part);
