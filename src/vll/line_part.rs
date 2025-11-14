@@ -246,6 +246,12 @@ impl LinePart {
         }
         return false
     }
+    pub fn is_continue(&self) -> bool {
+        if self.next == "continue" {
+            return true
+        }
+        return false
+    }
     pub fn is_else(&self) -> bool {
         if self.next == "else" {
             return true
@@ -422,6 +428,12 @@ impl LinePart {
     }
     pub fn is_ref(&self) -> bool {
         if self.next.starts_with("ref__") {
+            return true
+        }
+        return false
+    }
+    pub fn is_return(&self) -> bool {
+        if self.next == "return" {
             return true
         }
         return false

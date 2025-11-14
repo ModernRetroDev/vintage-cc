@@ -57,6 +57,14 @@ impl LinePart {
         }
         return false
     }
+    pub fn is_continue(&self) -> bool {
+        if self.next == "continue" {
+            return true
+        } else if self.next == "continue;" {
+            return true
+        }
+        return false
+    }
     pub fn is_endblk(&self) -> bool {
         if self.next == "}" {
             return true
@@ -117,6 +125,12 @@ impl LinePart {
     }
     pub fn is_println(&self) -> bool {
         if self.next.starts_with("println(") {
+            return true
+        }
+        return false
+    }
+    pub fn is_return(&self) -> bool {
+        if self.next == "return" || self.next == "return;" {
             return true
         }
         return false

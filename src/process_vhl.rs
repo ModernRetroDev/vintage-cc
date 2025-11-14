@@ -7,6 +7,7 @@ use crate::vhl::line_part::LinePart;
 use crate::vhl::process__asm;
 
 use crate::vhl::process_break;
+use crate::vhl::process_continue;
 use crate::vhl::process_endblk;
 use crate::vhl::process_eval_eq_rpn;
 use crate::vhl::process_fn;
@@ -16,6 +17,7 @@ use crate::vhl::process_if_rpn;
 use crate::vhl::process_let;
 use crate::vhl::process_loop;
 use crate::vhl::process_println;
+use crate::vhl::process_return;
 use crate::vhl::process_while_rpn;
 
 use crate::vhl::process_methods_file;
@@ -143,6 +145,12 @@ fn process_source(s: String) -> bool {
             }
             continue;
         }
+        if next.is_continue() {
+            if process_continue::now(next) {
+                return true;
+            }
+            continue;
+        }
         if line_is_eval_eq_rpn(ln_no, &line) {
             if process_eval_eq_rpn::now(next) {
                 return true;
@@ -188,6 +196,12 @@ fn process_source(s: String) -> bool {
         }
         if next.is_file_method() {
             if process_methods_file::now(next, line) {
+                return true;
+            }
+            continue;
+        }
+        if next.is_return() {
+            if process_return::now(next) {
                 return true;
             }
             continue;

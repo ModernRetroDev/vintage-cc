@@ -244,6 +244,16 @@ impl FnBlock {
         self.fn_blktype_levels.push(blktype.to_string());
     }
 
+    pub fn blktypes_peek(&mut self) -> Option<String> {
+        if self.fn_blktype_levels.len() == 0 {
+            return None
+        }
+        let lastblk = self.fn_blktype_levels.pop().unwrap();
+        self.fn_blktype_levels.push(lastblk.to_string());
+
+        return Some(lastblk);
+    }
+
     pub fn blktypes_pop(&mut self) -> Option<String> {
         if self.fn_blktype_levels.len() == 0 {
             return None
@@ -346,6 +356,17 @@ impl FnBlock {
                     loop {
                         out_lines.push(format!(
                             "    var__u16 _stk_16_{}", ind));
+                        ind += 1;
+                        if ind == self.fn_stk_size {
+                            break
+                        }
+                    }
+                }
+                if self.fn_stk_elem_size >= 3 {
+                    let mut ind: u8 = 0;
+                    loop {
+                        out_lines.push(format!(
+                            "    var__u24 _stk_24_{}", ind));
                         ind += 1;
                         if ind == self.fn_stk_size {
                             break
@@ -591,6 +612,13 @@ pub fn blktypes_push(blktype: &str) {
     unsafe {
         let last_ind = FN_BLOCKS.len() - 1;
         FN_BLOCKS[last_ind].blktypes_push(blktype);
+    }
+}
+
+pub fn blktypes_peek() -> Option<String> {
+    unsafe {
+        let last_ind = FN_BLOCKS.len() - 1;
+        return FN_BLOCKS[last_ind].blktypes_peek();
     }
 }
 

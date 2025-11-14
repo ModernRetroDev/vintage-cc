@@ -283,3 +283,58 @@ pub fn get_u16_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<St
         return resolve_varname(ln_no, epart);
     }
 }
+
+pub fn is_type_u24(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
+    match get_evalpart_basetype(ln_no, epart, deref_okay) {
+        Some(btype) => {
+            if btype == "u24" {
+                return true;
+            }
+            return false;
+        },
+        None => {},
+    }
+
+    if is_binary_literal(epart) {
+        let value = get_binary_literal_value(epart).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    } else if is_hex_literal(epart) {
+        let value = get_hex_literal_value(epart).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    } else if is_uint_literal(epart) {
+        let value = get_uint_literal_value(epart).unwrap();
+        if value <= 0xFFFFFF {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+pub fn get_u24_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<String> {
+    if !is_type_u24(ln_no, epart, deref_okay) {
+        return None
+    }
+
+    if is_binary_literal(epart) {
+        return Some(epart.to_string());
+    } else if is_hex_literal(epart) {
+        return Some(epart.to_string());
+    } else if is_uint_literal(epart) {
+        return Some(epart.to_string());
+    } else if is_direct_deref(epart) {
+        return Some(get_direct_deref_str(epart));
+    } else {
+        return resolve_varname(ln_no, epart);
+    }
+}

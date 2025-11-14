@@ -165,8 +165,7 @@ fn main
     print__endl
     setout__default
 
-    endif
-    endif
+    endif 2
 
     # outfile.writeln();
     setout__file .outfile
@@ -214,8 +213,7 @@ fn main
     print__endl
     setout__default
 
-    endif
-    endif
+    endif 2
 
     # outfile.writeln();
     setout__file .outfile
@@ -263,8 +261,7 @@ fn main
     print__endl
     setout__default
 
-    endif
-    endif
+    endif 2
 
     # outfile.writeln();
     setout__file .outfile

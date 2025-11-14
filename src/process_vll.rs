@@ -12,6 +12,7 @@ use crate::vll::process_bitwise_or;
 use crate::vll::process_break;
 use crate::vll::process_call;
 use crate::vll::process_close;
+use crate::vll::process_continue;
 use crate::vll::process_else;
 use crate::vll::process_endif;
 use crate::vll::process_endloop;
@@ -41,6 +42,7 @@ use crate::vll::process_plus_equals;
 use crate::vll::process_print;
 use crate::vll::process_ptr;
 use crate::vll::process_ref;
+use crate::vll::process_return;
 use crate::vll::process_rshift;
 use crate::vll::process_setout;
 use crate::vll::process_setup;
@@ -134,6 +136,8 @@ fn process_source(s: String) {
 	for line in lines {
 		ln_no += 1;
 
+		// println!("[{}]: `{}`", ln_no, &line);
+
 		if line_is_blank(&line) {
 			continue;
 		}
@@ -181,6 +185,12 @@ fn process_source(s: String) {
 		}
 		if next.is_close() {
 			if process_close::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_continue() {
+			if process_continue::now(next) {
 				return;
 			}
 			continue;
@@ -359,6 +369,12 @@ fn process_source(s: String) {
 		}
 		if next.is_ref() {
 			if process_ref::now(next) {
+				return;
+			}
+			continue;
+		}
+		if next.is_return() {
+			if process_return::now(next) {
 				return;
 			}
 			continue;

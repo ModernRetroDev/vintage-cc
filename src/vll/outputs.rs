@@ -131,6 +131,12 @@ impl FnBlock {
         return false;
     }
 
+    pub fn ifblocks_show(&mut self) {
+        for ifblk in &self.ifblk_levels {
+            println!("*ifblk* = `{}`", ifblk)
+        }
+    }
+
     pub fn ifblocks_push(&mut self, ifblk: &str) {
         self.ifblk_levels.push(ifblk.to_string());
     }
@@ -264,6 +270,7 @@ impl FnBlock {
             self.lines_main.insert(1, format!("; FUNCTION {}", fn_name));
             self.lines_main.insert(2, ";--------------------------------------------------------;".to_string());
             self.lines_main.insert(3, format!("{}: ", fn_name));
+            self.lines_main.push(format!("out_{}: ", fn_name));
             self.lines_main.push("   rts".to_string());
             self.lines_main.push("".to_string());
         }
@@ -638,6 +645,13 @@ pub fn get_vartype(varname: &str) -> Option<String> {
             }
         }
         return None;
+    }
+}
+
+pub fn ifblocks_show() {
+    unsafe {
+        let last_ind = FN_BLOCKS.len() - 1;
+        FN_BLOCKS[last_ind].ifblocks_show();
     }
 }
 

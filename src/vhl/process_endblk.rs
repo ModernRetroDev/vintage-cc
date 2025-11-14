@@ -55,7 +55,7 @@ pub fn now(part: LinePart) -> bool {
                 "elif" => {
                     if is_else {
                         // an elif block is ending and an else block beginning
-                        outputs::blktypes_push("else_x2");
+                        outputs::blktypes_push("else");
 
                         outputs::lines_main_push("    else");
                         outputs::lines_main_push("    # } else {");
@@ -68,7 +68,25 @@ pub fn now(part: LinePart) -> bool {
                         return process_if_rpn::now(part);
                     } else {
                         // an if block is ending; no follow-up block
-                        outputs::lines_main_push("    endif");
+                        let mut endif_ctr: u8 = 1;
+                        loop {
+                            match outputs::blktypes_peek() {
+                                Some(btype) => {
+                                    if btype == "else" {
+                                        outputs::blktypes_pop();
+                                        endif_ctr += 1;
+                                    } else {
+                                        break;
+                                    }
+                                },
+                                None => {
+                                    break;
+                                },
+                            }
+                        }
+
+                        outputs::lines_main_push(
+                            &format!("    endif {}", endif_ctr));
                         outputs::lines_main_push("");
                     }
                 },
@@ -78,23 +96,31 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no);
                         return true;
                     }
-                    outputs::lines_main_push("    endif");
-                    outputs::lines_main_push("");
-                },
-                "else_x2" => {
-                    if is_else {
-                        println!("ERROR: ln:{} an else block can not follow an else block.",
-                            part.ln_no);
-                        return true;
+                    let mut endif_ctr: u8 = 1;
+                    loop {
+                        match outputs::blktypes_peek() {
+                            Some(btype) => {
+                                if btype == "else" {
+                                    outputs::blktypes_pop();
+                                    endif_ctr += 1;
+                                } else {
+                                    break;
+                                }
+                            },
+                            None => {
+                                break;
+                            },
+                        }
                     }
-                    if outputs::blktypes_pop() != Some("else".to_string()) {
-                        println!("ERROR: ln:{} double-pop didnt work.",
-                            part.ln_no);
-                        return true;
+
+                    if endif_ctr > 1 {
+                        outputs::lines_main_push(
+                            &format!("    endif {}", endif_ctr));
+                        outputs::lines_main_push("");
+                    } else {
+                        outputs::lines_main_push("    endif");
+                        outputs::lines_main_push("");
                     }
-                    outputs::lines_main_push("    endif");
-                    outputs::lines_main_push("    endif");
-                    outputs::lines_main_push("");
                 },
                 "loop" => {
                     _ = outputs::loop_ctr_types_pop();

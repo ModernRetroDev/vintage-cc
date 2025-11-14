@@ -448,6 +448,7 @@ fn_print_hello:
    ; print__endl
    jsr _print__endl
 
+out_fn_print_hello: 
    rts
 
 ;--------------------------------------------------------;

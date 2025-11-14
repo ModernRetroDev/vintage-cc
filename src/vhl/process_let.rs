@@ -280,6 +280,33 @@ fn as_type_u16(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
     return false;
 }
 
+fn as_type_u24(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
+    outputs::lines_vardecl_push(&format!("    var__u24 {}", varname));
+
+    match init_val {
+        Some(ival) => {
+            match fn_args::get_u24_value_str(ln_no, &ival, false) {
+                Some(u24val) => {
+                    outputs::lines_vardef_push(&format!(
+                        "    equals__u24_u24 .{} {}", varname, u24val));
+                },
+                None => {
+                    println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+                        ln_no, ival);
+                    return true;
+                }
+            }
+        },
+        None => {},
+    }
+
+    outputs::set_var_index(varname);
+    outputs::varnames_append(varname);
+    outputs::vartypes_append("u24");
+
+    return false;
+}
+
 fn as_type_str8(_ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
     match init_val {
         Some(ival) => {
@@ -590,6 +617,9 @@ pub fn now(part: LinePart) -> bool {
         },
         "u16" => {
             return as_type_u16(part.ln_no, &varname, init_value);
+        },
+        "u24" => {
+            return as_type_u24(part.ln_no, &varname, init_value);
         },
         "str" => {
             return as_type_str8(part.ln_no, &varname, init_value);

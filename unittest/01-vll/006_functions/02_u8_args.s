@@ -659,6 +659,7 @@ fn_add_print:
    ; print__endl
    jsr _print__endl
 
+out_fn_add_print: 
    rts
 
 ;--------------------------------------------------------;
