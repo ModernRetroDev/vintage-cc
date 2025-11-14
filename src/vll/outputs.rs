@@ -296,9 +296,11 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "   .byte $00, $00 ; ptr_addr (u16)"));
                 self.lines_vardefs.push(format!(
-                    "   .byte ${:02X} ; length (u8)", varlen));
+                    "   .byte $01 ; str_type (u8)"));
                 self.lines_vardefs.push(format!(
-                    "   .byte ${:02X} ; alloc (u8)", varlen));
+                    "   .byte ${:02X}, $00 ; length (u16)", varlen));
+                self.lines_vardefs.push(format!(
+                    "   .byte ${:02X}, $00 ; alloc (u16)", varlen));
                 self.lines_vardefs.push(format!(
                     "   .byte ${:02X} ; element size (u8)", 1));
                 self.lines_vardefs.push(

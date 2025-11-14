@@ -30,8 +30,9 @@ var__main__cmpres: ; type: u8
 
 str8_0x0000: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $1C ; length (u8)
-   .byte $1C ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $1C, $00 ; length (u16)
+   .byte $1C, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $40,$3A,$30,$31,$2D,$74,$79,$70,$65,$2D
@@ -41,8 +42,9 @@ str8_0x0000: ; type: str8
 
 str8_0x0001: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $29 ; length (u8)
-   .byte $29 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $29, $00 ; length (u16)
+   .byte $29, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
@@ -54,8 +56,9 @@ str8_0x0001: ; type: str8
 
 str8_0x0002: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $29 ; length (u8)
-   .byte $29 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $29, $00 ; length (u16)
+   .byte $29, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$20,$50,$52,$49,$4E,$54,$20,$41,$4C
@@ -67,8 +70,9 @@ str8_0x0002: ; type: str8
 
 str8_0x0003: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $29 ; length (u8)
-   .byte $29 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $29, $00 ; length (u16)
+   .byte $29, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
@@ -275,14 +279,14 @@ _open__file:
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
    lda ZP_PTR_2
-   adc #03 ; skip over: length, allocated, and elemsize
+   adc #06 ; skip over: str_type (1), length (2), allocated (2), and elemsize (1)
    sta ZP_PTR_3
    lda ZP_PTR_2+1
    adc #0
    sta ZP_PTR_3+1
 
    ; load str8 length from ZP_PTR_2
-   ldy #0
+   ldy #1
    lda (ZP_PTR_2),y
 
    ; adjust ZP_PTR_3 to point at str8 data
@@ -347,17 +351,19 @@ _print__str8:
    lda (ZP_PTR_2),y
    sta ZP_PTR_1+1
 
-   ; zero out iteration counter, Y
-   ldy #0
    ; zero out escape char indicator, X
    ldx #0
+   ; point to the str8 length, Y
+   ldy #1
    ; store str8 length to ZP_PTR_2
    lda (ZP_PTR_1),y
    sta ZP_PTR_2
-   ; increment ZP_PTR_1 by 3 bytes
+   ; zero out iteration counter, Y
+   ldy #0
+   ; increment ZP_PTR_1 by 5 bytes
    clc
    lda ZP_PTR_1
-   adc #3
+   adc #6
    sta ZP_PTR_1
    lda ZP_PTR_1+1
    adc #0

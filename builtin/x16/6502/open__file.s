@@ -30,14 +30,14 @@ _open__file:
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
    lda ZP_PTR_2
-   adc #03 ; skip over: length, allocated, and elemsize
+   adc #06 ; skip over: str_type (1), length (2), allocated (2), and elemsize (1)
    sta ZP_PTR_3
    lda ZP_PTR_2+1
    adc #0
    sta ZP_PTR_3+1
 
    ; load str8 length from ZP_PTR_2
-   ldy #0
+   ldy #1
    lda (ZP_PTR_2),y
 
    ; adjust ZP_PTR_3 to point at str8 data

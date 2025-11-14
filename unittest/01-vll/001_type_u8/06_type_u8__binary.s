@@ -30,8 +30,9 @@ var__main__b: ; type: u8
 
 str8_0x0000: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $1A ; length (u8)
-   .byte $1A ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $1A, $00 ; length (u16)
+   .byte $1A, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $40,$3A,$30,$36,$5F,$74,$79,$70,$65,$5F
@@ -41,8 +42,9 @@ str8_0x0000: ; type: str8
 
 str8_0x0001: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $26 ; length (u8)
-   .byte $26 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $26, $00 ; length (u16)
+   .byte $26, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
@@ -53,8 +55,9 @@ str8_0x0001: ; type: str8
 
 str8_0x0002: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $26 ; length (u8)
-   .byte $26 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $26, $00 ; length (u16)
+   .byte $26, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$20,$75,$38,$20,$73,$70,$65,$63,$69
@@ -65,8 +68,9 @@ str8_0x0002: ; type: str8
 
 str8_0x0003: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $26 ; length (u8)
-   .byte $26 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $26, $00 ; length (u16)
+   .byte $26, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $23,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D,$2D
@@ -77,8 +81,9 @@ str8_0x0003: ; type: str8
 
 str8_0x0004: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $27 ; length (u8)
-   .byte $27 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $27, $00 ; length (u16)
+   .byte $27, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
@@ -89,8 +94,9 @@ str8_0x0004: ; type: str8
 
 str8_0x0005: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $17 ; length (u8)
-   .byte $17 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $17, $00 ; length (u16)
+   .byte $17, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
@@ -100,8 +106,9 @@ str8_0x0005: ; type: str8
 
 str8_0x0006: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $17 ; length (u8)
-   .byte $17 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $17, $00 ; length (u16)
+   .byte $17, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
@@ -111,8 +118,9 @@ str8_0x0006: ; type: str8
 
 str8_0x0007: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $17 ; length (u8)
-   .byte $17 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $17, $00 ; length (u16)
+   .byte $17, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
@@ -122,8 +130,9 @@ str8_0x0007: ; type: str8
 
 str8_0x0008: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $17 ; length (u8)
-   .byte $17 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $17, $00 ; length (u16)
+   .byte $17, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$30
@@ -133,8 +142,9 @@ str8_0x0008: ; type: str8
 
 str8_0x0009: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $17 ; length (u8)
-   .byte $17 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $17, $00 ; length (u16)
+   .byte $17, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$30,$31
@@ -144,8 +154,9 @@ str8_0x0009: ; type: str8
 
 str8_0x000A: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $16 ; length (u8)
-   .byte $16 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $16, $00 ; length (u16)
+   .byte $16, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$30,$31,$30
@@ -155,8 +166,9 @@ str8_0x000A: ; type: str8
 
 str8_0x000B: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $16 ; length (u8)
-   .byte $16 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $16, $00 ; length (u16)
+   .byte $16, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$30,$31,$30,$30
@@ -166,8 +178,9 @@ str8_0x000B: ; type: str8
 
 str8_0x000C: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $16 ; length (u8)
-   .byte $16 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $16, $00 ; length (u16)
+   .byte $16, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$31,$30,$30,$30
@@ -177,8 +190,9 @@ str8_0x000C: ; type: str8
 
 str8_0x000D: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $15 ; length (u8)
-   .byte $15 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $15, $00 ; length (u16)
+   .byte $15, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
@@ -188,8 +202,9 @@ str8_0x000D: ; type: str8
 
 str8_0x000E: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $15 ; length (u8)
-   .byte $15 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $15, $00 ; length (u16)
+   .byte $15, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$31,$31,$31,$31
@@ -199,8 +214,9 @@ str8_0x000E: ; type: str8
 
 str8_0x000F: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $3A ; length (u8)
-   .byte $3A ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $3A, $00 ; length (u16)
+   .byte $3A, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $2A,$2A,$2A,$20,$70,$72,$69,$6E,$74,$20
@@ -213,8 +229,9 @@ str8_0x000F: ; type: str8
 
 str8_0x0010: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $14 ; length (u8)
-   .byte $14 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $14, $00 ; length (u16)
+   .byte $14, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$30,$20,$20,$20,$20
@@ -223,8 +240,9 @@ str8_0x0010: ; type: str8
 
 str8_0x0011: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $14 ; length (u8)
-   .byte $14 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $14, $00 ; length (u16)
+   .byte $14, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$20,$20,$20,$20
@@ -233,8 +251,9 @@ str8_0x0011: ; type: str8
 
 str8_0x0012: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $14 ; length (u8)
-   .byte $14 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $14, $00 ; length (u16)
+   .byte $14, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$20,$20,$20
@@ -243,8 +262,9 @@ str8_0x0012: ; type: str8
 
 str8_0x0013: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $14 ; length (u8)
-   .byte $14 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $14, $00 ; length (u16)
+   .byte $14, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$20,$20
@@ -253,8 +273,9 @@ str8_0x0013: ; type: str8
 
 str8_0x0014: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $14 ; length (u8)
-   .byte $14 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $14, $00 ; length (u16)
+   .byte $14, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$20
@@ -263,8 +284,9 @@ str8_0x0014: ; type: str8
 
 str8_0x0015: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $13 ; length (u8)
-   .byte $13 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $13, $00 ; length (u16)
+   .byte $13, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
@@ -273,8 +295,9 @@ str8_0x0015: ; type: str8
 
 str8_0x0016: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $13 ; length (u8)
-   .byte $13 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $13, $00 ; length (u16)
+   .byte $13, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
@@ -283,8 +306,9 @@ str8_0x0016: ; type: str8
 
 str8_0x0017: ; type: str8
    .byte $00, $00 ; ptr_addr (u16)
-   .byte $13 ; length (u8)
-   .byte $13 ; alloc (u8)
+   .byte $01 ; str_type (u8)
+   .byte $13, $00 ; length (u16)
+   .byte $13, $00 ; alloc (u16)
    .byte $01 ; element size (u8)
    ; data start
    .byte $20,$2A,$20,$30,$62,$31,$30,$30,$30,$30
@@ -488,14 +512,14 @@ _open__file:
    ; save a copy of the str8 pointer in ZP_PTR_3
    clc
    lda ZP_PTR_2
-   adc #03 ; skip over: length, allocated, and elemsize
+   adc #06 ; skip over: str_type (1), length (2), allocated (2), and elemsize (1)
    sta ZP_PTR_3
    lda ZP_PTR_2+1
    adc #0
    sta ZP_PTR_3+1
 
    ; load str8 length from ZP_PTR_2
-   ldy #0
+   ldy #1
    lda (ZP_PTR_2),y
 
    ; adjust ZP_PTR_3 to point at str8 data
@@ -560,17 +584,19 @@ _print__str8:
    lda (ZP_PTR_2),y
    sta ZP_PTR_1+1
 
-   ; zero out iteration counter, Y
-   ldy #0
    ; zero out escape char indicator, X
    ldx #0
+   ; point to the str8 length, Y
+   ldy #1
    ; store str8 length to ZP_PTR_2
    lda (ZP_PTR_1),y
    sta ZP_PTR_2
-   ; increment ZP_PTR_1 by 3 bytes
+   ; zero out iteration counter, Y
+   ldy #0
+   ; increment ZP_PTR_1 by 5 bytes
    clc
    lda ZP_PTR_1
-   adc #3
+   adc #6
    sta ZP_PTR_1
    lda ZP_PTR_1+1
    adc #0
