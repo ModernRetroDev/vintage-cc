@@ -1,4 +1,3 @@
-use crate::vll::builtins;
 use crate::vll::get;
 use crate::vll::fn_args;
 use crate::vll::outputs;
@@ -9,7 +8,6 @@ use crate::vll::line_part::LinePart;
 fn as_type_u8(part: LinePart) -> bool {
     let varname      = part.get_next().next;
     let varname_part = part.get_next();
-    let orval        = varname_part.get_next().next;
     let orval_part   = varname_part.get_next();
     let resolved: String;
 

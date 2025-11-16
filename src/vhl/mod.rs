@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 pub mod array;
 pub mod fn_args;
 pub mod line_part;

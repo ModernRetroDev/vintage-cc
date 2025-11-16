@@ -1,4 +1,3 @@
-use crate::vhl::array;
 use crate::vhl::outputs;
 
 use crate::vhl::line_part::LinePart;
@@ -6,11 +5,9 @@ use crate::vhl::line_part::LinePart;
 
 fn get_first_str_arg(line: &str) -> Option<String> {
     let mut next:   String = "".to_string();
-    let mut rem:    String = "".to_string();
     let mut skip:   bool   = true;
     let mut first:  bool   = true;
     let mut in_str: bool   = true;
-    let     part:   LinePart;
 
     let trimmed = line.trim();
 
@@ -42,7 +39,7 @@ fn get_first_str_arg(line: &str) -> Option<String> {
             // continue reading till the second double quote mark.
             next.push(c);
             if c == '"' {
-                in_str = false;
+                // in_str = false;
                 break;
             }
         } else {
@@ -53,7 +50,7 @@ fn get_first_str_arg(line: &str) -> Option<String> {
     return Some(next)
 }
 
-fn as_simple(line: &str, ln_no: u64) -> bool {
+fn as_simple(line: &str, _ln_no: u64) -> bool {
     let value_str: String;  
 
     value_str = get_first_str_arg(line).unwrap();
@@ -90,6 +87,4 @@ pub fn now(part: LinePart, line: &str) -> bool {
             part.ln_no);
         return true;
     }
-
-    return false;
 }

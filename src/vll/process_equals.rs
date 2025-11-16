@@ -122,7 +122,6 @@ fn as_types_u8_u8ptr(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 
@@ -505,7 +504,6 @@ fn as_types_u16_u16ptr(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 
@@ -875,7 +873,6 @@ fn as_types_u24_u8ptr(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 
@@ -943,7 +940,6 @@ fn as_types_u24_u16ptr(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 
@@ -1013,7 +1009,6 @@ fn as_types_u24_u24ptr(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 
@@ -1172,7 +1167,6 @@ fn as_types_file_file(part: LinePart) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
-    let rhs_part = lhs_part.get_next();
     let lhs_res:  String;
     let rhs_res:  String;
 

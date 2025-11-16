@@ -117,10 +117,7 @@ impl FnBlock {
     pub fn var_is_ptr(&self, varname: &str) -> bool {
         let mut ind: usize = 0;
             for globvar in self.var_names.clone() {
-                // println!("~~~ `{}`", &globvar);
                 if varname == &globvar {
-                    let vtype: String = self.var_types[ind].clone();
-                    // println!("varname `{}` is type `{}`", &varname, &vtype);
                     if self.var_types[ind].ends_with(":ptr") {
                         return true;
                     }
@@ -131,11 +128,11 @@ impl FnBlock {
         return false;
     }
 
-    pub fn ifblocks_show(&mut self) {
-        for ifblk in &self.ifblk_levels {
-            println!("*ifblk* = `{}`", ifblk)
-        }
-    }
+    // pub fn ifblocks_show(&mut self) {
+    //     for ifblk in &self.ifblk_levels {
+    //         println!("*ifblk* = `{}`", ifblk)
+    //     }
+    // }
 
     pub fn ifblocks_push(&mut self, ifblk: &str) {
         self.ifblk_levels.push(ifblk.to_string());
@@ -258,7 +255,7 @@ impl FnBlock {
             self.lines_main.push("".to_string());
         } else {
             let fn_name = match &self.module_name {
-                Some(mod_name) => {
+                Some(_) => {
                     format!("mod_{}_fn_{}", self.fn_name, self.module_name.as_ref().unwrap())
                 },
                 None => {
@@ -513,17 +510,17 @@ static mut LINES_VARIABLE_DEFS: Vec<String> = Vec::new();
 static mut LINES_INIT_FN:       Vec<String> = Vec::new();
 
 
-pub fn dump_varnames() {
-    unsafe {
-        println!("[VARNAMES]");
-        for fn_blk in FN_BLOCKS.iter() {
-            println!(" <{}>", fn_blk.fn_name);
-            for globvar in fn_blk.var_names.clone() {
-                println!("   - `{}`", &globvar);
-            }
-        }
-    }
-}
+// pub fn dump_varnames() {
+//     unsafe {
+//         println!("[VARNAMES]");
+//         for fn_blk in FN_BLOCKS.iter() {
+//             println!(" <{}>", fn_blk.fn_name);
+//             for globvar in fn_blk.var_names.clone() {
+//                 println!("   - `{}`", &globvar);
+//             }
+//         }
+//     }
+// }
 
 pub fn var_is_ptr(fn_name: &str, varname: &str) -> bool {
     let ptrname: String = format!("ptr__{}__{}", fn_name, varname);
@@ -650,12 +647,12 @@ pub fn get_vartype(varname: &str) -> Option<String> {
     }
 }
 
-pub fn ifblocks_show() {
-    unsafe {
-        let last_ind = FN_BLOCKS.len() - 1;
-        FN_BLOCKS[last_ind].ifblocks_show();
-    }
-}
+// pub fn ifblocks_show() {
+//     unsafe {
+//         let last_ind = FN_BLOCKS.len() - 1;
+//         FN_BLOCKS[last_ind].ifblocks_show();
+//     }
+// }
 
 pub fn ifblocks_push(ifblk: &str) {
     unsafe {

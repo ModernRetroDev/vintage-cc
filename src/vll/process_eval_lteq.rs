@@ -367,6 +367,9 @@ pub fn now(part: LinePart) -> bool {
 	} else if part.next == "eval_lteq__u16" {
 		return as_type_u16(part);
 
+	} else if part.next == "eval_lteq__u24" {
+		return as_type_u24(part);
+
 	} else {
 		println!(
 			"ERROR: ln:{} Unhandled builtin function variant `{}`.",

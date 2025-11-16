@@ -73,7 +73,7 @@ fn get_binary_literal_value(part: &LinePart) -> Option<u64> {
 fn get_hex_literal_value(part: &LinePart) -> Option<u64> {
     let mut value:     u64 = 0;
     let mut bit_worth: u64 = 1;
-    let mut nextval:   u64 = 0;
+    let mut nextval:   u64;
 
     let reversed: String = part.next.chars().rev().collect::<String>();
 

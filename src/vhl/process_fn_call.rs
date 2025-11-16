@@ -65,7 +65,6 @@ fn is_simple_fn_call(part: &LinePart) -> bool {
     let mut first_part:   String = "".to_string();
     let mut first_char:   bool   = false;
     let mut expect_paren: bool   = false;
-    let mut expect_term:  bool   = false;
 
     for c in part.next.chars() {
         if first_char {
@@ -395,6 +394,4 @@ pub fn now(part: LinePart, line: &str) -> bool {
             part.ln_no);
         return true;
     }
-
-    return false
 }

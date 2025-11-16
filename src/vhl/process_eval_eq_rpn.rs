@@ -172,7 +172,7 @@ pub fn now(part: LinePart) -> bool {
     let mut eval_parts:   Vec<String>  = Vec::new();
     let mut cur_stk_sz:   u8 = 0;
     let mut req_stk_sz:   u8 = 0;
-    let mut req_elem_sz:  u8 = 1;
+    let mut req_elem_sz:  u8;
     let mut terminated:   bool = false;
     let mut deref_btype:  String = "".to_string();
 

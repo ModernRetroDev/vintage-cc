@@ -422,10 +422,10 @@ impl FnBlock {
     }
 }
 
-static mut ACTIVE_FN:                  String = String::new();
-static mut PLATFORM:                   String = String::new();
-static mut OUTPUT_FILENAME:            String = String::new();
-static mut FN_BLOCKS:                 Vec<FnBlock> = Vec::new();
+static mut ACTIVE_FN:       String = String::new();
+// static mut PLATFORM:        String = String::new();
+static mut OUTPUT_FILENAME: String = String::new();
+static mut FN_BLOCKS:       Vec<FnBlock> = Vec::new();
 
 // pub fn show_active_fn_args() {
 //     unsafe {

@@ -1,7 +1,6 @@
 use crate::vhl::array;
 use crate::vhl::outputs;
 
-use crate::vhl::line_part::LinePart;
 
 fn is_direct_deref(epart: &str) -> bool {
     return epart.contains("@:");
@@ -60,7 +59,6 @@ pub fn resolve_varname(ln_no: u64, epart: &str) -> Option<String>{
     } else {
         return Some(epart.to_string());
     }
-    return None
 }
 
 fn is_binary_literal(epart: &str) -> bool {
@@ -132,7 +130,7 @@ fn get_binary_literal_value(epart: &str) -> Option<u64> {
 fn get_hex_literal_value(epart: &str) -> Option<u64> {
     let mut value:     u64 = 0;
     let mut bit_worth: u64 = 1;
-    let mut nextval:   u64 = 0;
+    let mut nextval:   u64;
 
     let reversed: String = epart.chars().rev().collect::<String>();
 

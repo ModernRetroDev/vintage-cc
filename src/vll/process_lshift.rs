@@ -43,7 +43,6 @@ fn as_type_u8(part: LinePart) -> bool {
 fn as_type_u8_n(part: LinePart) -> bool {
     let varname      = part.get_next().next;
     let varname_part = part.get_next();
-    let shift        = varname_part.get_next().next;
     let shift_part   = varname_part.get_next();
     let resolved: String;
 

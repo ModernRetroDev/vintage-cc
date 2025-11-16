@@ -1,5 +1,3 @@
-use crate::vll::builtins;
-use crate::vll::get;
 use crate::vll::outputs;
 
 use crate::vll::line_part::LinePart;
@@ -44,6 +42,4 @@ pub fn now(part: LinePart) -> bool {
 			part.ln_no);
 		return true;
 	}
-
-	return false;
 }
