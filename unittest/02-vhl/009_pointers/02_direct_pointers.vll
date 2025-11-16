@@ -103,6 +103,7 @@ fn main
     setout__default
 
     # std_u8 = bnk_u8;
+    equals__u8_u8ptr ._stk_8_0 .bnk_u8
     equals__u8_u8 .std_u8 ._stk_8_0
 
     # outfile.writeln("std_u8 = bnk_u8 = {}", std_u8);
@@ -113,6 +114,7 @@ fn main
     setout__default
 
     # std_u8 = bnk_u8 10 +;
+    equals__u8_u8ptr ._stk_8_0 .bnk_u8
     equals__u8_u8 ._stk_8_1 10
     plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
     equals__u8_u8 .std_u8 ._stk_8_0

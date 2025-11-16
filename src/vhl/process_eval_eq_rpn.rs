@@ -635,21 +635,36 @@ pub fn now(part: LinePart) -> bool {
             get_evalpart_basetype(part.ln_no, &epart);
         let epart_ptr_str = match is_direct_deref(&epart) {
             true  => { "ptr".to_string() },
-            false => { "".to_string() },
+            false => {
+                match epart_type {
+                    Some(ref epart_str) => {
+                        if epart_str.ends_with(":ptr") {
+                            "ptr".to_string()
+                        } else {
+                            "".to_string()
+                        }
+                    },
+                    None => { "".to_string() },
+                }
+            },
         };
 
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" {
-                    match fn_args::get_u8_value_str(part.ln_no, epart, true) {
-                        Some(u8val) => {
-                            resolved_arg = u8val.clone();
-                        },
-                        None => {
-                            println!("ERROR: ln:{} Failed to get u8 value of `{}`",
-                                part.ln_no, epart);
-                            return true;
+                if vtype == "u8" || vtype == "u8:ptr" {
+                    if vtype == "u8:ptr" {
+                        resolved_arg = epart.clone();
+                    } else {
+                        match fn_args::get_u8_value_str(part.ln_no, epart, true) {
+                            Some(u8val) => {
+                                resolved_arg = u8val.clone();
+                            },
+                            None => {
+                                println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+                                    part.ln_no, epart);
+                                return true;
+                            }
                         }
                     }
 
@@ -671,15 +686,19 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no, req_elem_sz);
                         return true;
                     }
-                } else if vtype == "u16" {
-                    match fn_args::get_u16_value_str(part.ln_no, epart, true) {
-                        Some(u16val) => {
-                            resolved_arg = u16val.clone();
-                        },
-                        None => {
-                            println!("ERROR: ln:{} Failed to get u16 value of `{}`",
-                                part.ln_no, epart);
-                            return true;
+                } else if vtype == "u16" || vtype == "u16:ptr" {
+                    if vtype == "u16:ptr" {
+                        resolved_arg = epart.clone();
+                    } else {
+                        match fn_args::get_u16_value_str(part.ln_no, epart, true) {
+                            Some(u16val) => {
+                                resolved_arg = u16val.clone();
+                            },
+                            None => {
+                                println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+                                    part.ln_no, epart);
+                                return true;
+                            }
                         }
                     }
 
@@ -697,15 +716,19 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no, req_elem_sz);
                         return true;
                     }
-                } else if vtype == "u24" {
-                    match fn_args::get_u24_value_str(part.ln_no, epart, true) {
-                        Some(u24val) => {
-                            resolved_arg = u24val.clone();
-                        },
-                        None => {
-                            println!("ERROR: ln:{} Failed to get u24 value of `{}`",
-                                part.ln_no, epart);
-                            return true;
+                } else if vtype == "u24" || vtype == "u24:ptr" {
+                    if vtype == "u24:ptr" {
+                        resolved_arg = epart.clone();
+                    } else {
+                        match fn_args::get_u24_value_str(part.ln_no, epart, true) {
+                            Some(u24val) => {
+                                resolved_arg = u24val.clone();
+                            },
+                            None => {
+                                println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+                                    part.ln_no, epart);
+                                return true;
+                            }
                         }
                     }
 
