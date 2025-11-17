@@ -461,17 +461,17 @@ pub fn get_value(ln_no: u64, arg: &str) -> Option<String> {
     match &base_type[..] {
         "bool" => {
             outputs::mark_temptype_in_active_fn("var__bool _temp_bool");
-            outputs::lines_main_push("    load__bool ._temp_bool ._temp_ptr");
+            outputs::lines_main_push("    equals__bool_boolptr ._temp_bool ._temp_ptr");
             return Some("_temp_bool".to_string());
         },
         "u8" => {
             outputs::mark_temptype_in_active_fn("var__u8 _temp_u8");
-            outputs::lines_main_push("    load__u8 ._temp_u8 ._temp_ptr");
+            outputs::lines_main_push("    equals__u8_u8ptr ._temp_u8 ._temp_ptr");
             return Some("_temp_u8".to_string());
         },
         "u16" => {
             outputs::mark_temptype_in_active_fn("var__u16 _temp_u16");
-            outputs::lines_main_push("    load__u16 ._temp_u16 ._temp_ptr");
+            outputs::lines_main_push("    equals__u16_u16ptr ._temp_u16 ._temp_ptr");
             return Some("_temp_u16".to_string());
         },
         _ => {
@@ -501,15 +501,18 @@ pub fn store_value(ln_no: u64, arg: &str, val: &str) -> bool {
 
     match &base_type[..] {
         "bool" => {
-            outputs::lines_main_push(&format!("    store__bool ._temp_ptr {}", val));
+            outputs::lines_main_push(
+                &format!("    equals__boolptr_bool ._temp_ptr {}", val));
             return false;
         },
         "u8" => {
-            outputs::lines_main_push(&format!("    store__u8 ._temp_ptr {}", val));
+            outputs::lines_main_push(
+                &format!("    equals__u8ptr_u8 ._temp_ptr {}", val));
             return false;
         },
         "u16" => {
-            outputs::lines_main_push(&format!("    store__u16 ._temp_ptr {}", val));
+            outputs::lines_main_push(
+                &format!("    equals__u16ptr_u16 ._temp_ptr {}", val));
             return false;
         },
         _ => {

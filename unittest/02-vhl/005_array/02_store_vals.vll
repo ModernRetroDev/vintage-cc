@@ -10,7 +10,7 @@ fn main
     var__u8 ctr
     arr8__u8,5 undef
     var__file outfile
-    var__ptr _ptr
+    var__ptr _temp_ptr
     var__u8 _temp_u8
     var__u8 _stk_8_0
 
@@ -56,8 +56,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -69,8 +69,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -82,8 +82,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -95,8 +95,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -108,8 +108,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -121,28 +121,28 @@ fn main
 
     # undef[0] = 1;
     equals__u8_u8 ._stk_8_0 1
-    ref__arr8 ._ptr .undef 0
-    store__u8 ._ptr ._stk_8_0
+    ref__arr8 ._temp_ptr .undef 0
+    equals__u8ptr_u8 ._temp_ptr ._stk_8_0
 
     # undef[1] = 3;
     equals__u8_u8 ._stk_8_0 3
-    ref__arr8 ._ptr .undef 1
-    store__u8 ._ptr ._stk_8_0
+    ref__arr8 ._temp_ptr .undef 1
+    equals__u8ptr_u8 ._temp_ptr ._stk_8_0
 
     # undef[2] = 5;
     equals__u8_u8 ._stk_8_0 5
-    ref__arr8 ._ptr .undef 2
-    store__u8 ._ptr ._stk_8_0
+    ref__arr8 ._temp_ptr .undef 2
+    equals__u8ptr_u8 ._temp_ptr ._stk_8_0
 
     # undef[3] = 7;
     equals__u8_u8 ._stk_8_0 7
-    ref__arr8 ._ptr .undef 3
-    store__u8 ._ptr ._stk_8_0
+    ref__arr8 ._temp_ptr .undef 3
+    equals__u8ptr_u8 ._temp_ptr ._stk_8_0
 
     # undef[4] = 13;
     equals__u8_u8 ._stk_8_0 13
-    ref__arr8 ._ptr .undef 4
-    store__u8 ._ptr ._stk_8_0
+    ref__arr8 ._temp_ptr .undef 4
+    equals__u8ptr_u8 ._temp_ptr ._stk_8_0
 
     # outfile.writeln("AFTER:")
     setout__file .outfile
@@ -159,8 +159,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -172,8 +172,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -185,8 +185,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -198,8 +198,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -211,8 +211,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default

@@ -11,7 +11,7 @@ fn main
     arr8__u8,10 array = 2,4,6,8,10,12,14,16,18,20
     arr8__u8,5 undef
     var__file outfile
-    var__ptr _ptr
+    var__ptr _temp_ptr
     var__u8 _temp_u8
     var__u8 _stk_8_0
 
@@ -51,8 +51,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -64,8 +64,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -77,8 +77,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -90,8 +90,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -103,8 +103,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -116,8 +116,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -129,8 +129,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -142,8 +142,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -155,8 +155,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -168,8 +168,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -188,8 +188,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array 9
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array 9
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -208,8 +208,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -221,8 +221,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -234,8 +234,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -247,8 +247,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -260,8 +260,8 @@ fn main
     print__str8 "undef["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .undef .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .undef .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default

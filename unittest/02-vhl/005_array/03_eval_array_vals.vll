@@ -11,7 +11,7 @@ fn main
     arr8__u8,5 count = 1,2,3,4,5
     var__u8 res
     var__file outfile
-    var__ptr _ptr
+    var__ptr _temp_ptr
     var__u8 _temp_u8
     var__u8 _stk_8_0
     var__u8 _stk_8_1
@@ -53,8 +53,8 @@ fn main
     print__str8 "count["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .count .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -66,8 +66,8 @@ fn main
     print__str8 "count["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .count .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -79,8 +79,8 @@ fn main
     print__str8 "count["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .count .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -92,8 +92,8 @@ fn main
     print__str8 "count["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .count .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -105,8 +105,8 @@ fn main
     print__str8 "count["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .count .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count .ctr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -128,14 +128,14 @@ fn main
     setout__default
 
     # res = count[0] count[2] count[4] + +;
-    ref__arr8 ._ptr .count 0
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count 0
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_0 ._temp_u8
-    ref__arr8 ._ptr .count 2
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count 2
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_1 ._temp_u8
-    ref__arr8 ._ptr .count 4
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .count 4
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_2 ._temp_u8
     plus_equals__u8_u8 ._stk_8_1 ._stk_8_2
     plus_equals__u8_u8 ._stk_8_0 ._stk_8_1

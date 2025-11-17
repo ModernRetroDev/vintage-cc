@@ -10,7 +10,7 @@ fn main
     arr8__u8,5 a = 5,3,20,10,15
     var__file outfile
     var__bool _cmpres
-    var__ptr _ptr
+    var__ptr _temp_ptr
     var__u8 _temp_u8
     var__u8 _stk_8_0
     var__u8 _stk_8_1
@@ -48,11 +48,11 @@ fn main
     setout__default
 
     # if' a[0]  a[1]  < {
-    ref__arr8 ._ptr .a 0
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .a 0
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_0 ._temp_u8
-    ref__arr8 ._ptr .a 1
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .a 1
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_1 ._temp_u8
     eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
     equals__bool_bool ._cmpres ._stk_8_0
@@ -85,15 +85,15 @@ fn main
     setout__default
 
     # if' a[2]  a[3] - a[4] < {
-    ref__arr8 ._ptr .a 2
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .a 2
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_0 ._temp_u8
-    ref__arr8 ._ptr .a 3
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .a 3
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_1 ._temp_u8
     minus_equals__u8_u8 ._stk_8_0 ._stk_8_1
-    ref__arr8 ._ptr .a 4
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .a 4
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     equals__u8_u8 ._stk_8_1 ._temp_u8
     eval_lt__u8 ._stk_8_0 ._stk_8_0 ._stk_8_1
     equals__bool_bool ._cmpres ._stk_8_0
