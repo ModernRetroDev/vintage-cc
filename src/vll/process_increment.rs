@@ -4,6 +4,40 @@ use crate::vll::outputs;
 use crate::vll::line_part::LinePart;
 
 
+fn as_type_ptr(part: LinePart) -> bool {
+	let thisvar      = part.get_next().next;
+	let thisvar_part = part.get_next();
+	let thisvar_res: String;
+
+	// read in the variable name
+	if !thisvar_part.is_varname() {
+		println!("ERROR: ln:{} Expected varname, got `{}`",
+			part.ln_no, thisvar);
+		return true;
+	}
+	thisvar_res = get::var_fullname(&thisvar);
+
+	let vtype = outputs::get_vartype(&thisvar_res).unwrap();
+	if !vtype.ends_with(":ptr") {
+		println!(
+			"WARNING: ln:{} Expected a ptr type; got `{}`, which is type `{}`",
+			part.ln_no, thisvar, vtype)
+	}
+
+	outputs::mainfn_append(&format!("   ; increment__ptr {thisvar}"));
+	outputs::mainfn_append(&format!("   lda {thisvar_res}"));
+	outputs::mainfn_append(         "   clc ; clear carry");
+	outputs::mainfn_append(         "   adc #1");
+	outputs::mainfn_append(&format!("   sta {thisvar_res}"));
+	//
+	outputs::mainfn_append(&format!("   lda {thisvar_res}+1"));
+	outputs::mainfn_append(         "   adc #0");
+	outputs::mainfn_append(&format!("   sta {thisvar_res}+1"));
+	outputs::mainfn_append("");
+
+	return false
+}
+
 fn as_type_u8(part: LinePart) -> bool {
 	let thisvar      = part.get_next().next;
 	let thisvar_part = part.get_next();
@@ -109,7 +143,10 @@ fn as_type_u24(part: LinePart) -> bool {
 
 pub fn now(part: LinePart) -> bool {
 
-	if part.next == "increment__u8" {
+	if part.next == "increment__ptr" {
+		return as_type_ptr(part);
+
+	} else if part.next == "increment__u8" {
 		return as_type_u8(part);
 
 	} else if part.next == "increment__u16" {

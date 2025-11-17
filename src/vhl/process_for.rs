@@ -3,6 +3,33 @@ use crate::vhl::outputs;
 
 use crate::vhl::line_part::LinePart;
 
+fn is_valid_loop_label(loop_lbl: &str) -> bool {
+    if !loop_lbl.starts_with("@") {
+        return false;
+    }
+    if loop_lbl.len() <= 1 {
+        return false;
+    }
+    if ! loop_lbl.chars().nth(1).unwrap().is_alphabetic() {
+        return false;
+    }
+
+    for next in loop_lbl[2..].chars() {
+        if next.is_alphabetic() {
+            continue;
+        }
+        if next.is_digit(10) {
+            continue;
+        }
+        if next == '_' {
+            continue;
+        }
+        // else; invalid character
+        return false;
+    }
+
+    return true;
+}
 
 fn is_for_loop(part: LinePart) -> Option<bool> {
     let mut next:       LinePart;
@@ -333,9 +360,13 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
                     "ERROR: ln:{} Loop labels must start with an `@` char; got `{}`.",
                     part.ln_no, next.next.chars().nth(0).unwrap());
                 return true;
-            } else {
-                println!("TODO[VHL]: Check that loop label is a valid name!");
+            } else if is_valid_loop_label(&next.next) {
                 loop_label = Some(next.next[1..].to_string());
+            } else {
+                println!(
+                    "ERROR: ln:{} Invalid loop label provided; got `{}`.",
+                    part.ln_no, &next.next);
+                return true;
             }
             break;
         } else if next.next.ends_with("{") {
@@ -484,10 +515,10 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
 
     let lpvar_eq_fn: String = match &basetype_loopable[..] {
         "u8" => {
-            "equals__u8_u8".to_string()
+            "equals__u8_u8ptr".to_string()
         },
         "u16" => {
-            "equals__u16_u16".to_string()
+            "equals__u16_u16ptr".to_string()
         },
         _ => {
             println!(
@@ -510,6 +541,19 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
 
     outputs::lines_main_push(&format!("    # for {}", part.rem));
     outputs::lines_main_push(&format!("    {} .{} 0", eq_fn, temp_loop_ctr_var));
+    //------------------------------------------------------------------------//
+    // now set the value of loopable_next (if desired)                        //
+    //------------------------------------------------------------------------//
+    let mut resolved_arg: String = "".to_string();
+    if get_loopable_next {
+        let indexed_array: String = format!("{}[{}]", 
+            &loopable_varname, &temp_loop_ctr_var);
+        resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_array) {
+            Some(temp_var) => { temp_var.clone() },
+            None => { return true },
+        };
+    }
+
     if all {
         outputs::lines_main_push(&format!("    {} .{} .{}", 
             get_alloc_fn, loop_len_var, loopable_varname));
@@ -526,18 +570,26 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
     outputs::lines_main_push(         "        if ._cmpres");
     outputs::lines_main_push(         "            break");
     outputs::lines_main_push(         "        endif");
-    //------------------------------------------------------------------------//
-    // now set the value of loopable_next (if desired)                        //
-    //------------------------------------------------------------------------//
+
     if get_loopable_next {
-        let indexed_array: String = format!("{}[{}]", 
-            &loopable_varname, &temp_loop_ctr_var);
-        let resolved_arg: String = match array::get_value(part.ln_no, &indexed_array) {
-            Some(temp_var) => { temp_var.clone() },
-            None => { return true },
-        };
         outputs::lines_main_push(&format!("        {} .{} .{}", 
             lpvar_eq_fn, loopable_next, resolved_arg));
+        match &index_type[..] {
+            "u8" => {
+                outputs::lines_main_push(
+                    &format!("        increment__ptr .{}", resolved_arg));
+            },
+            "u16" => {
+                outputs::lines_main_push(
+                    &format!("        plus_equals__ptr_u8 .{} 2", resolved_arg));
+            },
+            _ => {
+                println!(
+                    "ERROR: ln:{} FOR: Unsupported basetype loopable `{}`.",
+                    part.ln_no, basetype_loopable);
+                return true;
+            }
+        }
     }
 
     outputs::lines_main_push(&format!("        {} .{}", increment_fn, temp_loop_ctr_var));
@@ -585,9 +637,13 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
                     "ERROR: ln:{} Loop labels must start with an `@` char; got `{}`.",
                     part.ln_no, next.next.chars().nth(0).unwrap());
                 return true;
-            } else {
-                println!("TODO[VHL]: Check that loop label is a valid name!");
+            } else if is_valid_loop_label(&next.next) {
                 loop_label = Some(next.next[1..].to_string());
+            } else {
+                println!(
+                    "ERROR: ln:{} Invalid loop label provided; got `{}`.",
+                    part.ln_no, &next.next);
+                return true;
             }
             break;
         } else if next.next.ends_with("{") {
@@ -762,10 +818,10 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
 
     let lpvar_eq_fn: String = match &basetype_loopable[..] {
         "u8" => {
-            "equals__u8_u8".to_string()
+            "equals__u8_u8ptr".to_string()
         },
         "u16" => {
-            "equals__u16_u16".to_string()
+            "equals__u16_u16ptr".to_string()
         },
         _ => {
             println!(
@@ -788,6 +844,19 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
 
     outputs::lines_main_push(&format!("    # for {}", part.rem));
     outputs::lines_main_push(&format!("    {} .{} 0", eq_fn, temp_loop_ctr_var));
+    //------------------------------------------------------------------------//
+    // now set the value of loopable_next (if desired)                        //
+    //------------------------------------------------------------------------//
+    let mut resolved_arg: String = "".to_string();
+    if get_loopable_next {
+        let indexed_array: String = format!("{}[{}]", 
+            &loopable_varname, &temp_loop_ctr_var);
+        resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_array) {
+            Some(temp_var) => { temp_var.clone() },
+            None => { return true },
+        };
+    }
+
     if all {
         outputs::lines_main_push(&format!("    {} .{} .{}", 
             get_alloc_fn, loop_len_var, loopable_varname));
@@ -808,14 +877,24 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     // now set the value of loopable_next (if desired)                        //
     //------------------------------------------------------------------------//
     if get_loopable_next {
-        let indexed_array: String = format!("{}[{}]", 
-            &loopable_varname, &temp_loop_ctr_var);
-        let resolved_arg: String = match array::get_value(part.ln_no, &indexed_array) {
-            Some(temp_var) => { temp_var.clone() },
-            None => { return true },
-        };
         outputs::lines_main_push(&format!("        {} .{} .{}", 
             lpvar_eq_fn, loopable_next, resolved_arg));
+        match &index_type[..] {
+            "u8" => {
+                outputs::lines_main_push(
+                    &format!("        increment__ptr .{}", resolved_arg));
+            },
+            "u16" => {
+                outputs::lines_main_push(
+                    &format!("        plus_equals__ptr_u8 .{} 2", resolved_arg));
+            },
+            _ => {
+                println!(
+                    "ERROR: ln:{} FOR: Unsupported basetype loopable `{}`.",
+                    part.ln_no, basetype_loopable);
+                return true;
+            }
+        }
     }
     //------------------------------------------------------------------------//
     // now set the value of loopable_index (if desired)                       //

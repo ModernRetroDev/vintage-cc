@@ -39,7 +39,7 @@ fn as_type_arr8(part: LinePart) -> bool {
     ptrname_res = get::var_fullname(&ptrname);
     match outputs::get_vartype(&ptrname_res) {
         Some(vtype) => {
-            if vtype != "ptr" {
+            if !(vtype == "ptr" || vtype.ends_with(":ptr")) {
                 println!(
                     "ERROR: ln:{} Expected a ptr type; got `{}`, which is type `{}`",
                     part.ln_no, ptrname, vtype);

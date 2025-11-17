@@ -255,11 +255,12 @@ fn get_array_index(_ln_no: u64, arg: &str) -> Option<String> {
 }
 
 // this always sets `_temp_ptr` to point at the indexed value
-fn get_reference(ln_no: u64, arg: &str) -> bool {
+fn get_reference(ln_no: u64, arg: &str, basetype: &str, unique: bool) -> Option<String> {
     let     array_elem:     u64;
     let     array_size:     u8;
     let     array_name:     String;
     let     elem_index_str: String;
+    let     ptr_varname:    String;
     let mut elem_index:     u64 = 0;
     let mut index_vartype:  Option<String> = None;
 
@@ -270,11 +271,11 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
     //------------------------------------------------------------------------//
     match get_arraytype_size(ln_no, arg) {
         Some(asize) => { array_size = asize },
-        None        => { return true },
+        None        => { return None },
     }
     match get_arraytype_n_elem(ln_no, arg) {
         Some(nelem) => { array_elem = nelem },
-        None        => { return true },
+        None        => { return None },
     }
 
     //------------------------------------------------------------------------//
@@ -282,11 +283,11 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
     //------------------------------------------------------------------------//
     match get_array_name(ln_no, arg) {
         Some(aname) => { array_name = aname },
-        None        => { return true },
+        None        => { return None },
     }
     match get_array_index(ln_no, arg) {
         Some(index) => { elem_index_str = index },
-        None        => { return true },
+        None        => { return None },
     }
 
 
@@ -304,6 +305,15 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
         Err(_) => {},
     }
 
+    ptr_varname = match unique {
+        true => {
+            outputs::get_unique_ptr_var(basetype).unwrap()
+        },
+        false => {
+            "_temp_ptr".to_string()
+        },
+    };
+
     match index_vartype {
         Some(vtype) => {
             //----------------------------------------------------------------//
@@ -316,28 +326,28 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
                         println!(
                             "ERROR: ln:{} arr8 can only be indexed using a u8 value, not `{}`.",
                             ln_no, vtype_str);
-                        return true;
+                        return None;
                     }
                     outputs::lines_main_push(&format!(
-                        "    ref__arr8 ._ptr .{} .{}", 
-                        array_name, elem_index_str));
+                        "    ref__arr8 .{} .{} .{}", 
+                        ptr_varname, array_name, elem_index_str));
                 },
                 "u16" => {
                     if array_size != 16 {
                         println!(
                             "ERROR: ln:{} arr16 can only be indexed using a u16 value, not `{}`.",
                             ln_no, vtype_str);
-                        return true;
+                        return None;
                     }
                     outputs::lines_main_push(&format!(
-                        "    ref__arr16 ._ptr .{} .{}", 
-                        array_name, elem_index_str));
+                        "    ref__arr16 .{} .{} .{}", 
+                        ptr_varname, array_name, elem_index_str));
                 },
                 _ => {
                     println!(
                         "ERROR: ln:{} vartype `{}` can not be used to index into array.",
                         ln_no, vtype_str);
-                    return true;
+                    return None;
                 }
             }
         },
@@ -351,16 +361,16 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
                         println!(
                             "ERROR: ln:{} value `{}` exceeds maximum possible array elements.",
                             ln_no, elem_index);
-                        return true;
+                        return None;
                     } else if elem_index >= array_elem {
                         println!(
                             "ERROR: ln:{} value `{}` exceeds allocated array elements of `{}`.",
                             ln_no, elem_index, array_elem);
-                        return true;
+                        return None;
                     } else {
                         outputs::lines_main_push(&format!(
-                            "    ref__arr8 ._ptr .{} {}", 
-                            array_name, elem_index));
+                            "    ref__arr8 .{} .{} {}", 
+                            ptr_varname, array_name, elem_index));
                     }
                 },
                 16 => {
@@ -368,38 +378,35 @@ fn get_reference(ln_no: u64, arg: &str) -> bool {
                         println!(
                             "ERROR: ln:{} value `{}` exceeds maximum possible array elements.",
                             ln_no, elem_index);
-                        return true;
+                        return None;
                     } else if elem_index >= array_elem {
                         println!(
                             "ERROR: ln:{} value `{}` exceeds allocated array elements of `{}`.",
                             ln_no, elem_index, array_elem);
-                        return true;
+                        return None;
                     } else {
                         outputs::lines_main_push(&format!(
-                            "    ref__arr16 ._ptr .{} {}", 
-                            array_name, elem_index));
+                            "    ref__arr16 .{} .{} {}", 
+                            ptr_varname, array_name, elem_index));
                     }
                 },
                 _ => {
                     println!(
                         "ERROR: ln:{} unsupported array size `{}`.",
                         ln_no, array_size);
-                    return true;
+                    return None;
                 },
             }
         },
     }
 
-    return false;
+    return Some(ptr_varname);
 }
 
-pub fn get_value(ln_no: u64, arg: &str) -> Option<String> {
-    let array_name: String;
-    let base_type:  String;
-
-    if get_reference(ln_no, &arg) {
-        return None;
-    }
+pub fn get_value_ptr(ln_no: u64, arg: &str) -> Option<String> {
+    let array_name:     String;
+    let base_type:      String;
+    let unique_val_ptr: String;
 
     match get_array_name(ln_no, arg) {
         Some(aname) => { array_name = aname },
@@ -411,19 +418,60 @@ pub fn get_value(ln_no: u64, arg: &str) -> Option<String> {
     }
 
     match &base_type[..] {
+        "bool" => {},
+        "u8" => {},
+        "u16" => {},
+        _ => {
+            println!("[TODO] Unsupported base type `{}` for array `{}`", 
+                base_type, array_name);
+            return None
+        }
+    }
+
+    match get_reference(ln_no, &arg, &base_type, true) {
+        Some(uptr) => {
+            unique_val_ptr = uptr.clone();
+        },
+        None => {
+            return None;
+        }
+    }
+
+    return Some(unique_val_ptr);
+}
+
+pub fn get_value(ln_no: u64, arg: &str) -> Option<String> {
+    let array_name: String;
+    let base_type:  String;
+
+    match get_array_name(ln_no, arg) {
+        Some(aname) => { array_name = aname },
+        None        => { return None },
+    }
+    match get_arraytype_basetype(ln_no, arg) {
+        Some(btype) => { base_type = btype.clone() },
+        None        => { return None },
+    }
+
+    if get_reference(ln_no, &arg, &base_type, false).is_none() {
+        return None;
+    }
+
+
+    match &base_type[..] {
         "bool" => {
             outputs::mark_temptype_in_active_fn("var__bool _temp_bool");
-            outputs::lines_main_push("    load__bool ._temp_bool ._ptr");
+            outputs::lines_main_push("    load__bool ._temp_bool ._temp_ptr");
             return Some("_temp_bool".to_string());
         },
         "u8" => {
             outputs::mark_temptype_in_active_fn("var__u8 _temp_u8");
-            outputs::lines_main_push("    load__u8 ._temp_u8 ._ptr");
+            outputs::lines_main_push("    load__u8 ._temp_u8 ._temp_ptr");
             return Some("_temp_u8".to_string());
         },
         "u16" => {
             outputs::mark_temptype_in_active_fn("var__u16 _temp_u16");
-            outputs::lines_main_push("    load__u16 ._temp_u16 ._ptr");
+            outputs::lines_main_push("    load__u16 ._temp_u16 ._temp_ptr");
             return Some("_temp_u16".to_string());
         },
         _ => {
@@ -438,10 +486,6 @@ pub fn store_value(ln_no: u64, arg: &str, val: &str) -> bool {
     let array_name: String;
     let base_type:  String;
 
-    if get_reference(ln_no, &arg) {
-        return true;
-    }
-
     match get_array_name(ln_no, arg) {
         Some(aname) => { array_name = aname },
         None        => { return true },
@@ -451,19 +495,21 @@ pub fn store_value(ln_no: u64, arg: &str, val: &str) -> bool {
         None        => { return true },
     }
 
-    // return Some(format!("_temp_{}", base_type));
+    if get_reference(ln_no, &arg, &base_type, false).is_none() {
+        return true;
+    }
 
     match &base_type[..] {
         "bool" => {
-            outputs::lines_main_push(&format!("    store__bool ._ptr {}", val));
+            outputs::lines_main_push(&format!("    store__bool ._temp_ptr {}", val));
             return false;
         },
         "u8" => {
-            outputs::lines_main_push(&format!("    store__u8 ._ptr {}", val));
+            outputs::lines_main_push(&format!("    store__u8 ._temp_ptr {}", val));
             return false;
         },
         "u16" => {
-            outputs::lines_main_push(&format!("    store__u16 ._ptr {}", val));
+            outputs::lines_main_push(&format!("    store__u16 ._temp_ptr {}", val));
             return false;
         },
         _ => {

@@ -12,11 +12,15 @@ fn main
     var__u8 next
     var__file outfile
     var__bool _cmpres
-    var__ptr _ptr
+    var__ptr _temp_ptr
     var__u8 _temp_u8
     var__u8 _stk_8_0
     var__u8 _loop_len_u8
     var__u8 _loop_ctr_u8_0
+    ptr__u8 _uptr_u8_0
+    ptr__u8 _uptr_u8_1
+    ptr__u8 _uptr_u8_2
+    ptr__u8 _uptr_u8_3
 
     # outfile.create("03_for_loop.utest");
     setup__file .outfile 'w' "@:03_for_loop.utest"
@@ -57,15 +61,15 @@ fn main
 
     # for next in array {
     equals__u8_u8 ._loop_ctr_u8_0 0
+    ref__arr8 ._uptr_u8_0 .array ._loop_ctr_u8_0
     loop
         get_length__arr8 ._loop_len_u8 .array
         eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
         if ._cmpres
             break
         endif
-    ref__arr8 ._ptr .array ._loop_ctr_u8_0
-    load__u8 ._temp_u8 ._ptr
-        equals__u8_u8 .next ._temp_u8
+        equals__u8_u8ptr .next ._uptr_u8_0
+        increment__ptr ._uptr_u8_0
         increment__u8 ._loop_ctr_u8_0
 
     # outfile.writeln("array[{}] = {}", ctr, next);
@@ -111,8 +115,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    load__u8 ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -138,15 +142,15 @@ fn main
 
     # for next in [all] array {
     equals__u8_u8 ._loop_ctr_u8_0 0
+    ref__arr8 ._uptr_u8_1 .array ._loop_ctr_u8_0
     get_alloc__arr8 ._loop_len_u8 .array
     loop
         eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
         if ._cmpres
             break
         endif
-    ref__arr8 ._ptr .array ._loop_ctr_u8_0
-    load__u8 ._temp_u8 ._ptr
-        equals__u8_u8 .next ._temp_u8
+        equals__u8_u8ptr .next ._uptr_u8_1
+        increment__ptr ._uptr_u8_1
         increment__u8 ._loop_ctr_u8_0
 
     # outfile.writeln("array[{}] = {}", ctr, next);
@@ -192,8 +196,8 @@ fn main
     print__str8 "array["
     print__u8 .ctr
     print__str8 "] = "
-    ref__arr8 ._ptr .array .ctr
-    load__u8 ._temp_u8 ._ptr
+    ref__arr8 ._temp_ptr .array .ctr
+    load__u8 ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
@@ -215,15 +219,15 @@ fn main
 
     # for ctr, next in [enumerate] array {
     equals__u8_u8 ._loop_ctr_u8_0 0
+    ref__arr8 ._uptr_u8_2 .array ._loop_ctr_u8_0
     loop
         get_length__arr8 ._loop_len_u8 .array
         eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
         if ._cmpres
             break
         endif
-    ref__arr8 ._ptr .array ._loop_ctr_u8_0
-    load__u8 ._temp_u8 ._ptr
-        equals__u8_u8 .next ._temp_u8
+        equals__u8_u8ptr .next ._uptr_u8_2
+        increment__ptr ._uptr_u8_2
         equals__u8_u8 .ctr ._loop_ctr_u8_0
         increment__u8 ._loop_ctr_u8_0
 
@@ -251,15 +255,15 @@ fn main
 
     # for _, next in [enumerate] array {
     equals__u8_u8 ._loop_ctr_u8_0 0
+    ref__arr8 ._uptr_u8_3 .array ._loop_ctr_u8_0
     loop
         get_length__arr8 ._loop_len_u8 .array
         eval_eq__u8 ._cmpres ._loop_len_u8 ._loop_ctr_u8_0
         if ._cmpres
             break
         endif
-    ref__arr8 ._ptr .array ._loop_ctr_u8_0
-    load__u8 ._temp_u8 ._ptr
-        equals__u8_u8 .next ._temp_u8
+        equals__u8_u8ptr .next ._uptr_u8_3
+        increment__ptr ._uptr_u8_3
         increment__u8 ._loop_ctr_u8_0
 
     # outfile.writeln("array[?] = {}", next);

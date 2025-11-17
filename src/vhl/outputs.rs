@@ -33,6 +33,10 @@ struct FnBlock {
     fn_stk_elem_size:    u8,
     fn_blktype_levels:   Vec<String>,
     //
+    fn_unique_ptrs:      Vec<String>,
+    fn_unique_ptrs_stk:  Vec<String>,
+    fn_unique_ptrs_len:  u8,
+    //
     fn_loop_ctr_types:   Vec<String>,
     fn_loop_ctr_len_u8:  u8,
     fn_loop_ctr_len_u16: u8,
@@ -60,6 +64,10 @@ fn new_fn_block(fn_name: &str) -> FnBlock {
         fn_stk_size:         0,
         fn_stk_elem_size:    0,
         fn_blktype_levels:   Vec::new(),
+        //
+        fn_unique_ptrs:      Vec::new(),
+        fn_unique_ptrs_stk:  Vec::new(),
+        fn_unique_ptrs_len:  0,
         //
         fn_loop_ctr_types:   Vec::new(),
         fn_loop_ctr_len_u8:  0,
@@ -192,6 +200,34 @@ impl FnBlock {
             "u16" => {
                 return Some(format!(
                     "_loop_ctr_u16_{}", self.fn_loop_ctr_len_u16-1));
+            },
+            _ => {
+                return None;
+            }
+        }
+    }
+
+    pub fn get_unique_ptr_var(&mut self, basetype: &str) -> Option<String> {
+        let next_uptr_no = self.fn_unique_ptrs_len;
+
+        self.fn_unique_ptrs_len += 1;
+
+        match basetype {
+            "u8" => {
+                let uptr: String = format!(
+                    "_uptr_{}_{}", basetype, next_uptr_no);
+                self.fn_unique_ptrs_stk.push(uptr.clone());
+                self.fn_unique_ptrs.push(
+                    format!("ptr__{} {}", basetype, uptr));
+                return Some(uptr);
+            },
+            "u16" => {
+                let uptr: String = format!(
+                    "_uptr_{}_{}",basetype, next_uptr_no);
+                self.fn_unique_ptrs_stk.push(uptr.clone());
+                self.fn_unique_ptrs.push(
+                    format!("ptr__{} {}", basetype, uptr));
+                return Some(uptr);
             },
             _ => {
                 return None;
@@ -333,7 +369,7 @@ impl FnBlock {
                 out_lines.push("    var__bool _cmpres".to_string());
             }
             if self.fn_has_array_ptr {
-                out_lines.push("    var__ptr _ptr".to_string());
+                out_lines.push("    var__ptr _temp_ptr".to_string());
             }
             for temptype in self.fn_temp_types.clone() {
                 out_lines.push(format!(
@@ -394,6 +430,17 @@ impl FnBlock {
                         "    var__u16 _loop_ctr_u16_{}", ind));
                     ind += 1;
                     if ind == self.fn_loop_ctr_len_u16 {
+                        break
+                    }
+                }
+            }
+            if self.fn_unique_ptrs_len > 0 {
+                let mut ind: usize = 0;
+                loop {
+                    out_lines.push(format!(
+                        "    {}", self.fn_unique_ptrs[ind]));
+                    ind += 1;
+                    if ind == self.fn_unique_ptrs_len.into() {
                         break
                     }
                 }
@@ -591,6 +638,13 @@ pub fn get_loop_ctr_tempvar() -> Option<String> {
     unsafe {
         let last_ind = FN_BLOCKS.len() - 1;
         return FN_BLOCKS[last_ind].get_loop_ctr_tempvar();
+    }
+}
+
+pub fn get_unique_ptr_var(basetype: &str) -> Option<String> {
+    unsafe {
+        let last_ind = FN_BLOCKS.len() - 1;
+        return FN_BLOCKS[last_ind].get_unique_ptr_var(basetype);
     }
 }
 
