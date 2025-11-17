@@ -33,7 +33,6 @@ use crate::vll::process_if;
 use crate::vll::process_increment;
 use crate::vll::process_label;
 use crate::vll::process_lang_asm;
-use crate::vll::process_load;
 use crate::vll::process_loop;
 use crate::vll::process_lshift;
 use crate::vll::process_minus_equals;
@@ -47,7 +46,6 @@ use crate::vll::process_rshift;
 use crate::vll::process_setout;
 use crate::vll::process_setup;
 use crate::vll::process_shutdown;
-use crate::vll::process_store;
 use crate::vll::process_var;
 use crate::vll::outputs;
 
@@ -319,12 +317,6 @@ fn process_source(s: String) {
 			}
 			continue;
 		}
-		if next.is_load() {
-			if process_load::now(next) {
-				return;
-			}
-			continue;
-		}
 		if next.is_loop() {
 			if process_loop::now(next) {
 				return;
@@ -399,12 +391,6 @@ fn process_source(s: String) {
 		}
 		if next.is_shutdown() {
 			if process_shutdown::now(next) {
-				return;
-			}
-			continue;
-		}
-		if next.is_store() {
-			if process_store::now(next) {
 				return;
 			}
 			continue;

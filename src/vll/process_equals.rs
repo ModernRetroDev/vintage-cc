@@ -160,7 +160,7 @@ fn as_types_u8_u8ptr(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype_rhs != "u8:ptr" {
+    if ! (vartype_rhs == "u8:ptr" || vartype_rhs == "ptr") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8ptr type; got `{}`, which is type `{}`",
             part.ln_no, rhs, vartype_rhs)
@@ -207,7 +207,7 @@ fn as_types_u8ptr_u8(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype != "u8:ptr" {
+    if ! (vartype == "u8:ptr" || vartype == "ptr") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8ptr type; got `{}`, which is type `{}`",
             part.ln_no, lhs, vartype)

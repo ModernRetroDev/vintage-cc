@@ -378,12 +378,6 @@ impl LinePart {
         }
         return false
     }
-    pub fn is_load(&self) -> bool {
-        if self.next.starts_with("load__") {
-            return true
-        }
-        return false
-    }
     pub fn is_loop(&self) -> bool {
         if self.next == "loop" {
             return true
@@ -458,12 +452,6 @@ impl LinePart {
     }
     pub fn is_shutdown(&self) -> bool {
         if self.next == "shutdown" {
-            return true
-        }
-        return false
-    }
-    pub fn is_store(&self) -> bool {
-        if self.next.starts_with("store__") {
             return true
         }
         return false

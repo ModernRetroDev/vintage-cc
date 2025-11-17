@@ -102,6 +102,8 @@ str8_0x0004: ; type: str8
    .byte $00 ; null terminator (u8)
 
 arr16__main__array: ; type: arr16__u8
+   .byte $00, $00 ; ptr_addr (u16)
+   .byte $02 ; array_type (u8)
    .byte $00,$02 ; length (u16)
    .byte $00,$02 ; alloc (u16)
    .byte $01 ; element size (u8)
@@ -167,12 +169,12 @@ arr16__main__array: ; type: arr16__u8
 .global _eval_eq__u16
 .global _mul_by_10__u8
 .global _open__file
-.global _plus_equals__u16_u16
 .global _print__endl
 .global _print__str8
 .global _print__u16_x
 .global _print__u8
 .global _print__u8_x
+.global _ref__arr16
 .global _setout__file
 .global _setup__file
 .global _shutdown
@@ -437,47 +439,6 @@ _open__file:
    rts
 
 
-_plus_equals__u16_u16:
-   ;-----------------------------------------------------;
-   ; Adds a U16 from `ZP_PTR_2` to a U16.                ;
-   ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO U16 VALUE BEING ADDED TO.      ;
-   ; ZP_PTR_2 = POINTS TO U16 VALUE BEING ADDED.         ;
-   ;-----------------------------------------------------;
-   ; add to low byte
-   clc
-   ldy #0
-   lda (ZP_PTR_1),y
-   adc (ZP_PTR_2),y
-   sta (ZP_PTR_1),y
-   ; carry over to high byte
-   ldy #1
-   lda (ZP_PTR_1),y
-   adc (ZP_PTR_2),y
-   sta (ZP_PTR_1),y
-   rts
-
-_plus_equals__u16_u16d:
-   ;-----------------------------------------------------;
-   ; Adds a U16 from registers `A,X` to a U16.           ;
-   ;-----------------------------------------------------;
-   ; ZP_PTR_1 = POINTS TO U16 VALUE BEING ADDED TO.      ;
-   ; A = LOW BYTE OF U16 VALUE TO BE ADDED               ;
-   ; X = HIGH BYTE OF U16 VALUE TO BE ADDED              ;
-   ;-----------------------------------------------------;
-   ; add to low byte
-   clc
-   ldy #0
-   adc (ZP_PTR_1),y
-   sta (ZP_PTR_1),y
-   ; carry over to high byte
-   txa
-   ldy #1
-   adc (ZP_PTR_1),y
-   sta (ZP_PTR_1),y
-   rts
-
-
 _print__endl:
    ; print an end of line character
    lda #$0D
@@ -695,6 +656,48 @@ _print__u8_x__out:
    rts
 
 
+_ref__arr16:
+   ; get the memory address for a supplied array index
+   ;-----------------------------------------------------;
+   ; ZP_PTR_1 = POINTS TO RETURN POINTER.                ;
+   ; ZP_PTR_2 = POINTS TO ARRAY POINTER.                 ;
+   ; r0       = CONTAINS THE U16 INDEX POSITION.         ;
+   ;-----------------------------------------------------;
+   lda ZP_PTR_2
+   sta ZP_PTR_3
+   lda ZP_PTR_2+1
+   sta ZP_PTR_3+1
+
+   ldy #0
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_2
+   iny
+   lda (ZP_PTR_3),y
+   sta ZP_PTR_2+1
+
+   ; increment ZP_PTR_2 by 6 bytes
+   clc
+   lda ZP_PTR_2
+   adc #6
+   sta ZP_PTR_2
+   lda ZP_PTR_2+1
+   adc #0
+   sta ZP_PTR_2+1
+
+   ; now add the u16 index position; store to ZP_PTR_1
+   ldy #0
+   clc
+   lda ZP_PTR_2
+   adc r0
+   sta (ZP_PTR_1),y
+   iny
+   lda ZP_PTR_2+1
+   adc r0+1
+   sta (ZP_PTR_1),y
+
+   rts
+
+
 _setout__file:
    ; change the default output to a file write
    ;-------------------------------------------------------;
@@ -843,6 +846,14 @@ fn__init:
    lda #>(str8_0x0004+2)
    sta str8_0x0004,X
 
+   ; ptr_init for `arr16__main__array`
+   ldx #0
+   lda #<(arr16__main__array+2)
+   sta arr16__main__array,X
+   inx
+   lda #>(arr16__main__array+2)
+   sta arr16__main__array,X
+
    rts
 
 ;--------------------------------------------------------;
@@ -963,37 +974,27 @@ if_0x0000_out:
    jsr _print__str8
 
    ; ref__arr16 .ptr .array .ctr
-   ; hop over 5 bytes to point at data
-   clc
+   lda #<var__main__ptr
+   sta ZP_PTR_1
+   lda #>var__main__ptr
+   sta ZP_PTR_1+1
    lda #<arr16__main__array
-   adc #5
-   sta var__main__ptr
+   sta ZP_PTR_2
    lda #>arr16__main__array
-   adc #0
-   sta var__main__ptr+1
-   lda #<var__main__ptr
-   sta ZP_PTR_1
-   lda #>var__main__ptr
-   sta ZP_PTR_1+1
-   lda #<var__main__ctr
-   sta ZP_PTR_2
-   lda #>var__main__ctr
    sta ZP_PTR_2+1
-   jsr _plus_equals__u16_u16
+   lda var__main__ctr
+   sta r0
+   lda var__main__ctr+1
+   sta r0+1
+   jsr _ref__arr16
 
-   ; load__u8 .nxt .ptr
-   lda #<var__main__ptr
+   ; equals__u8_u8ptr .nxt .ptr
+   lda var__main__ptr
    sta ZP_PTR_1
-   lda #>var__main__ptr
+   lda var__main__ptr+1
    sta ZP_PTR_1+1
    ldy #0
    lda (ZP_PTR_1),y
-   sta ZP_PTR_2
-   ldy #1
-   lda (ZP_PTR_1),y
-   sta ZP_PTR_2+1
-   ldy #0
-   lda (ZP_PTR_2),y
    sta var__main__nxt
 
    ; print__u8 .nxt

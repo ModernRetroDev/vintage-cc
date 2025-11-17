@@ -35,7 +35,7 @@ fn main
 		ref__arr8  .ptr  .array  .ctr
 		# ^^^ store a reference (i.e., address) to an array element to ptr
 
-		load__u8  .nxt  .ptr
+		equals__u8_u8ptr  .nxt  .ptr
 		# ^^^ load referenced u8 value from `ptr` into `nxt`
 
 		# print__u16_x .ptr
@@ -68,14 +68,14 @@ fn main
 		ref__arr8  .ptr  .array  .ctr
 		# ^^^ store a reference (i.e., address) to an array element to ptr
 
-		load__u8  .nxt  .ptr
+		equals__u8_u8ptr  .nxt  .ptr
 		# ^^^ load referenced u8 value from `ptr` into `nxt`
 
 		increment__u8  .nxt
 		print__u8 .nxt
 		print__endl
 
-		store__u8  .ptr  .nxt
+		equals__u8ptr_u8  .ptr  .nxt
 		# ^^^ store value of `nxt` into `ptr`
 
 		increment__u8  .ctr
@@ -106,7 +106,7 @@ fn main
 		ref__arr8  .ptr  .array  .ctr
 		# ^^^ store a reference (i.e., address) to an array element to ptr
 
-		load__u8  .nxt  .ptr
+		equals__u8_u8ptr  .nxt  .ptr
 		# ^^^ load referenced u8 value from `ptr` into `nxt`
 
 		# print__u16_x .ptr

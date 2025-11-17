@@ -6,17 +6,17 @@ use crate::vll::line_part::LinePart;
 
 
 fn as_type_arr8(part: LinePart) -> bool {
-    let     ptrname      = part.get_next().next;
-    let     ptrname_part = part.get_next();
-    let     array        = ptrname_part.get_next().next;
-    let     array_part   = ptrname_part.get_next();
-    let     index        = array_part.get_next().next;
-    let     index_part   = array_part.get_next();
-    let     array_res:   String;
-    let     ptrname_res: String;
-    let mut index_res:   String;
+    let ptrname      = part.get_next().next;
+    let ptrname_part = part.get_next();
+    let array        = ptrname_part.get_next().next;
+    let array_part   = ptrname_part.get_next();
+    let index        = array_part.get_next().next;
+    let index_part   = array_part.get_next();
+    let array_res:   String;
+    let ptrname_res: String;
+    let index_res:   String;
 
-    builtins::mark_as_used("plus_equals__u16_u8");
+    builtins::mark_as_used("ref__arr8");
 
     //------------------------------------------------------------------------//
     // Check for input errors.                                                //
@@ -83,53 +83,43 @@ fn as_type_arr8(part: LinePart) -> bool {
 
     outputs::mainfn_append(&format!("   ; ref__arr8 {} {} {}",
         ptrname, array, index));
-
-
-
-    outputs::mainfn_append(         "   ; hop over 3 bytes to point at data");
-    outputs::mainfn_append(         "   clc");
-    outputs::mainfn_append(&format!("   lda #<{array_res}"));
-    outputs::mainfn_append(         "   adc #3");
-    outputs::mainfn_append(&format!("   sta {ptrname_res}"));
-    outputs::mainfn_append(&format!("   lda #>{array_res}"));
-    outputs::mainfn_append(         "   adc #0");
-    outputs::mainfn_append(&format!("   sta {ptrname_res}+1"));
     //
-    outputs::mainfn_append(&format!("   lda #<{ptrname_res}"));
+    outputs::mainfn_append(&format!("   lda #<{}", ptrname_res));
     outputs::mainfn_append(         "   sta ZP_PTR_1");
-    outputs::mainfn_append(&format!("   lda #>{ptrname_res}"));
+    outputs::mainfn_append(&format!("   lda #>{}", ptrname_res));
     outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    
+    outputs::mainfn_append(&format!("   lda #<{}", array_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2");
+    outputs::mainfn_append(&format!("   lda #>{}", array_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
     //
     if index_res.starts_with("#") {
         outputs::mainfn_append(&format!("   lda #<{}", &index_res[1..]));
-        outputs::mainfn_append(         "   sta r0L");
-        outputs::mainfn_append(&format!("   lda #>{}", &index_res[1..]));
-        outputs::mainfn_append(         "   sta r0H");
-        index_res = "r0".to_string();
+        outputs::mainfn_append(         "   sta r0");
+    } else {
+        outputs::mainfn_append(&format!("   lda {index_res}"));
+        outputs::mainfn_append(         "   sta r0");
     }
-    outputs::mainfn_append(&format!("   lda #<{index_res}"));
-    outputs::mainfn_append(         "   sta ZP_PTR_2");
-    outputs::mainfn_append(&format!("   lda #>{index_res}"));
-    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
     //
-    outputs::mainfn_append(         "   jsr _plus_equals__u16_u8");
+    outputs::mainfn_append(         "   jsr _ref__arr8");
     outputs::mainfn_append("");
 
     return false;
 }
 
 fn as_type_arr16(part: LinePart) -> bool {
-    let     ptrname      = part.get_next().next;
-    let     ptrname_part = part.get_next();
-    let     array        = ptrname_part.get_next().next;
-    let     array_part   = ptrname_part.get_next();
-    let     index        = array_part.get_next().next;
-    let     index_part   = array_part.get_next();
-    let     array_res:   String;
-    let     ptrname_res: String;
-    let mut index_res:   String;
+    let ptrname      = part.get_next().next;
+    let ptrname_part = part.get_next();
+    let array        = ptrname_part.get_next().next;
+    let array_part   = ptrname_part.get_next();
+    let index        = array_part.get_next().next;
+    let index_part   = array_part.get_next();
+    let array_res:   String;
+    let ptrname_res: String;
+    let index_res:   String;
 
-    builtins::mark_as_used("plus_equals__u16_u16");
+    builtins::mark_as_used("ref__arr16");
 
     //------------------------------------------------------------------------//
     // Check for input errors.                                                //
@@ -196,36 +186,30 @@ fn as_type_arr16(part: LinePart) -> bool {
 
     outputs::mainfn_append(&format!("   ; ref__arr16 {} {} {}",
         ptrname, array, index));
-
-
-
-    outputs::mainfn_append(         "   ; hop over 5 bytes to point at data");
-    outputs::mainfn_append(         "   clc");
-    outputs::mainfn_append(&format!("   lda #<{array_res}"));
-    outputs::mainfn_append(         "   adc #5");
-    outputs::mainfn_append(&format!("   sta {ptrname_res}"));
-    outputs::mainfn_append(&format!("   lda #>{array_res}"));
-    outputs::mainfn_append(         "   adc #0");
-    outputs::mainfn_append(&format!("   sta {ptrname_res}+1"));
     //
-    outputs::mainfn_append(&format!("   lda #<{ptrname_res}"));
+    outputs::mainfn_append(&format!("   lda #<{}", ptrname_res));
     outputs::mainfn_append(         "   sta ZP_PTR_1");
-    outputs::mainfn_append(&format!("   lda #>{ptrname_res}"));
+    outputs::mainfn_append(&format!("   lda #>{}", ptrname_res));
     outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    
+    outputs::mainfn_append(&format!("   lda #<{}", array_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2");
+    outputs::mainfn_append(&format!("   lda #>{}", array_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
     //
     if index_res.starts_with("#") {
         outputs::mainfn_append(&format!("   lda #<{}", &index_res[1..]));
-        outputs::mainfn_append(         "   sta r0L");
+        outputs::mainfn_append(         "   sta r0");
         outputs::mainfn_append(&format!("   lda #>{}", &index_res[1..]));
-        outputs::mainfn_append(         "   sta r0H");
-        index_res = "r0".to_string();
+        outputs::mainfn_append(         "   sta r0+1");
+    } else {
+        outputs::mainfn_append(&format!("   lda {index_res}"));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda {index_res}+1"));
+        outputs::mainfn_append(         "   sta r0+1");
     }
-    outputs::mainfn_append(&format!("   lda #<{index_res}"));
-    outputs::mainfn_append(         "   sta ZP_PTR_2");
-    outputs::mainfn_append(&format!("   lda #>{index_res}"));
-    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
     //
-    outputs::mainfn_append(         "   jsr _plus_equals__u16_u16");
+    outputs::mainfn_append(         "   jsr _ref__arr16");
     outputs::mainfn_append("");
 
     return false;
