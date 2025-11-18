@@ -15,15 +15,42 @@ fn as_type_u8(part: LinePart) -> bool {
         &array_name.next[1..]);
     globname_rv = get::var_fullname(&varname);
 
+    outputs::mainfn_append(&format!("   ; get_length__arr8 {}", globname_arr));
     outputs::mainfn_append(&format!("   lda #<{}", globname_arr));
     outputs::mainfn_append(         "   sta ZP_PTR_1");
     outputs::mainfn_append(&format!("   lda #>{}", globname_arr));
     outputs::mainfn_append(         "   sta ZP_PTR_1+1");
     //
-    outputs::mainfn_append(         "   ; store arr8 length to A");
-    outputs::mainfn_append(         "   ldy #0");
+    outputs::mainfn_append(         "   ldy #1");
     outputs::mainfn_append(         "   lda (ZP_PTR_1),y");
     outputs::mainfn_append(&format!("   sta {}", globname_rv));
+
+    return false;
+}
+
+fn as_type_u16(part: LinePart) -> bool {
+    let globname_arr: String;
+    let globname_rv:  String;
+    let varname    = part.get_next().next;
+    let array_name = part.get_next().get_next();
+
+    globname_arr = format!("arr16__{}__{}", 
+        outputs::get_active_fn(), 
+        &array_name.next[1..]);
+    globname_rv = get::var_fullname(&varname);
+
+    outputs::mainfn_append(&format!("   ; get_length__arr16 {}", globname_arr));
+    outputs::mainfn_append(&format!("   lda #<{}", globname_arr));
+    outputs::mainfn_append(         "   sta ZP_PTR_1");
+    outputs::mainfn_append(&format!("   lda #>{}", globname_arr));
+    outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    //
+    outputs::mainfn_append(         "   ldy #1");
+    outputs::mainfn_append(         "   lda (ZP_PTR_1),y");
+    outputs::mainfn_append(&format!("   sta {}", globname_rv));
+    outputs::mainfn_append(         "   iny");
+    outputs::mainfn_append(         "   lda (ZP_PTR_1),y");
+    outputs::mainfn_append(&format!("   sta {}+1", globname_rv));
 
     return false;
 }
@@ -39,6 +66,8 @@ pub fn now(part: LinePart) -> bool {
 
     if part.next.starts_with("get_length__arr8") {
         return as_type_u8(part);
+    } else if part.next.starts_with("get_length__arr16") {
+        return as_type_u16(part);
     } else {
         println!(
             "ERROR: ln:{} GET_LENGTH: Unhandled builtin function variant `{}`.",

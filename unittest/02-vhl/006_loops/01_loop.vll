@@ -68,7 +68,7 @@ fn main
     print__u8 .ctr
     print__str8 "] = "
     ref__arr8 ._temp_ptr .array .ctr
-    load__u8 ._temp_u8 ._temp_ptr
+    equals__u8_u8ptr ._temp_u8 ._temp_ptr
     print__u8 ._temp_u8
     print__endl
     setout__default
