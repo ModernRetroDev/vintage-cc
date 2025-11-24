@@ -21,4 +21,6 @@ pub mod process_while_rpn;
 
 pub mod process_methods_file;
 
+pub mod type_strings;
+
 pub mod outputs;

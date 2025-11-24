@@ -213,6 +213,14 @@ impl FnBlock {
         self.fn_unique_ptrs_len += 1;
 
         match basetype {
+            "char" => {
+                let uptr: String = format!(
+                    "_uptr_{}_{}", basetype, next_uptr_no);
+                self.fn_unique_ptrs_stk.push(uptr.clone());
+                self.fn_unique_ptrs.push(
+                    format!("ptr__{} {}", basetype, uptr));
+                return Some(uptr);
+            },
             "u8" => {
                 let uptr: String = format!(
                     "_uptr_{}_{}", basetype, next_uptr_no);

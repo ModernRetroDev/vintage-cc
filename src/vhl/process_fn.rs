@@ -113,6 +113,11 @@ pub fn now(part: LinePart, line: &str) -> bool {
                             "    ptr__file _arg_{}__{}",
                             fn_arg.arg_pos, fn_arg.arg_name));
                     },
+                    "str" => {
+                        outputs::lines_vardecl_push(&format!(
+                            "    ptr__str _arg_{}__{}",
+                            fn_arg.arg_pos, fn_arg.arg_name));
+                    },
                     _ => {
                         println!(
                             "ERROR: ln:{} Unhandled vartype `{}` as fn argument.",

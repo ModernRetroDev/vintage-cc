@@ -79,6 +79,15 @@ impl FnBlock {
             }
             ind += 1
         }
+        ind = 0;
+        for globvar in self.var_names.clone() {
+            if arr8name == &globvar {
+                if self.var_types[ind] == "str8" {
+                    return Some("char".to_string());
+                }
+            }
+            ind += 1
+        }
         return None;
     }
 
@@ -92,6 +101,15 @@ impl FnBlock {
         for globvar in self.arr16_names.clone() {
             if arr16name == &globvar {
                 return Some(self.arr16_types[ind].to_string());
+            }
+            ind += 1
+        }
+        ind = 0;
+        for globvar in self.var_names.clone() {
+            if arr16name == &globvar {
+                if self.var_types[ind] == "str16" {
+                    return Some("char".to_string());
+                }
             }
             ind += 1
         }
@@ -343,6 +361,11 @@ impl FnBlock {
                     "   .byte $00, $00"));
                 self.lines_vardefs.push("".to_string());
             } else if vartype == "bool".to_string() {
+                self.lines_vardefs.push(format!(
+                    "{}: ; type: {}", varname, vartype));
+                self.lines_vardefs.push(format!(
+                    "   .byte ${:02X}", 0));
+            } else if vartype == "char".to_string() {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(

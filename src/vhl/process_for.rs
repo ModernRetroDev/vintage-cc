@@ -1,7 +1,20 @@
 use crate::vhl::array;
 use crate::vhl::outputs;
+use crate::vhl::type_strings;
 
 use crate::vhl::line_part::LinePart;
+
+fn is_str_var(varname: &str) -> bool {
+    match outputs::get_vartype(varname) {
+        Some(vtype) => {
+            if vtype.starts_with("str8;") || vtype.starts_with("str16;") {
+                return true;
+            }
+        },
+        None => {},
+    }
+    return false;
+}
 
 fn is_valid_loop_label(loop_lbl: &str) -> bool {
     if !loop_lbl.starts_with("@") {
@@ -326,6 +339,7 @@ fn is_enumerated_for_all_loop(part: LinePart) -> Option<bool> {
 
 fn as_for_loop(part: LinePart, all: bool) -> bool {
     let     get_loopable_next:   bool;
+    let     loopable_is_str:     bool;
     let     vtype_loopable_next: String;
     let     basetype_loopable:   String;
     let     loopable_next:       String;
@@ -428,6 +442,12 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
         loopable_varname = eval_parts[2].clone();
     }
 
+    if is_str_var(&loopable_varname) {
+        loopable_is_str = true;
+    } else {
+        loopable_is_str = false;
+    }
+
     //------------------------------------------------------------------------//
     // Make sure the loopable variable is actually loopable.                  //
     //------------------------------------------------------------------------//
@@ -443,9 +463,11 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
                 return true;
             }
         }
+    } else if loopable_is_str {
+        basetype_loopable = "char".to_string();
     } else {
-        println!("Unsupported loopable!!!");
-        basetype_loopable = "XXX".to_string();
+        basetype_loopable = outputs::get_vartype(
+            &loopable_varname).unwrap();
     }
 
     if get_loopable_next {
@@ -459,26 +481,36 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
     //------------------------------------------------------------------------//
     // If things are still okay at this point; we should be good to go.       //
     //------------------------------------------------------------------------//
-    match array::get_array_index_size(part.ln_no, &loopable_varname) {
-        Some(ind_size) => {
-            outputs::loop_ctr_types_push(&ind_size);
-            match &ind_size[..] {
-                "u8" => { index_type = ind_size.clone(); },
-                "u16" => { index_type = ind_size.clone(); },
-                _ => {
-                    println!(
-                        "ERROR: ln:{} FOR: unsupported index type `{}`.",
-                        part.ln_no, ind_size);
-                    return true;
-                },
-            };
-        },
-        None => {
-            println!(
-                "ERROR: ln:{} FOR: unable to determine index type for `{}`.",
-                part.ln_no, loopable_varname);
-            return true;
-        },
+    if loopable_is_str {
+        let str_vtype: String = outputs::get_vartype(&loopable_varname).unwrap();
+        if str_vtype.starts_with("str8;") {
+            index_type = "u8".to_string();
+        } else {
+            index_type = "u16".to_string();
+        }
+        outputs::loop_ctr_types_push(&index_type);
+    } else {
+        match array::get_array_index_size(part.ln_no, &loopable_varname) {
+            Some(ind_size) => {
+                outputs::loop_ctr_types_push(&ind_size);
+                match &ind_size[..] {
+                    "u8" => { index_type = ind_size.clone(); },
+                    "u16" => { index_type = ind_size.clone(); },
+                    _ => {
+                        println!(
+                            "ERROR: ln:{} FOR: unsupported index type `{}`.",
+                            part.ln_no, ind_size);
+                        return true;
+                    },
+                };
+            },
+            None => {
+                println!(
+                    "ERROR: ln:{} FOR: unable to determine index type for `{}`.",
+                    part.ln_no, loopable_varname);
+                return true;
+            },
+        }
     }
 
     let eq_fn:        String;
@@ -514,6 +546,9 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
     };
 
     let lpvar_eq_fn: String = match &basetype_loopable[..] {
+        "char" => {
+            "equals__u8_u8ptr".to_string()
+        },
         "u8" => {
             "equals__u8_u8ptr".to_string()
         },
@@ -546,12 +581,19 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
     //------------------------------------------------------------------------//
     let mut resolved_arg: String = "".to_string();
     if get_loopable_next {
-        let indexed_array: String = format!("{}[{}]", 
+        let indexed_var: String = format!("{}[{}]", 
             &loopable_varname, &temp_loop_ctr_var);
-        resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_array) {
-            Some(temp_var) => { temp_var.clone() },
-            None => { return true },
-        };
+        if loopable_is_str {
+            resolved_arg = match type_strings::get_value_ptr(part.ln_no, &indexed_var) {
+                Some(temp_var) => { temp_var.clone() },
+                None => { return true },
+            };
+        } else {
+            resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_var) {
+                Some(temp_var) => { temp_var.clone() },
+                None => { return true },
+            };
+        }
     }
 
     if all {
@@ -601,6 +643,7 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
 fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     let     get_loopable_next:    bool;
     let     get_loopable_index:   bool;
+    let     loopable_is_str:     bool;
     let     vtype_loopable_index: String;
     let     vtype_loopable_next:  String;
     let     basetype_loopable:    String;
@@ -721,6 +764,12 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
 
     loopable_varname = eval_parts[4].clone();
 
+    if is_str_var(&loopable_varname) {
+        loopable_is_str = true;
+    } else {
+        loopable_is_str = false;
+    }
+
     //------------------------------------------------------------------------//
     // Make sure the loopable variable is actually loopable.                  //
     //------------------------------------------------------------------------//
@@ -736,9 +785,11 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
                 return true;
             }
         }
+    } else if is_str_var(&loopable_varname) {
+        basetype_loopable = "char".to_string();
     } else {
-        println!("Unsupported loopable!!!");
-        basetype_loopable = "XXX".to_string();
+        basetype_loopable = outputs::get_vartype(
+            &loopable_varname).unwrap();
     }
 
     if get_loopable_next {
@@ -753,26 +804,36 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     //------------------------------------------------------------------------//
     // If things are still okay at this point; we should be good to go.       //
     //------------------------------------------------------------------------//
-    match array::get_array_index_size(part.ln_no, &loopable_varname) {
-        Some(ind_size) => {
-            outputs::loop_ctr_types_push(&ind_size);
-            match &ind_size[..] {
-                "u8" => { index_type = ind_size.clone(); },
-                "u16" => { index_type = ind_size.clone(); },
-                _ => {
-                    println!(
-                        "ERROR: ln:{} FOR: unsupported index type `{}`.",
-                        part.ln_no, ind_size);
-                    return true;
-                },
-            };
-        },
-        None => {
-            println!(
-                "ERROR: ln:{} FOR: unable to determine index type for `{}`.",
-                part.ln_no, loopable_varname);
-            return true;
-        },
+    if is_str_var(&loopable_varname) {
+        let str_vtype: String = outputs::get_vartype(&loopable_varname).unwrap();
+        if str_vtype.starts_with("str8;") {
+            index_type = "u8".to_string();
+        } else {
+            index_type = "u16".to_string();
+        }
+        outputs::loop_ctr_types_push(&index_type);
+    } else {
+        match array::get_array_index_size(part.ln_no, &loopable_varname) {
+            Some(ind_size) => {
+                outputs::loop_ctr_types_push(&ind_size);
+                match &ind_size[..] {
+                    "u8" => { index_type = ind_size.clone(); },
+                    "u16" => { index_type = ind_size.clone(); },
+                    _ => {
+                        println!(
+                            "ERROR: ln:{} FOR: unsupported index type `{}`.",
+                            part.ln_no, ind_size);
+                        return true;
+                    },
+                };
+            },
+            None => {
+                println!(
+                    "ERROR: ln:{} FOR: unable to determine index type for `{}`.",
+                    part.ln_no, loopable_varname);
+                return true;
+            },
+        }
     }
 
     if get_loopable_index {
@@ -817,6 +878,9 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     };
 
     let lpvar_eq_fn: String = match &basetype_loopable[..] {
+        "char" => {
+            "equals__u8_u8ptr".to_string()
+        },
         "u8" => {
             "equals__u8_u8ptr".to_string()
         },
@@ -849,12 +913,20 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     //------------------------------------------------------------------------//
     let mut resolved_arg: String = "".to_string();
     if get_loopable_next {
-        let indexed_array: String = format!("{}[{}]", 
+        let indexed_var: String = format!("{}[{}]", 
             &loopable_varname, &temp_loop_ctr_var);
-        resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_array) {
-            Some(temp_var) => { temp_var.clone() },
-            None => { return true },
-        };
+
+        if loopable_is_str {
+            resolved_arg = match type_strings::get_value_ptr(part.ln_no, &indexed_var) {
+                Some(temp_var) => { temp_var.clone() },
+                None => { return true },
+            };
+        } else {
+            resolved_arg = match array::get_value_ptr(part.ln_no, &indexed_var) {
+                Some(temp_var) => { temp_var.clone() },
+                None => { return true },
+            };
+        }
     }
 
     if all {

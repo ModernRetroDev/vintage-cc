@@ -226,6 +226,33 @@ fn as_type_ptr(ln_no: u64, varname: &str, ptrtype_str: &str, init_val: Option<St
     return false;
 }
 
+fn as_type_char(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
+    outputs::lines_vardecl_push(&format!("    var__char {}", varname));
+
+    match init_val {
+        Some(ival) => {
+            match fn_args::get_u8_value_str(ln_no, &ival, false) {
+                Some(u8val) => {
+                    outputs::lines_vardef_push(&format!(
+                        "    equals__u8_u8 .{} {}", varname, u8val));
+                },
+                None => {
+                    println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+                        ln_no, ival);
+                    return true;
+                }
+            }
+        },
+        None => {},
+    }
+
+    outputs::set_var_index(varname);
+    outputs::varnames_append(varname);
+    outputs::vartypes_append("char");
+
+    return false;
+}
+
 fn as_type_u8(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
     outputs::lines_vardecl_push(&format!("    var__u8 {}", varname));
 
@@ -307,18 +334,25 @@ fn as_type_u24(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
     return false;
 }
 
-fn as_type_str8(_ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
+fn as_type_str8(ln_no: u64, varname: &str, init_val: Option<String>) -> bool {
+    let str8len: usize;
+
     match init_val {
         Some(ival) => {
+            str8len = ival.len();
             outputs::lines_vardecl_push(
                 &format!("    var__str8 {} = {}", varname, ival));
         },
-        None => {},
+        None => {
+            println!("TODO/ERROR: ln:{} Allocated strings without an init value",
+                ln_no);
+            return true;
+        },
     }
 
     outputs::set_var_index(varname);
     outputs::varnames_append(varname);
-    outputs::vartypes_append("str8");
+    outputs::vartypes_append(&format!("str8;{str8len}"));
 
     return false;
 }
@@ -608,6 +642,9 @@ pub fn now(part: LinePart) -> bool {
     match vartype_str {
         "bool" => {
             return as_type_bool(part.ln_no, &varname, init_value);
+        },
+        "char" => {
+            return as_type_char(part.ln_no, &varname, init_value);
         },
         "file" => {
             return as_type_file(part.ln_no, &varname, init_value);

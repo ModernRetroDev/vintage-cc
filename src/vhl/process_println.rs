@@ -1,6 +1,7 @@
 use crate::vhl::array;
 use crate::vhl::fn_args;
 use crate::vhl::outputs;
+use crate::vhl::type_strings;
 
 use crate::vhl::line_part::LinePart;
 
@@ -19,38 +20,14 @@ fn as_type_newline(altmode: &Option<String>) -> bool {
     return false;
 }
 
-// fn as_type_char(part: LinePart) -> bool {
-//  let value      = part.get_next().next;
-//  let value_part = part.get_next();
-//  let resolved: String;
-
-//  builtins::mark_as_used(&part.next);
-
-//  if value_part.is_varname() {
-//      resolved = get::var_fullname(&value);
-//  } else {
-//      let achar = part.get_next_char();
-//      match achar {
-//          Some(achar) => {
-//              resolved = format!("#${:02X}", achar);
-//          },
-//          None => {
-//              println!("ERROR: malformed char on LN {}", part.ln_no);
-//              return true;
-//          }
-//      }
-//  }
-
-//  outputs::lines_main_push(&format!("   ; print__char {}", value));
-//  outputs::lines_main_push(&format!("   lda {}", resolved));
-//  outputs::lines_main_push(         "   jsr _print__char");
-//  outputs::lines_main_push("");
-
-//  return false;
-// }
-
 fn as_type_bool(bool_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__bool {}", bool_arg));
+
+    return false;
+}
+
+fn as_type_char(char_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__char {}", char_arg));
 
     return false;
 }
@@ -63,6 +40,12 @@ fn as_type_file(file_arg: &str) -> bool {
 
 fn as_type_ptr(ptr_arg: &str) -> bool {
     outputs::lines_main_push(&format!("    print__ptr {}", ptr_arg));
+
+    return false;
+}
+
+fn as_type_str(str_arg: &str) -> bool {
+    outputs::lines_main_push(&format!("    print__str {}", str_arg));
 
     return false;
 }
@@ -258,6 +241,13 @@ fn resolve_supplied_arg(ln_no: u64, supplied: &str) -> Option<String> {
             },
             None => { return None },
         }
+    } else if type_strings::arg_is_strings_index(&supplied) {
+        match type_strings::get_value(ln_no, &supplied) {
+            Some(temp_var) => {
+                resolved_arg = format!(".{}", temp_var);
+            },
+            None => { return None },
+        }
     } else if outputs::varname_is_fn_arg_in_active_fn(supplied) {
         resolved_arg = format!(".{}",
             outputs::get_fn_arg_varname_in_active_fn(supplied));
@@ -280,6 +270,8 @@ fn get_supplied_basetype(ln_no: u64, supplied: &str) -> Option<String> {
             },
             None => {},
         }
+    } else if type_strings::arg_is_strings_index(supplied) {
+        basetype = "char".to_string();
     } else if outputs::varname_is_fn_arg_in_active_fn(supplied) {
         basetype = outputs::get_fn_arg_type_by_name(
             &outputs::get_active_fn(), supplied).unwrap().clone();
@@ -679,205 +671,216 @@ pub fn now(part: LinePart, line: &str, altmode: Option<String>) -> bool {
             } else {
                 match get_supplied_basetype(part.ln_no, &single_arg) {
                     Some(vartype) => {
-                        match &vartype[..] {
-                            "bool" => {
-                                if as_type_bool(&resolved_arg) {
-                                    return true;
-                                }
-                            },
-                            "file" => {
-                                if as_type_file(&resolved_arg) {
-                                    return true;
-                                }
-                            },
-                            "u8" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u8(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u8_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u8_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u8_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u8 `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
+                        if vartype.starts_with("str8;") {
+                            if as_type_str8(&resolved_arg) {
+                                return true;
+                            }
+                        } else {
+                            match &vartype[..] {
+                                "bool" => {
+                                    if as_type_bool(&resolved_arg) {
                                         return true;
                                     }
-                                }
-                            },
-                            "u8:ptr" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u8ptr(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u8ptr_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u8ptr_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u8ptr_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u8ptr `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
+                                },
+                                "char" => {
+                                    if as_type_char(&resolved_arg) {
                                         return true;
                                     }
-                                }
-                            },
-                            "u16" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u16(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u16_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u16_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u16_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u16 `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
+                                },
+                                "file" => {
+                                    if as_type_file(&resolved_arg) {
                                         return true;
                                     }
-                                }
-                            },
-                            "u16:ptr" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u16ptr(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u16ptr_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u16ptr_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u16ptr_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u16ptr `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
+                                },
+                                "str" => {
+                                    if as_type_str(&resolved_arg) {
                                         return true;
                                     }
-                                }
-                            },
-                            "u24" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u24(&resolved_arg) {
+                                },
+                                "u8" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u8(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u8_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u8_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u8_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u8 `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
                                             return true;
                                         }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u24_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u24_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u24_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u24 `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
-                                        return true;
                                     }
-                                }
-                            },
-                            "u24:ptr" => {
-                                match &grp[..] {
-                                    "$" => {
-                                        if as_type_u24ptr(&resolved_arg) {
+                                },
+                                "u8:ptr" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u8ptr(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u8ptr_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u8ptr_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u8ptr_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u8ptr `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
                                             return true;
                                         }
-                                    },
-                                    "$:b" => {
-                                        if as_type_u24ptr_b(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:x" => {
-                                        if as_type_u24ptr_x(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    "$:X" => {
-                                        if as_type_u24ptr_xx(&resolved_arg) {
-                                            return true;
-                                        }
-                                    },
-                                    _ => {
-                                        println!(
-                                            "ERROR: ln:{} Unsupported formatting `{}` provided for a u24ptr `{}`.",
-                                            part.ln_no, &grp[1..], single_arg);
-                                        return true;
                                     }
+                                },
+                                "u16" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u16(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u16_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u16_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u16_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u16 `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
+                                            return true;
+                                        }
+                                    }
+                                },
+                                "u16:ptr" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u16ptr(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u16ptr_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u16ptr_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u16ptr_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u16ptr `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
+                                            return true;
+                                        }
+                                    }
+                                },
+                                "u24" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u24(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u24_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u24_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u24_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u24 `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
+                                            return true;
+                                        }
+                                    }
+                                },
+                                "u24:ptr" => {
+                                    match &grp[..] {
+                                        "$" => {
+                                            if as_type_u24ptr(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:b" => {
+                                            if as_type_u24ptr_b(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:x" => {
+                                            if as_type_u24ptr_x(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        "$:X" => {
+                                            if as_type_u24ptr_xx(&resolved_arg) {
+                                                return true;
+                                            }
+                                        },
+                                        _ => {
+                                            println!(
+                                                "ERROR: ln:{} Unsupported formatting `{}` provided for a u24ptr `{}`.",
+                                                part.ln_no, &grp[1..], single_arg);
+                                            return true;
+                                        }
+                                    }
+                                },
+                                _ => {
+                                    println!("[TODO] println(): Unsupported type `{}` for `{}`", 
+                                        vartype, resolved_arg);
                                 }
-                            },
-                            "str8" => {
-                                if as_type_str8(&resolved_arg) {
-                                    return true;
-                                }
-                            },
-                            _ => {
-                                println!("[TODO] println(): Unsupported type `{}` for `{}`", 
-                                    vartype, resolved_arg);
                             }
                         }
                     },

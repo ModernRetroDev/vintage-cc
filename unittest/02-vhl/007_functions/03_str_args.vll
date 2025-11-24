@@ -1,0 +1,130 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn print_string
+    ptr__str _arg_0__s
+    ptr__file _arg_1__outfile
+
+    # outfile.writeln("`{}`", s);
+    setout__file ._arg_1__outfile
+    print__str8 "`"
+    print__str ._arg_0__s
+    print__str8 "`"
+    print__endl
+    setout__default
+
+endfn
+
+fn main
+    var__str8 str1 = "Hello World!"
+    var__str8 str2 = "Something Else..."
+    var__file outfile
+
+    # outfile.create("03_str_args.utest");
+    setup__file .outfile 'w' "@:03_str_args.utest"
+    open__file .outfile
+
+    # outfile.writeln("#------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# CALL A FUNCTION (WITH STRING ARGS) #");
+    setout__file .outfile
+    print__str8 "# CALL A FUNCTION (WITH STRING ARGS) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("str1 = `{}`", str1);
+    setout__file .outfile
+    print__str8 "str1 = `"
+    print__str8 .str1
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln("str2 = `{}`", str2);
+    setout__file .outfile
+    print__str8 "str2 = `"
+    print__str8 .str2
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("print_string(str1)");
+    setout__file .outfile
+    print__str8 "print_string(str1)"
+    print__endl
+    setout__default
+
+    # outfile.writeln("------------------");
+    setout__file .outfile
+    print__str8 "------------------"
+    print__endl
+    setout__default
+
+    # print_string(str1, outfile);
+    equals__str_str .print_string._arg_0__s .str1
+    equals__file_file .print_string._arg_1__outfile .outfile
+    call print_string
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("print_string(str2)");
+    setout__file .outfile
+    print__str8 "print_string(str2)"
+    print__endl
+    setout__default
+
+    # outfile.writeln("------------------");
+    setout__file .outfile
+    print__str8 "------------------"
+    print__endl
+    setout__default
+
+    # print_string(str2, outfile);
+    equals__str_str .print_string._arg_0__s .str2
+    equals__file_file .print_string._arg_1__outfile .outfile
+    call print_string
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

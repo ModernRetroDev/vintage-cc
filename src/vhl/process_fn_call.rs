@@ -351,7 +351,13 @@ fn as_fn_call_with_args(line: &str, ln_no: u64) -> bool {
         // println!("ARG[?] = `{}`", arg);
         let supplied_type: String = match get_supplied_basetype(ln_no, arg) {
             Some(btype) => {
-                btype
+                if btype.starts_with("str8;") {
+                    "str".to_string()
+                } else if btype.starts_with("str16;") {
+                    "str".to_string()
+                } else {
+                    btype
+                }
             },
             None => {
                 println!(

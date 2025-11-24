@@ -68,6 +68,34 @@ fn as_type_endl(part: LinePart) -> bool {
     return false
 }
 
+fn as_type_str(part: LinePart) -> bool {
+    let     value      = part.get_next().next;
+    let     value_part = part.get_next();
+    let     value_str: String;
+    let     resolved:  String;
+
+    builtins::mark_as_used(&part.next);
+
+    if value_part.is_varname() {
+        // we are referencing a variable... resolve name
+        value_str = part.get_next().next;
+        resolved = get::var_fullname(&value);
+    } else {
+        println!("ERROR: ln:{} `print__str` should only be used on variables", part.ln_no);
+        return true;
+    }
+
+    outputs::mainfn_append(&format!("   ; print__str {}", value_str));
+    outputs::mainfn_append(&format!("   lda #<{}", resolved));
+    outputs::mainfn_append(         "   sta ZP_PTR_1");
+    outputs::mainfn_append(&format!("   lda #>{}", resolved));
+    outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    outputs::mainfn_append(         "   jsr _print__str");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 fn as_type_str8(part: LinePart) -> bool {
     let     value      = part.get_next().next;
     let     value_part = part.get_next();
@@ -894,7 +922,6 @@ fn as_type_u24ptr_xx(part: LinePart) -> bool {
     return false;
 }
 
-
 fn as_type_ptr(part: LinePart) -> bool {
     let value      = part.get_next().next;
     let value_part = part.get_next();
@@ -934,6 +961,9 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "print__ptr" {
         return as_type_ptr(part);
+
+    } else if part.next == "print__str" {
+        return as_type_str(part);
 
     } else if part.next == "print__str8" {
         return as_type_str8(part);

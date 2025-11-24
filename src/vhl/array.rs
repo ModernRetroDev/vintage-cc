@@ -422,7 +422,7 @@ pub fn get_value_ptr(ln_no: u64, arg: &str) -> Option<String> {
         "u8" => {},
         "u16" => {},
         _ => {
-            println!("[TODO] Unsupported base type `{}` for array `{}`", 
+            println!("[TODO] array::get_value_ptr: Unsupported base type `{}` for array `{}`", 
                 base_type, array_name);
             return None
         }
@@ -475,7 +475,7 @@ pub fn get_value(ln_no: u64, arg: &str) -> Option<String> {
             return Some("_temp_u16".to_string());
         },
         _ => {
-            println!("[TODO] Unsupported base type `{}` for array `{}`", 
+            println!("[TODO] array::get_value: Unsupported base type `{}` for array `{}`", 
                 base_type, array_name);
             return None
         }
@@ -516,7 +516,7 @@ pub fn store_value(ln_no: u64, arg: &str, val: &str) -> bool {
             return false;
         },
         _ => {
-            println!("[TODO] Unsupported base type `{}` for array `{}`", 
+            println!("[TODO] array::store_value: Unsupported base type `{}` for array `{}`", 
                 base_type, array_name);
             return true
         }

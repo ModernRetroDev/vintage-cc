@@ -88,7 +88,7 @@ fn as_types_u8_u8(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype != "u8" {
+    if ! (vartype == "u8" || vartype == "char") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8 type; got `{}`, which is type `{}`",
             part.ln_no, lhs, vartype);
@@ -144,7 +144,7 @@ fn as_types_u8_u8ptr(part: LinePart) -> bool {
             return true;
         },
     }
-    if vartype != "u8" {
+    if ! (vartype == "u8" || vartype == "char") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8 type; got `{}`, which is type `{}`",
             part.ln_no, lhs, vartype)
@@ -160,7 +160,7 @@ fn as_types_u8_u8ptr(part: LinePart) -> bool {
             return true;
         },
     }
-    if ! (vartype_rhs == "u8:ptr" || vartype_rhs == "ptr") {
+    if ! (vartype_rhs == "u8:ptr" || vartype_rhs == "char:ptr" || vartype_rhs == "ptr") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8ptr type; got `{}`, which is type `{}`",
             part.ln_no, rhs, vartype_rhs)
@@ -207,7 +207,7 @@ fn as_types_u8ptr_u8(part: LinePart) -> bool {
             return true;
         },
     }
-    if ! (vartype == "u8:ptr" || vartype == "ptr") {
+    if ! (vartype == "u8:ptr" || vartype == "char:ptr" || vartype == "ptr") {
         println!(
             "WARNING: ln:{} EQUALS: Expected a u8ptr type; got `{}`, which is type `{}`",
             part.ln_no, lhs, vartype)
@@ -1232,6 +1232,75 @@ fn as_types_file_file(part: LinePart) -> bool {
     return false;
 }
 
+fn as_types_str_str(part: LinePart) -> bool {
+    let lhs      = part.get_next().next;
+    let lhs_part = part.get_next();
+    let rhs      = lhs_part.get_next().next;
+    let lhs_res:  String;
+    let rhs_res:  String;
+
+    if !lhs_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, lhs);
+        return true;
+    }
+    lhs_res = get::var_fullname(&lhs);
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    let vartype: String;
+    match outputs::get_vartype(&lhs_res) {
+        Some(vtype) => { vartype = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype != "str:ptr" {
+        println!(
+            "WARNING: ln:{} EQUALS: LHS Expected a str type; got `{}`, which is type `{}`",
+            part.ln_no, lhs, vartype)
+    }
+
+    rhs_res = get::var_fullname(&rhs);
+
+    let vartype_rhs: String;
+    match outputs::get_vartype(&rhs_res) {
+        Some(vtype) => { vartype_rhs = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, rhs);
+            return true;
+        },
+    }
+    if ! (vartype_rhs == "str:ptr" || vartype_rhs == "str8" || vartype_rhs == "str16") {
+        println!(
+            "WARNING: ln:{} EQUALS: RHS Expected a str type; got `{}`, which is type `{}`",
+            part.ln_no, rhs, vartype_rhs)
+    }
+
+    outputs::mainfn_append(&format!("   ; equals__str_str {} {}",
+        lhs, rhs));
+
+    if rhs_res.starts_with("#") {
+        outputs::mainfn_append(&format!("   lda #<{}", &rhs_res[1..]));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda #>{}", &rhs_res[1..]));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+    } else {
+        outputs::mainfn_append(&format!("   lda {rhs_res}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+1"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+    }
+
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 fn as_types_u16_u8(part: LinePart, bool_as_u8: bool) -> bool {
     // set a u16 value from a u8 value
     let lhs      = part.get_next().next;
@@ -1309,6 +1378,9 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "equals__file_file" {
         return as_types_file_file(part);
+
+    } else if part.next == "equals__str_str" {
+        return as_types_str_str(part);
 
     } else if part.next == "equals__ptr_u16" {
         return as_types_ptr_u16(part);
