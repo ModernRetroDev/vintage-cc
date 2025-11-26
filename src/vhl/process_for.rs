@@ -1,4 +1,5 @@
 use crate::vhl::array;
+use crate::vhl::fn_args;
 use crate::vhl::outputs;
 use crate::vhl::type_strings;
 
@@ -8,6 +9,8 @@ fn is_str_var(varname: &str) -> bool {
     match outputs::get_vartype(varname) {
         Some(vtype) => {
             if vtype.starts_with("str8;") || vtype.starts_with("str16;") {
+                return true;
+            } else if vtype == "str" {
                 return true;
             }
         },
@@ -358,6 +361,8 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
         return true;
     }
 
+    outputs::lines_main_push(&format!("    # for {}", part.rem));
+
     loop {
         next = next.get_next();
         if next.next == "" {
@@ -446,6 +451,19 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
         loopable_is_str = true;
     } else {
         loopable_is_str = false;
+    }
+
+    let loopable_varname_res: String;
+    match fn_args::resolve_varname(part.ln_no, &loopable_varname) {
+        Some(res) => {
+            loopable_varname_res = res.clone();
+        }
+        None => {
+            println!(
+                "ERROR: ln:{} Unable to resolve variable name for {}.",
+                part.ln_no, loopable_varname);
+            return true;
+        }
     }
 
     //------------------------------------------------------------------------//
@@ -574,7 +592,6 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
         }
     }
 
-    outputs::lines_main_push(&format!("    # for {}", part.rem));
     outputs::lines_main_push(&format!("    {} .{} 0", eq_fn, temp_loop_ctr_var));
     //------------------------------------------------------------------------//
     // now set the value of loopable_next (if desired)                        //
@@ -598,12 +615,12 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
 
     if all {
         outputs::lines_main_push(&format!("    {} .{} .{}", 
-            get_alloc_fn, loop_len_var, loopable_varname));
+            get_alloc_fn, loop_len_var, loopable_varname_res));
         outputs::lines_main_push(         "    loop");
     } else {
         outputs::lines_main_push(         "    loop");
         outputs::lines_main_push(&format!("        {} .{} .{}", 
-            get_len_fn, loop_len_var, loopable_varname));
+            get_len_fn, loop_len_var, loopable_varname_res));
     }
 
     outputs::set_cmpres_in_active_fn();
@@ -616,7 +633,11 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
     if get_loopable_next {
         outputs::lines_main_push(&format!("        {} .{} .{}", 
             lpvar_eq_fn, loopable_next, resolved_arg));
-        match &index_type[..] {
+        match &basetype_loopable[..] {
+            "char" => {
+                outputs::lines_main_push(
+                    &format!("        increment__ptr .{}", resolved_arg));
+            },
             "u8" => {
                 outputs::lines_main_push(
                     &format!("        increment__ptr .{}", resolved_arg));
@@ -643,15 +664,15 @@ fn as_for_loop(part: LinePart, all: bool) -> bool {
 fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     let     get_loopable_next:    bool;
     let     get_loopable_index:   bool;
-    let     loopable_is_str:     bool;
+    let     loopable_is_str:      bool;
     let     vtype_loopable_index: String;
     let     vtype_loopable_next:  String;
     let     basetype_loopable:    String;
-    let mut loopable_index:       String;
+    let     index_type:           String;
     let     loopable_next:        String;
     let     loopable_varname:     String;
-    let     index_type:           String;
-    let mut loop_label:  Option<String> = None;
+    let mut loopable_index:       String;
+    let mut loop_label:           Option<String> = None;
     let mut vtype_opt:            Option<String>;
     let mut next:                 LinePart;
     let mut eval_parts:           Vec<String>  = Vec::new();
@@ -663,6 +684,8 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
             part.ln_no, next.next);
         return true;
     }
+
+    outputs::lines_main_push(&format!("    # for {}", part.rem));
 
     loop {
         next = next.get_next();
@@ -906,7 +929,6 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
         }
     }
 
-    outputs::lines_main_push(&format!("    # for {}", part.rem));
     outputs::lines_main_push(&format!("    {} .{} 0", eq_fn, temp_loop_ctr_var));
     //------------------------------------------------------------------------//
     // now set the value of loopable_next (if desired)                        //
@@ -951,7 +973,11 @@ fn as_enumerated_for_loop(part: LinePart, all: bool) -> bool {
     if get_loopable_next {
         outputs::lines_main_push(&format!("        {} .{} .{}", 
             lpvar_eq_fn, loopable_next, resolved_arg));
-        match &index_type[..] {
+        match &basetype_loopable[..] {
+            "char" => {
+                outputs::lines_main_push(
+                    &format!("        increment__ptr .{}", resolved_arg));
+            },
             "u8" => {
                 outputs::lines_main_push(
                     &format!("        increment__ptr .{}", resolved_arg));

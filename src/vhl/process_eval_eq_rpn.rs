@@ -652,7 +652,7 @@ pub fn now(part: LinePart) -> bool {
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" || vtype == "u8:ptr" {
+                if vtype == "u8" || vtype == "u8:ptr" || vtype == "char" {
                     if vtype == "u8:ptr" {
                         resolved_arg = epart.clone();
                     } else {
@@ -742,6 +742,10 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no, req_elem_sz);
                         return true;
                     }
+                } else {
+                    println!("ERROR: ln:{} Unhandled vartype `{}` for `{}`.",
+                        part.ln_no, vtype, &epart);
+                    return true;
                 }
             },
             None => {

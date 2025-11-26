@@ -242,7 +242,7 @@ fn as_type_str8(part: LinePart) -> bool {
     }
 
     if !string_part.is_varname() {
-        println!("ERROR: ln:{} Invalid input. Expected arr8 var; got `{}`",
+        println!("ERROR: ln:{} Invalid input. Expected str8 var; got `{}`",
             part.ln_no, string);
         return true;
     }
@@ -317,6 +317,108 @@ fn as_type_str8(part: LinePart) -> bool {
     return false;
 }
 
+fn as_type_str16(part: LinePart) -> bool {
+    let ptrname      = part.get_next().next;
+    let ptrname_part = part.get_next();
+    let string       = ptrname_part.get_next().next;
+    let string_part  = ptrname_part.get_next();
+    let index        = string_part.get_next().next;
+    let index_part   = string_part.get_next();
+    let ptrname_res: String;
+    let index_res:   String;
+    let string_res:  String;
+
+    builtins::mark_as_used("ref__arr16");
+
+    //------------------------------------------------------------------------//
+    // Check for input errors.                                                //
+    //------------------------------------------------------------------------//
+    if !ptrname_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, ptrname);
+        return true;
+    }
+
+    if !string_part.is_varname() {
+        println!("ERROR: ln:{} Invalid input. Expected str16 var; got `{}`",
+            part.ln_no, string);
+        return true;
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    ptrname_res = get::var_fullname(&ptrname);
+    match outputs::get_vartype(&ptrname_res) {
+        Some(vtype) => {
+            if !(vtype == "ptr" || vtype.ends_with(":ptr")) {
+                println!(
+                    "ERROR: ln:{} Expected a ptr type; got `{}`, which is type `{}`",
+                    part.ln_no, ptrname, vtype);
+                return true;
+            }
+        },
+        None => {},
+    }
+
+    //------------------------------------------------------------------------//
+    // Extract the string name                                                //
+    //------------------------------------------------------------------------//
+    string_res = get::var_fullname(&string);
+
+    //------------------------------------------------------------------------//
+    // Extract the string index                                               //
+    //------------------------------------------------------------------------//
+    if index_part.is_varname() {
+        index_res = get::var_fullname(&index);
+
+        match outputs::get_vartype(&index_res) {
+            Some(vtype) => {
+                if vtype != "u16" {
+                    println!(
+                        "ERROR: ln:{} Expected a u16 type; got `{}`, which is type `{}`",
+                        part.ln_no, index, vtype)
+                }
+            },
+            None => {},
+        }
+
+    } else {
+        index_res = format!("#{}", index);
+    }
+
+
+    outputs::mainfn_append(&format!("   ; ref__str16 {} {} {}",
+        ptrname, string, index));
+    //
+    outputs::mainfn_append(&format!("   lda #<{}", ptrname_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_1");
+    outputs::mainfn_append(&format!("   lda #>{}", ptrname_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_1+1");
+    
+    outputs::mainfn_append(&format!("   lda #<{}", string_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2");
+    outputs::mainfn_append(&format!("   lda #>{}", string_res));
+    outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+    //
+    if index_res.starts_with("#") {
+        outputs::mainfn_append(&format!("   lda #<{}", &index_res[1..]));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda #>{}", &index_res[1..]));
+        outputs::mainfn_append(         "   sta r0+1");
+    } else {
+        outputs::mainfn_append(&format!("   lda {index_res}"));
+        outputs::mainfn_append(         "   sta r0");
+        outputs::mainfn_append(&format!("   lda {index_res}+1"));
+        outputs::mainfn_append(         "   sta r0+1");
+    }
+    //
+    outputs::mainfn_append(         "   jsr _ref__arr16");
+    outputs::mainfn_append("");
+
+    return false;
+}
+
 pub fn now(part: LinePart) -> bool {
 
     if part.next == "ref__arr8" {
@@ -327,6 +429,9 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "ref__str8" {
         return as_type_str8(part);
+
+    } else if part.next == "ref__str16" {
+        return as_type_str16(part);
 
     } else {
         println!(

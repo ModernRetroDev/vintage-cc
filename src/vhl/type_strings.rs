@@ -1,3 +1,4 @@
+use crate::vhl::fn_args;
 use crate::vhl::outputs;
 
 
@@ -85,7 +86,7 @@ fn get_stringtype_part(ln_no: u64, arg: &str, desired: &str) -> Option<String> {
         }
     }
 
-    if !(strtype_str == "str8" || strtype_str == "str16") {
+    if !(strtype_str == "str" || strtype_str == "str8" || strtype_str == "str16") {
         println!(
             "ERROR: ln:{} Unsupported string type `{}`.",
             ln_no, &strtype_str);
@@ -94,7 +95,9 @@ fn get_stringtype_part(ln_no: u64, arg: &str, desired: &str) -> Option<String> {
 
     match desired {
         "size" => {
-            if strtype_str == "str8" {
+            if strtype_str == "str" {
+                return Some("0".to_string());
+            } else if strtype_str == "str8" {
                 return Some("8".to_string());
             } else {
                 return Some("16".to_string());
@@ -151,6 +154,10 @@ fn get_stringtype_n_elem(ln_no: u64, arg: &str) -> Option<u64> {
         None => {
             return None;
         }
+    }
+
+    if n_elem_str == "" {
+        return Some(0);
     }
 
     match n_elem_str.parse::<u64>() {
@@ -293,6 +300,17 @@ fn get_reference(ln_no: u64, arg: &str, unique: bool) -> Option<String> {
         },
     };
 
+    let string_name_res: String;
+    match fn_args::resolve_varname(ln_no, &string_name) {
+        Some(res) => { string_name_res = res.clone(); }
+        None => {
+            println!(
+                "ERROR: ln:{} Unable to resolve variable name for {}.",
+                ln_no, string_name);
+            return None;
+        }
+    }
+
     match index_vartype {
         Some(vtype) => {
             //----------------------------------------------------------------//
@@ -309,10 +327,10 @@ fn get_reference(ln_no: u64, arg: &str, unique: bool) -> Option<String> {
                     }
                     outputs::lines_main_push(&format!(
                         "    ref__str8 .{} .{} .{}", 
-                        ptr_varname, string_name, elem_index_str));
+                        ptr_varname, string_name_res, elem_index_str));
                 },
                 "u16" => {
-                    if string_size != 16 {
+                    if ! (string_size == 16 || string_size == 0) {
                         println!(
                             "ERROR: ln:{} str8 can only be indexed using a u8 value, not `{}`.",
                             ln_no, vtype_str);
@@ -321,7 +339,7 @@ fn get_reference(ln_no: u64, arg: &str, unique: bool) -> Option<String> {
                     }
                     outputs::lines_main_push(&format!(
                         "    ref__str16 .{} .{} .{}", 
-                        ptr_varname, string_name, elem_index_str));
+                        ptr_varname, string_name_res, elem_index_str));
                 },
                 _ => {
                     println!(
@@ -350,7 +368,7 @@ fn get_reference(ln_no: u64, arg: &str, unique: bool) -> Option<String> {
                     } else {
                         outputs::lines_main_push(&format!(
                             "    ref__str8 .{} .{} {}", 
-                            ptr_varname, string_name, elem_index));
+                            ptr_varname, string_name_res, elem_index));
                     }
                 },
                 16 => {
@@ -367,7 +385,7 @@ fn get_reference(ln_no: u64, arg: &str, unique: bool) -> Option<String> {
                     } else {
                         outputs::lines_main_push(&format!(
                             "    ref__str16 .{} .{} {}", 
-                            ptr_varname, string_name, elem_index));
+                            ptr_varname, string_name_res, elem_index));
                     }
                 },
                 _ => {

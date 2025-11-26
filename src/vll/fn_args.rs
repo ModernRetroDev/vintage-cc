@@ -157,7 +157,7 @@ pub fn is_type_u8(part: &LinePart) -> bool {
             Some(vtype) => { vartype = vtype; },
             None => { return false; },
         }
-        if vartype == "u8" {
+        if vartype == "u8" || vartype == "char" {
             return true;
         }
         return false;

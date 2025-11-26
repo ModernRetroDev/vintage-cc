@@ -123,26 +123,26 @@ impl FnBlock {
 
     pub fn get_vartype(&self, varname: &str) -> Option<String> {
         let mut ind: usize = 0;
-            for globvar in self.var_names.clone() {
-                if varname == &globvar {
-                    return Some(self.var_types[ind].to_string());
-                }
-                ind += 1
+        for globvar in self.var_names.clone() {
+            if varname == &globvar {
+                return Some(self.var_types[ind].to_string());
             }
+            ind += 1
+        }
         return None;
     }
 
     pub fn var_is_ptr(&self, varname: &str) -> bool {
         let mut ind: usize = 0;
-            for globvar in self.var_names.clone() {
-                if varname == &globvar {
-                    if self.var_types[ind].ends_with(":ptr") {
-                        return true;
-                    }
-                    return false;
+        for globvar in self.var_names.clone() {
+            if varname == &globvar {
+                if self.var_types[ind].ends_with(":ptr") {
+                    return true;
                 }
-                ind += 1
+                return false;
             }
+            ind += 1
+        }
         return false;
     }
 

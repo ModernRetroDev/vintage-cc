@@ -91,7 +91,6 @@ pub fn unique_ifblk_name() -> String {
     return format!("if_0x{:04X}", ifblk_no);
 }
 
-
 pub fn unique_loopblk_name() -> String {
     let loopblk_no: u32;
 

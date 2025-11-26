@@ -13,7 +13,10 @@ fn as_type_u8(part: LinePart) -> bool {
     globname_arr = get::var_fullname(&array_name);
     match outputs::get_vartype(&globname_arr) {
         Some(vtype) => {
-            if ! (vtype == "str8" || vtype == "str16") {
+            if ! (vtype == "str" || vtype == "str:ptr"  || vtype == "str8" || vtype == "str16") {
+                println!(
+                    "ERROR: ln:{} unsupported type `{}` for get_length__arr8.",
+                    part.ln_no, vtype);
                 return false;
             }
         },
@@ -48,7 +51,10 @@ fn as_type_u16(part: LinePart) -> bool {
     globname_arr = get::var_fullname(&array_name);
     match outputs::get_vartype(&globname_arr) {
         Some(vtype) => {
-            if ! (vtype == "str8" || vtype == "str16") {
+            if ! (vtype == "str" || vtype == "str:ptr" || vtype == "str8" || vtype == "str16") {
+                println!(
+                    "ERROR: ln:{} unsupported type `{}` for get_length__arr16.",
+                    part.ln_no, vtype);
                 return false;
             }
         },

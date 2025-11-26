@@ -51,10 +51,18 @@ fn get_evalpart_basetype(ln_no: u64, epart: &str, deref_okay: bool) -> Option<St
     }
 }
 
-pub fn resolve_varname(ln_no: u64, epart: &str) -> Option<String>{
+fn resolve_array_val(ln_no: u64, epart: &str) -> Option<String>{
     if array::arg_is_array(epart) {
         return array::get_value(ln_no, epart);
     } else if outputs::varname_is_fn_arg_in_active_fn(epart) {
+        return Some(outputs::get_fn_arg_varname_in_active_fn(epart).clone());
+    } else {
+        return Some(epart.to_string());
+    }
+}
+
+pub fn resolve_varname(_ln_no: u64, epart: &str) -> Option<String>{
+    if outputs::varname_is_fn_arg_in_active_fn(epart) {
         return Some(outputs::get_fn_arg_varname_in_active_fn(epart).clone());
     } else {
         return Some(epart.to_string());
@@ -177,6 +185,8 @@ pub fn is_type_u8(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
         Some(btype) => {
             if btype == "u8" {
                 return true;
+            } else if btype == "char" {
+                return true;
             }
             return false;
         },
@@ -223,7 +233,7 @@ pub fn get_u8_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<Str
     } else if is_direct_deref(epart) {
         return Some(get_direct_deref_str(epart));
     } else {
-        return resolve_varname(ln_no, epart);
+        return resolve_array_val(ln_no, epart);
     }
 }
 
@@ -278,7 +288,7 @@ pub fn get_u16_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<St
     } else if is_direct_deref(epart) {
         return Some(get_direct_deref_str(epart));
     } else {
-        return resolve_varname(ln_no, epart);
+        return resolve_array_val(ln_no, epart);
     }
 }
 
@@ -333,6 +343,6 @@ pub fn get_u24_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<St
     } else if is_direct_deref(epart) {
         return Some(get_direct_deref_str(epart));
     } else {
-        return resolve_varname(ln_no, epart);
+        return resolve_array_val(ln_no, epart);
     }
 }
