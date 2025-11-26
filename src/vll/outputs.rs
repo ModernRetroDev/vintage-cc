@@ -309,7 +309,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
-                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                    "   .byte <({}+2), >({}+2) ; ptr_addr (u16)",
+                        varname, varname));
                 self.lines_vardefs.push(format!(
                     "   .byte $01 ; str_type (u8)"));
                 self.lines_vardefs.push(format!(
@@ -320,16 +321,6 @@ impl FnBlock {
                     "   .byte ${:02X} ; element size (u8)", 1));
                 self.lines_vardefs.push(
                     "   ; data start".to_string());
-
-                self.lines_ptr_init.push(
-                    format!("   ; ptr_init for `{}`", varname));
-                self.lines_ptr_init.push(format!("   ldx #0"));
-                self.lines_ptr_init.push(format!("   lda #<({}+2)", varname));
-                self.lines_ptr_init.push(format!("   sta {},X", varname));
-                self.lines_ptr_init.push(        "   inx".to_string());
-                self.lines_ptr_init.push(format!("   lda #>({}+2)", varname));
-                self.lines_ptr_init.push(format!("   sta {},X", varname));
-                self.lines_ptr_init.push(        "".to_string());
                 //------------------------------------------------------------//
                 // Write out contents of the string ten bytes at a time.      //
                 //------------------------------------------------------------//
@@ -392,7 +383,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
-                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                    "   .byte <({}+2), >({}+2) ; ptr_addr (u16)",
+                        varname, varname));
                 self.lines_vardefs.push(format!(
                     "   .byte $00 ; mode (u8)"));
                 self.lines_vardefs.push(format!(
@@ -404,16 +396,6 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "   .byte $00, $00 ; fname (u16)"));
                 self.lines_vardefs.push("".to_string());
-
-                self.lines_ptr_init.push(
-                    format!("   ; ptr_init for `{}`", varname));
-                self.lines_ptr_init.push(format!("   ldx #0"));
-                self.lines_ptr_init.push(format!("   lda #<({}+2)", varname));
-                self.lines_ptr_init.push(format!("   sta {},X", varname));
-                self.lines_ptr_init.push(        "   inx".to_string());
-                self.lines_ptr_init.push(format!("   lda #>({}+2)", varname));
-                self.lines_ptr_init.push(format!("   sta {},X", varname));
-                self.lines_ptr_init.push(        "".to_string());
             } else if vartype.ends_with(":ptr") {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
@@ -437,7 +419,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: arr8__{}", arr8name, arr8type));
                 self.lines_vardefs.push(format!(
-                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                    "   .byte <({}+2), >({}+2) ; ptr_addr (u16)",
+                        arr8name, arr8name));
                 self.lines_vardefs.push(format!(
                     "   .byte $01 ; array_type (u8)"));
                 self.lines_vardefs.push(format!(
@@ -448,16 +431,6 @@ impl FnBlock {
                     "   .byte ${:02X} ; element size (u8)", 1));
                 self.lines_vardefs.push(
                     "   ; data start".to_string());
-
-                self.lines_ptr_init.push(
-                    format!("   ; ptr_init for `{}`", arr8name));
-                self.lines_ptr_init.push(format!("   ldx #0"));
-                self.lines_ptr_init.push(format!("   lda #<({}+2)", arr8name));
-                self.lines_ptr_init.push(format!("   sta {},X", arr8name));
-                self.lines_ptr_init.push(        "   inx".to_string());
-                self.lines_ptr_init.push(format!("   lda #>({}+2)", arr8name));
-                self.lines_ptr_init.push(format!("   sta {},X", arr8name));
-                self.lines_ptr_init.push(        "".to_string());
                 //------------------------------------------------------------//
                 // Write out contents of the string ten bytes at a time.      //
                 //------------------------------------------------------------//
@@ -495,7 +468,8 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: arr16__{}", arr16name, arr16type));
                 self.lines_vardefs.push(format!(
-                    "   .byte $00, $00 ; ptr_addr (u16)"));
+                    "   .byte <({}+2), >({}+2) ; ptr_addr (u16)",
+                        arr16name, arr16name));
                 self.lines_vardefs.push(format!(
                     "   .byte $02 ; array_type (u8)"));
                 self.lines_vardefs.push(format!(
@@ -508,16 +482,6 @@ impl FnBlock {
                     "   .byte ${:02X} ; element size (u8)", 1));
                 self.lines_vardefs.push(
                     "   ; data start".to_string());
-
-                self.lines_ptr_init.push(
-                    format!("   ; ptr_init for `{}`", arr16name));
-                self.lines_ptr_init.push(format!("   ldx #0"));
-                self.lines_ptr_init.push(format!("   lda #<({}+2)", arr16name));
-                self.lines_ptr_init.push(format!("   sta {},X", arr16name));
-                self.lines_ptr_init.push(        "   inx".to_string());
-                self.lines_ptr_init.push(format!("   lda #>({}+2)", arr16name));
-                self.lines_ptr_init.push(format!("   sta {},X", arr16name));
-                self.lines_ptr_init.push(        "".to_string());
                 //------------------------------------------------------------//
                 // Write out contents of the string ten bytes at a time.      //
                 //------------------------------------------------------------//

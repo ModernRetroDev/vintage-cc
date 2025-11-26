@@ -15,7 +15,7 @@
 ; VARIABLE DEFINITIONS                                   ;
 ;--------------------------------------------------------;
 var__main__f: ; type: file
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(var__main__f+2), >(var__main__f+2) ; ptr_addr (u16)
    .byte $00 ; mode (u8)
    .byte $00 ; device (u8)
    .byte $00 ; channel (u8)
@@ -29,7 +29,7 @@ var__main__b: ; type: u8
    .byte $00
 
 str8_0x0000: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0000+2), >(str8_0x0000+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $1F, $00 ; length (u16)
    .byte $1F, $00 ; alloc (u16)
@@ -42,7 +42,7 @@ str8_0x0000: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0001: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0001+2), >(str8_0x0001+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $26, $00 ; length (u16)
    .byte $26, $00 ; alloc (u16)
@@ -55,7 +55,7 @@ str8_0x0001: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0002: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0002+2), >(str8_0x0002+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $26, $00 ; length (u16)
    .byte $26, $00 ; alloc (u16)
@@ -68,7 +68,7 @@ str8_0x0002: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0003: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0003+2), >(str8_0x0003+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $26, $00 ; length (u16)
    .byte $26, $00 ; alloc (u16)
@@ -81,7 +81,7 @@ str8_0x0003: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0004: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0004+2), >(str8_0x0004+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $27, $00 ; length (u16)
    .byte $27, $00 ; alloc (u16)
@@ -94,7 +94,7 @@ str8_0x0004: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0005: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0005+2), >(str8_0x0005+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $0D, $00 ; length (u16)
    .byte $0D, $00 ; alloc (u16)
@@ -105,7 +105,7 @@ str8_0x0005: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0006: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0006+2), >(str8_0x0006+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $29, $00 ; length (u16)
    .byte $29, $00 ; alloc (u16)
@@ -119,7 +119,7 @@ str8_0x0006: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0007: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0007+2), >(str8_0x0007+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $1B, $00 ; length (u16)
    .byte $1B, $00 ; alloc (u16)
@@ -131,7 +131,7 @@ str8_0x0007: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0008: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0008+2), >(str8_0x0008+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $22, $00 ; length (u16)
    .byte $22, $00 ; alloc (u16)
@@ -144,7 +144,7 @@ str8_0x0008: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x0009: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x0009+2), >(str8_0x0009+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $0C, $00 ; length (u16)
    .byte $0C, $00 ; alloc (u16)
@@ -155,7 +155,7 @@ str8_0x0009: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000A: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x000A+2), >(str8_0x000A+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $31, $00 ; length (u16)
    .byte $31, $00 ; alloc (u16)
@@ -169,7 +169,7 @@ str8_0x000A: ; type: str8
    .byte $00 ; null terminator (u8)
 
 str8_0x000B: ; type: str8
-   .byte $00, $00 ; ptr_addr (u16)
+   .byte <(str8_0x000B+2), >(str8_0x000B+2) ; ptr_addr (u16)
    .byte $01 ; str_type (u8)
    .byte $1B, $00 ; length (u16)
    .byte $1B, $00 ; alloc (u16)
@@ -668,125 +668,12 @@ _shutdown:
 
 
 ;--------------------------------------------------------;
-; INIT FUNCTION                                          ;
-;--------------------------------------------------------;
-fn__init: 
-   ; ptr_init for `var__main__f`
-   ldx #0
-   lda #<(var__main__f+2)
-   sta var__main__f,X
-   inx
-   lda #>(var__main__f+2)
-   sta var__main__f,X
-
-   ; ptr_init for `str8_0x0000`
-   ldx #0
-   lda #<(str8_0x0000+2)
-   sta str8_0x0000,X
-   inx
-   lda #>(str8_0x0000+2)
-   sta str8_0x0000,X
-
-   ; ptr_init for `str8_0x0001`
-   ldx #0
-   lda #<(str8_0x0001+2)
-   sta str8_0x0001,X
-   inx
-   lda #>(str8_0x0001+2)
-   sta str8_0x0001,X
-
-   ; ptr_init for `str8_0x0002`
-   ldx #0
-   lda #<(str8_0x0002+2)
-   sta str8_0x0002,X
-   inx
-   lda #>(str8_0x0002+2)
-   sta str8_0x0002,X
-
-   ; ptr_init for `str8_0x0003`
-   ldx #0
-   lda #<(str8_0x0003+2)
-   sta str8_0x0003,X
-   inx
-   lda #>(str8_0x0003+2)
-   sta str8_0x0003,X
-
-   ; ptr_init for `str8_0x0004`
-   ldx #0
-   lda #<(str8_0x0004+2)
-   sta str8_0x0004,X
-   inx
-   lda #>(str8_0x0004+2)
-   sta str8_0x0004,X
-
-   ; ptr_init for `str8_0x0005`
-   ldx #0
-   lda #<(str8_0x0005+2)
-   sta str8_0x0005,X
-   inx
-   lda #>(str8_0x0005+2)
-   sta str8_0x0005,X
-
-   ; ptr_init for `str8_0x0006`
-   ldx #0
-   lda #<(str8_0x0006+2)
-   sta str8_0x0006,X
-   inx
-   lda #>(str8_0x0006+2)
-   sta str8_0x0006,X
-
-   ; ptr_init for `str8_0x0007`
-   ldx #0
-   lda #<(str8_0x0007+2)
-   sta str8_0x0007,X
-   inx
-   lda #>(str8_0x0007+2)
-   sta str8_0x0007,X
-
-   ; ptr_init for `str8_0x0008`
-   ldx #0
-   lda #<(str8_0x0008+2)
-   sta str8_0x0008,X
-   inx
-   lda #>(str8_0x0008+2)
-   sta str8_0x0008,X
-
-   ; ptr_init for `str8_0x0009`
-   ldx #0
-   lda #<(str8_0x0009+2)
-   sta str8_0x0009,X
-   inx
-   lda #>(str8_0x0009+2)
-   sta str8_0x0009,X
-
-   ; ptr_init for `str8_0x000A`
-   ldx #0
-   lda #<(str8_0x000A+2)
-   sta str8_0x000A,X
-   inx
-   lda #>(str8_0x000A+2)
-   sta str8_0x000A,X
-
-   ; ptr_init for `str8_0x000B`
-   ldx #0
-   lda #<(str8_0x000B+2)
-   sta str8_0x000B,X
-   inx
-   lda #>(str8_0x000B+2)
-   sta str8_0x000B,X
-
-   rts
-
-;--------------------------------------------------------;
 ; MAIN FUNCTION                                          ;
 ;--------------------------------------------------------;
 fn_main: 
    ; set output mode to ISO
    lda #$0F
    jsr BSOUT
-
-   ; run init fn
-   jsr fn__init
 
    ; setup__file .f 'w' "@:05_type_u8__subtraction.utest"
    lda #<var__main__f
