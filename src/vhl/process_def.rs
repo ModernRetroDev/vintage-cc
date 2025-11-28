@@ -39,7 +39,7 @@ fn defblk_name_is_valid(blkname: &str) -> bool {
     return true;
 }
 
-pub fn now(part: LinePart, line: &str) -> bool {
+pub fn now(part: LinePart, _line: &str) -> bool {
     let defblk_name: String;
     let defblk_name_raw = part.get_next().next;
 

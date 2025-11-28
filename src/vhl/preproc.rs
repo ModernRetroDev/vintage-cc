@@ -1,7 +1,5 @@
 use crate::vhl::outputs;
 
-use crate::vhl::line_part::LinePart;
-
 
 pub fn resolve_line(ln_no: u64, line: &str) -> Option<String> {
     // return Some(line.to_string());
@@ -191,6 +189,13 @@ fn get_defvalue(line: &str) -> String {
     return defvalue;
 }
 
+fn defvalue_includes_def(defvalue: &str) -> bool {
+    if defvalue.contains("#") {
+        println!("[TODO]: Make sure that defs don't include other defs");
+    }
+    return false;
+}
+
 pub fn load_def(ln_no: u64, line: &str) -> bool {
     let defname: String = get_defname(line);
 
@@ -226,8 +231,13 @@ pub fn load_def(ln_no: u64, line: &str) -> bool {
     }
 
     let defvalue: String = get_defvalue(line);
+    if defvalue_includes_def(&defvalue) {
+        println!(
+            "ERROR: ln:{} Definitions can not contain other definitions.",
+            ln_no);
+        return true;
+    }
 
-    println!("[TODO]: Make sure that defs don't include other defs");
     outputs::defblk_push(&defname, &defvalue);
 
 
