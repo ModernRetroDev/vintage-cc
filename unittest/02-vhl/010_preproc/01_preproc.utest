@@ -1,0 +1,1 @@
+#----------------------------------------------## DEFINE AND USE SOME PREPROCESSOR DEFINITIONS ##----------------------------------------------#five (#FIVE)       = `5`ten  (#GROUP__TEN) = `10`#FIVE + #TEN = 15

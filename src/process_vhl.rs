@@ -3,6 +3,7 @@ use std::fs;
 use std::path::Path;
 
 use crate::vhl::line_part::LinePart;
+use crate::vhl::preproc;
 
 use crate::vhl::process__asm;
 
@@ -10,6 +11,7 @@ use crate::vhl::process_break;
 use crate::vhl::process_continue;
 use crate::vhl::process_endblk;
 use crate::vhl::process_eval_eq_rpn;
+use crate::vhl::process_def;
 use crate::vhl::process_fn;
 use crate::vhl::process_fn_call;
 use crate::vhl::process_for;
@@ -120,6 +122,9 @@ fn process_source(s: String) -> bool {
     let mut ln_no: u64 = 0;
     let mut next: LinePart;
 
+    // make sure defblock is initially inactive
+    outputs::set_active_defblk("~");
+
     for line in lines {
         ln_no += 1;
 
@@ -130,10 +135,35 @@ fn process_source(s: String) -> bool {
             continue;
         }
 
-        next = line_get_first(ln_no, line);
+        if outputs::defblk_is_active() {
+            next = line_get_first(ln_no, &line);
+            if next.is_endblk() {
+                if process_endblk::now(next) {
+                    return true;
+                }
+                continue;
+            }
+
+            if preproc::load_def(ln_no, &line) {
+                return true;
+            }
+            continue;
+        }
+
+        let res_line: String;
+        match preproc::resolve_line(ln_no, line) {
+            Some(res) => {
+                res_line = res.clone();
+            },
+            None => {
+                return true;
+            }
+        }
+
+        next = line_get_first(ln_no, &res_line);
 
         if next.is__asm() {
-            if process__asm::now(next, &line) {
+            if process__asm::now(next, &res_line) {
                 return true;
             }
             continue;
@@ -145,13 +175,19 @@ fn process_source(s: String) -> bool {
             }
             continue;
         }
+        if next.is_def() {
+            if process_def::now(next, &res_line) {
+                return true;
+            }
+            continue;
+        }
         if next.is_continue() {
             if process_continue::now(next) {
                 return true;
             }
             continue;
         }
-        if line_is_eval_eq_rpn(ln_no, &line) {
+        if line_is_eval_eq_rpn(ln_no, &res_line) {
             if process_eval_eq_rpn::now(next) {
                 return true;
             }
@@ -177,7 +213,7 @@ fn process_source(s: String) -> bool {
             continue;
         }
         if next.is_fn() {
-            if process_fn::now(next, line) {
+            if process_fn::now(next, &res_line) {
                 return true;
             }
             continue;
@@ -195,7 +231,7 @@ fn process_source(s: String) -> bool {
             continue;
         }
         if next.is_file_method() {
-            if process_methods_file::now(next, line) {
+            if process_methods_file::now(next, &res_line) {
                 return true;
             }
             continue;
@@ -208,7 +244,7 @@ fn process_source(s: String) -> bool {
         }
 
         if next.is_println() {
-            if process_println::now(next, line, None) {
+            if process_println::now(next, &res_line, None) {
                 return true;
             }
             continue;
@@ -224,13 +260,13 @@ fn process_source(s: String) -> bool {
             //----------------------------------------------------------------//
             // This one needs to be last as it will match built-in functions. //
             //----------------------------------------------------------------//
-            if process_fn_call::now(next, line) {
+            if process_fn_call::now(next, &res_line) {
                 return true;
             }
             continue;
         }
 
-        println!("!!![UNHANDLED] {}: {}", ln_no, line);
+        println!("!!![UNHANDLED] {}: {}", ln_no, &res_line);
     }
 
     outputs::write();

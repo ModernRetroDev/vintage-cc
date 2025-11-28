@@ -2,6 +2,7 @@
 pub mod array;
 pub mod fn_args;
 pub mod line_part;
+pub mod preproc;
 
 pub mod process__asm;
 
@@ -9,6 +10,7 @@ pub mod process_break;
 pub mod process_continue;
 pub mod process_endblk;
 pub mod process_eval_eq_rpn;
+pub mod process_def;
 pub mod process_fn;
 pub mod process_fn_call;
 pub mod process_for;

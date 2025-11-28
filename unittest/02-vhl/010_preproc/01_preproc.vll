@@ -1,0 +1,86 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    var__u8 five
+    var__u8 ten
+    var__u8 sum
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+
+    equals__u8_u8 .five 5
+    equals__u8_u8 .ten 10
+
+    # outfile.create("01_preproc.utest");
+    setup__file .outfile 'w' "@:01_preproc.utest"
+    open__file .outfile
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# DEFINE AND USE SOME PREPROCESSOR DEFINITIONS #");
+    setout__file .outfile
+    print__str8 "# DEFINE AND USE SOME PREPROCESSOR DEFINITIONS #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("five (#FIVE)       = `{}`", five);
+    setout__file .outfile
+    print__str8 "five (#FIVE)       = `"
+    print__u8 .five
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln("ten  (#GROUP__TEN) = `{}`", ten);
+    setout__file .outfile
+    print__str8 "ten  (#GROUP__TEN) = `"
+    print__u8 .ten
+    print__str8 "`"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # sum = 5 10 +;
+    equals__u8_u8 ._stk_8_0 5
+    equals__u8_u8 ._stk_8_1 10
+    plus_equals__u8_u8 ._stk_8_0 ._stk_8_1
+    equals__u8_u8 .sum ._stk_8_0
+
+    # outfile.writeln("#FIVE + #TEN = {}", sum);
+    setout__file .outfile
+    print__str8 "#FIVE + #TEN = "
+    print__u8 .sum
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

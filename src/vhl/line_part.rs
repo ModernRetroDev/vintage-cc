@@ -65,6 +65,12 @@ impl LinePart {
         }
         return false
     }
+    pub fn is_def(&self) -> bool {
+        if self.next == "def" {
+            return true
+        }
+        return false
+    }
     pub fn is_endblk(&self) -> bool {
         if self.next == "}" {
             return true

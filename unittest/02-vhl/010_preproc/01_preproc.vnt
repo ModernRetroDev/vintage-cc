@@ -1,0 +1,43 @@
+
+def GROUP {
+	GROUP__FIVE  5
+	GROUP__TEN   10
+}
+
+def {
+	FIVE  5
+	TEN   10
+}
+
+fn shutdown() {
+	// turn off the system now
+	_asm("   ; shut off the system immediately");
+	_asm("   ldx #$42");
+	_asm("   ldy #$01");
+	_asm("   lda #$00");
+	_asm("   jsr $FEC9");
+}
+
+fn main() {
+	let outfile: file;
+	let five: u8 = #FIVE;
+	let ten:  u8 = #GROUP__TEN;
+	let sum:  u8;
+
+	outfile.create("01_preproc.utest");
+
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln("# DEFINE AND USE SOME PREPROCESSOR DEFINITIONS #");
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("five (#FIVE)       = `{}`", five);
+	outfile.writeln("ten  (#GROUP__TEN) = `{}`", ten);
+	outfile.writeln();
+
+	sum = #FIVE #TEN +;
+	outfile.writeln("#FIVE + #TEN = {}", sum);
+
+	outfile.close();
+	shutdown();
+}

@@ -20,6 +20,11 @@ pub fn now(part: LinePart) -> bool {
         }
     }
 
+    if outputs::defblk_is_active() {
+        outputs::set_active_defblk("~");
+        return false;
+    }
+
     match outputs::blktypes_pop() {
         Some(blktype) => {
             let blktype_str = &blktype[..];

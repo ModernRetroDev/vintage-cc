@@ -19,6 +19,27 @@ pub fn new_fn_arg(apos: u8, aname: &str, atype: &str) -> FnArg {
     }
 }
 
+struct DefBlock {
+    blk_name:   String,
+    def_names:  Vec<String>,
+    def_values: Vec<String>,
+}
+
+fn new_def_block(defblk_name: &str) -> DefBlock {
+    return DefBlock{
+        blk_name   : defblk_name.to_string(),
+        def_names  : Vec::new(),
+        def_values : Vec::new(),
+    }
+}
+
+impl DefBlock {
+    pub fn defblk_push(&mut self, defname: &str, defvalue: &str) {
+        self.def_names.push(defname.to_string());
+        self.def_values.push(defvalue.to_string());
+    }
+}
+
 struct FnBlock {
     fn_name:        String,
     module_name:    Option<String>,
@@ -478,8 +499,10 @@ impl FnBlock {
 }
 
 static mut ACTIVE_FN:       String = String::new();
+static mut ACTIVE_DEFBLK:   String = String::new();
 // static mut PLATFORM:        String = String::new();
 static mut OUTPUT_FILENAME: String = String::new();
+static mut DEF_BLOCKS:      Vec<DefBlock> = Vec::new();
 static mut FN_BLOCKS:       Vec<FnBlock> = Vec::new();
 
 // pub fn show_active_fn_args() {
@@ -497,6 +520,26 @@ static mut FN_BLOCKS:       Vec<FnBlock> = Vec::new();
 //     }
 // }
 
+pub fn defblk_is_defined(defblk_name: &str) -> bool {
+    unsafe {
+        for def_blk in DEF_BLOCKS.iter() {
+            if def_blk.blk_name == defblk_name {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+pub fn defblk_is_active() -> bool {
+    unsafe {
+        if ACTIVE_DEFBLK != "~" {
+            return true;
+        }
+    }
+    return false;
+}
+
 pub fn fn_is_defined(fn_name: &str) -> bool {
     unsafe {
         for fn_blk in FN_BLOCKS.iter() {
@@ -506,6 +549,12 @@ pub fn fn_is_defined(fn_name: &str) -> bool {
         }
     }
     return false;
+}
+
+pub fn get_active_defblk() -> String {
+    unsafe {
+        return ACTIVE_DEFBLK.clone();
+    }
 }
 
 pub fn get_active_fn() -> String {
@@ -617,6 +666,14 @@ pub fn update_active_fn_stack(stk_len: u8, elem_size: u8) {
     }
 }
 
+pub fn set_active_defblk(defblk_name: &str) {
+    unsafe {
+        ACTIVE_DEFBLK = defblk_name.to_string();
+
+        DEF_BLOCKS.push(new_def_block(defblk_name));
+    }
+}
+
 pub fn set_active_fn(fn_name: &str) {
     if fn_name == "" {
         return
@@ -625,6 +682,13 @@ pub fn set_active_fn(fn_name: &str) {
         ACTIVE_FN = fn_name.to_string();
 
         FN_BLOCKS.push(new_fn_block(fn_name));
+    }
+}
+
+pub fn defblk_push(defname: &str, defvalue: &str) {
+    unsafe {
+        let last_ind = DEF_BLOCKS.len() - 1;
+        DEF_BLOCKS[last_ind].defblk_push(defname, defvalue);
     }
 }
 
@@ -661,6 +725,35 @@ pub fn set_var_index(varname: &str) {
         let last_ind = FN_BLOCKS.len() - 1;
         FN_BLOCKS[last_ind].set_var_index(varname);
     }
+}
+
+pub fn preproc_def_exists(defname: &str) -> bool {
+    unsafe {
+        for def_blk in DEF_BLOCKS.iter() {
+            for blk_defname in def_blk.def_names.iter() {
+                if defname == blk_defname {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+pub fn preproc_get_def_str(defname: &str) -> Option<String> {
+    let mut def_ind: usize;
+    unsafe {
+        for def_blk in DEF_BLOCKS.iter() {
+            def_ind = 0;
+            for blk_defname in def_blk.def_names.iter() {
+                if defname == blk_defname {
+                    return Some(def_blk.def_values[def_ind].clone());
+                }
+                def_ind += 1;
+            }
+        }
+    }
+    return None;
 }
 
 pub fn get_vartype(varname: &str) -> Option<String> {
