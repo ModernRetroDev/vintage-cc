@@ -638,7 +638,7 @@ fn as_types_u16ptr_u16(part: LinePart) -> bool {
     return false;
 }
 
-fn as_types_u24_u8(part: LinePart) -> bool {
+fn as_types_u24_u8(part: LinePart, bool_as_u8: bool) -> bool {
     let lhs      = part.get_next().next;
     let lhs_part = part.get_next();
     let rhs      = lhs_part.get_next().next;
@@ -671,23 +671,32 @@ fn as_types_u24_u8(part: LinePart) -> bool {
             part.ln_no, lhs, vartype)
     }
 
-    if !fn_args::is_type_u8(&rhs_part) {
-        println!(
-            "ERROR: ln:{} EQUALS: Expected a u8 type; got `{}` instead.",
-            part.ln_no, rhs);
-        return true;
-    }
-    match fn_args::get_u8_value_str(&rhs_part) {
-        Some(val_str) => { rhs_res = val_str; },
-        None => {
-            println!("ERROR: ln:{} Failed to get u8 value of `{}`",
-                part.ln_no, rhs_part.next);
+    if bool_as_u8 {
+        rhs_res = get::var_fullname(&rhs_part.next).clone();
+    } else {
+        if !fn_args::is_type_u8(&rhs_part) {
+            println!(
+                "ERROR: ln:{} EQUALS: Expected a u8 type; got `{}` instead.",
+                part.ln_no, rhs);
             return true;
-        },
-    };
+        }
+        match fn_args::get_u8_value_str(&rhs_part) {
+            Some(val_str) => { rhs_res = val_str; },
+            None => {
+                println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+                    part.ln_no, rhs_part.next);
+                return true;
+            },
+        };
+    }
 
-    outputs::mainfn_append(&format!("   ; equals__u24_u8 {} {}",
-        lhs, rhs));
+    if bool_as_u8 {
+        outputs::mainfn_append(&format!("   ; equals__u24_bool {} {}",
+            lhs, rhs));
+    } else {
+        outputs::mainfn_append(&format!("   ; equals__u24_u8 {} {}",
+            lhs, rhs));
+    }
 
     if rhs_res.starts_with("#") {
         let rhs_val = &rhs_res[1..].parse::<i64>().unwrap();
@@ -1410,7 +1419,7 @@ pub fn now(part: LinePart) -> bool {
         return as_types_u16ptr_u16(part);
 
     } else if part.next == "equals__u24_u8" {
-        return as_types_u24_u8(part);
+        return as_types_u24_u8(part, false);
 
     } else if part.next == "equals__u24_u16" {
         return as_types_u24_u16(part);
@@ -1435,6 +1444,9 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "equals__u16_bool" {
         return as_types_u16_u8(part, true);
+
+    } else if part.next == "equals__u24_bool" {
+        return as_types_u24_u8(part, true);
 
     } else {
         println!(

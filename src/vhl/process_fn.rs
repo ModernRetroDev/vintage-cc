@@ -108,6 +108,16 @@ pub fn now(part: LinePart, line: &str) -> bool {
                             "    var__u8 _arg_{}__{}",
                             fn_arg.arg_pos, fn_arg.arg_name));
                     },
+                    "u16" => {
+                        outputs::lines_vardecl_push(&format!(
+                            "    var__u16 _arg_{}__{}",
+                            fn_arg.arg_pos, fn_arg.arg_name));
+                    },
+                    "u24" => {
+                        outputs::lines_vardecl_push(&format!(
+                            "    var__u24 _arg_{}__{}",
+                            fn_arg.arg_pos, fn_arg.arg_name));
+                    },
                     "file" => {
                         outputs::lines_vardecl_push(&format!(
                             "    ptr__file _arg_{}__{}",

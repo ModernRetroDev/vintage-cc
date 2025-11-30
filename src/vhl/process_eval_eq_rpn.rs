@@ -165,16 +165,18 @@ fn eval_is_decrement(part: LinePart) -> bool {
 }
 
 pub fn now(part: LinePart) -> bool {
-    let     varname:      String;
-    let     var_is_ref:   bool;
-    let     var_is_deref: bool;
-    let mut next:         LinePart;
-    let mut eval_parts:   Vec<String>  = Vec::new();
-    let mut cur_stk_sz:   u8 = 0;
-    let mut req_stk_sz:   u8 = 0;
-    let mut req_elem_sz:  u8;
-    let mut terminated:   bool = false;
-    let mut deref_btype:  String = "".to_string();
+    let     varname:       String;
+    let     var_is_ref:    bool;
+    let     var_is_deref:  bool;
+    let mut sugar:         Option<String> = None;
+    let mut next:          LinePart;
+    let mut eval_parts:    Vec<String>  = Vec::new();
+    let mut trailing_eval: Option<String> = None;
+    let mut cur_stk_sz:    u8 = 0;
+    let mut req_stk_sz:    u8 = 0;
+    let mut req_elem_sz:   u8;
+    let mut terminated:    bool = false;
+    let mut deref_btype:   String = "".to_string();
 
     if part.next.starts_with("@") {
         var_is_ref = true;
@@ -196,11 +198,20 @@ pub fn now(part: LinePart) -> bool {
     }
 
     next = part.get_next();
-    if next.next != "=" {
-        println!(
-            "ERROR: ln:{} Eval RPN must have `=` follow a variable name, not `{}`.",
-            part.ln_no, next.next);
-        return true;
+    match &next.next[..] {
+        "="   => {},
+        "+="  => { sugar = Some("+=".to_string()) },
+        "-="  => { sugar = Some("-=".to_string()) },
+        "|="  => { sugar = Some("|=".to_string()) },
+        "&="  => { sugar = Some("&=".to_string()) },
+        "<<=" => { sugar = Some("<<=".to_string()) },
+        ">>=" => { sugar = Some(">>=".to_string()) },
+        _    => {
+            println!(
+                "ERROR: ln:{} Eval RPN must have `=` follow a variable name, not `{}`.",
+                part.ln_no, next.next);
+            return true;
+        }
     }
 
     //------------------------------------------------------------------------//
@@ -297,6 +308,34 @@ pub fn now(part: LinePart) -> bool {
         }
     }
 
+    match sugar {
+        Some(op) => {
+            eval_parts.push(varname.clone());
+            match &op[..] {
+                "+=" => {
+                    trailing_eval = Some("+".to_string());
+                },
+                "-=" => {
+                    trailing_eval = Some("-".to_string());
+                },
+                "|=" => {
+                    trailing_eval = Some("|".to_string());
+                },
+                "&=" => {
+                    trailing_eval = Some("&".to_string());
+                },
+                "<<=" => {
+                    trailing_eval = Some("<<".to_string());
+                },
+                ">>=" => {
+                    trailing_eval = Some(">>".to_string());
+                },
+                _ => {},
+            }
+        },
+        None => {},
+    }
+
     //------------------------------------------------------------------------//
     // Else: Operation is more complicated; a stack will be required.         //
     //------------------------------------------------------------------------//
@@ -328,6 +367,13 @@ pub fn now(part: LinePart) -> bool {
         }
 
         eval_parts.push(trimmed.clone());
+    }
+
+    match trailing_eval {
+        Some(op) => {
+            eval_parts.push(op.clone());
+        },
+        None => {},
     }
 
     //------------------------------------------------------------------------//

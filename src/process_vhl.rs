@@ -76,8 +76,11 @@ fn line_is_eval_eq_rpn(ln_no: u64, line: &str) -> bool {
         return false;
     }
 
-    if rpn_eq.next == "=" {
-        return true
+    match &rpn_eq.next[..] {
+        "=" | "+=" | "-=" | "&=" | "|=" | "<<=" | ">>=" => {
+            return true
+        },
+        _ => {},
     }
 
     return false

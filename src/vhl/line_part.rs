@@ -94,8 +94,6 @@ impl LinePart {
                 None => {}
 
             }
-
-            println!("varname = `{}`", varname);
         }
         return false
     }
