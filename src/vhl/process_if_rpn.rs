@@ -129,11 +129,11 @@ pub fn now(part: LinePart) -> bool {
 
         match epart_type {
             Some(vtype) => {
-                if vtype == "u16" {
+                if vtype == "u16" || vtype == "u16:ptr"  {
                     if req_elem_sz < 2 {
                         req_elem_sz = 2;
                     }
-                } else if vtype == "u24" {
+                } else if vtype == "u24" || vtype == "u24:ptr" {
                     if req_elem_sz < 3 {
                         req_elem_sz = 3;
                     }
@@ -224,7 +224,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -252,7 +252,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (3).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -280,7 +280,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (4).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -308,7 +308,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (5).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -336,7 +336,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (6).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -364,7 +364,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (7).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -399,7 +399,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (8).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -434,7 +434,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (9).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -469,7 +469,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (10).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -504,7 +504,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (11).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -539,7 +539,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (12).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -574,7 +574,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (13).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -609,7 +609,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2*).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (14).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -630,13 +630,24 @@ pub fn now(part: LinePart) -> bool {
             get_evalpart_basetype(part.ln_no, &epart);
         let epart_ptr_str = match is_direct_deref(&epart) {
             true  => { "ptr".to_string() },
-            false => { "".to_string() },
+            false => {
+                match epart_type {
+                    Some(ref epart_str) => {
+                        if epart_str.ends_with(":ptr") {
+                            "ptr".to_string()
+                        } else {
+                            "".to_string()
+                        }
+                    },
+                    None => { "".to_string() },
+                }
+            },
         };
 
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" {
+                if vtype == "u8" || vtype == "u8:ptr" {
                     match fn_args::get_u8_value_str(part.ln_no, epart, true) {
                         Some(u8val) => {
                             resolved_arg = u8val.clone();
@@ -671,7 +682,7 @@ pub fn now(part: LinePart) -> bool {
                             return true;
                         },
                     }
-                } else if vtype == "u16" {
+                } else if vtype == "u16" || vtype == "u16:ptr" {
                     match fn_args::get_u16_value_str(part.ln_no, epart, true) {
                         Some(u16val) => {
                             resolved_arg = u16val.clone();
@@ -696,12 +707,12 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (15).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
                     }
-                } else if vtype == "u24" {
+                } else if vtype == "u24" || vtype == "u24:ptr"  {
                     match fn_args::get_u24_value_str(part.ln_no, epart, true) {
                         Some(u24val) => {
                             resolved_arg = u24val.clone();
@@ -721,7 +732,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (2).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (16).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -753,7 +764,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (4).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (17).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -772,7 +783,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (4).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (18).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -786,7 +797,7 @@ pub fn now(part: LinePart) -> bool {
                         },
                         _ => {
                             println!(
-                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (4).",
+                                "ERROR: ln:{} Stack elements of size `{}` not currently supported (19).",
                                 part.ln_no, req_elem_sz);
                             return true;
                         },
@@ -817,7 +828,7 @@ pub fn now(part: LinePart) -> bool {
         },
         _ => {
             println!(
-                "ERROR: ln:{} Stack elements of size `{}` not currently supported (3_3).",
+                "ERROR: ln:{} Stack elements of size `{}` not currently supported (20).",
                 part.ln_no, req_elem_sz);
             return true;
         }

@@ -173,11 +173,11 @@ pub fn now(part: LinePart) -> bool {
 
         match epart_type {
             Some(vtype) => {
-                if vtype == "u16" {
+                if vtype == "u16" || vtype == "u16:ptr"  {
                     if req_elem_sz < 2 {
                         req_elem_sz = 2;
                     }
-                } else if vtype == "u24" {
+                } else if vtype == "u24" || vtype == "u24:ptr" {
                     if req_elem_sz < 3 {
                         req_elem_sz = 3;
                     }
@@ -680,13 +680,24 @@ pub fn now(part: LinePart) -> bool {
             get_evalpart_basetype(part.ln_no, &epart);
         let epart_ptr_str = match is_direct_deref(&epart) {
             true  => { "ptr".to_string() },
-            false => { "".to_string() },
+            false => {
+                match epart_type {
+                    Some(ref epart_str) => {
+                        if epart_str.ends_with(":ptr") {
+                            "ptr".to_string()
+                        } else {
+                            "".to_string()
+                        }
+                    },
+                    None => { "".to_string() },
+                }
+            },
         };
 
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" {
+                if vtype == "u8" || vtype == "u8:ptr" {
                     match fn_args::get_u8_value_str(part.ln_no, epart, true) {
                         Some(u8val) => {
                             resolved_arg = u8val.clone();
@@ -721,7 +732,7 @@ pub fn now(part: LinePart) -> bool {
                             return true;
                         }
                     }
-                } else if vtype == "u16" {
+                } else if vtype == "u16" || vtype == "u16:ptr" {
                     match fn_args::get_u16_value_str(part.ln_no, epart, true) {
                         Some(u16val) => {
                             resolved_arg = u16val.clone();
@@ -751,7 +762,7 @@ pub fn now(part: LinePart) -> bool {
                             return true;
                         }
                     }
-                } else if vtype == "u24" {
+                } else if vtype == "u24" || vtype == "u24:ptr"  {
                     match fn_args::get_u24_value_str(part.ln_no, epart, true) {
                         Some(u24val) => {
                             resolved_arg = u24val.clone();

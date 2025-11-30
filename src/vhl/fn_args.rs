@@ -183,9 +183,9 @@ fn get_uint_literal_value(epart: &str) -> Option<u64> {
 pub fn is_type_u8(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
     match get_evalpart_basetype(ln_no, epart, deref_okay) {
         Some(btype) => {
-            if btype == "u8" {
+            if btype == "u8" || btype == "u8:ptr" {
                 return true;
-            } else if btype == "char" {
+            } else if btype == "char" || btype == "char:ptr" {
                 return true;
             }
             return false;
@@ -240,7 +240,7 @@ pub fn get_u8_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<Str
 pub fn is_type_u16(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
     match get_evalpart_basetype(ln_no, epart, deref_okay) {
         Some(btype) => {
-            if btype == "u16" {
+            if btype == "u16" || btype == "u16:ptr" {
                 return true;
             }
             return false;
@@ -295,7 +295,7 @@ pub fn get_u16_value_str(ln_no: u64, epart: &str, deref_okay: bool) -> Option<St
 pub fn is_type_u24(ln_no: u64, epart: &str, deref_okay: bool) -> bool {
     match get_evalpart_basetype(ln_no, epart, deref_okay) {
         Some(btype) => {
-            if btype == "u24" {
+            if btype == "u24" || btype == "u24:ptr" {
                 return true;
             }
             return false;
