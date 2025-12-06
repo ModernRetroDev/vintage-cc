@@ -151,8 +151,25 @@ pub fn now(part: LinePart, line: &str) -> bool {
 
             if fname_arg.starts_with("\"") {
                 outputs::lines_main_push(&format!("    # {}", line.trim()));
-                outputs::lines_main_push(
-                    &format!("    setup__file .{} 'w' \"@:{}", varname, &fname_arg[1..]));
+                match &outputs::get_platform()[..] {
+                    "c64" => {
+                        let fname_len = fname_arg.len();
+                        outputs::lines_main_push(
+                            &format!("    setup__file .{} 'w' \"@0:{},S,W\"", 
+                                varname, &fname_arg[1..fname_len-1]));
+                    },
+                    "x16" => {
+                        outputs::lines_main_push(
+                            &format!("    setup__file .{} 'w' \"@:{}", 
+                                varname, &fname_arg[1..]));
+                    },
+                    _ => {
+                        println!(
+                            "ERROR: ln:{} Unsupported platform.",
+                            part.ln_no);
+                        return true;
+                    }
+                }
                 outputs::lines_main_push(
                     &format!("    open__file .{}", varname));
                 outputs::lines_main_push("");

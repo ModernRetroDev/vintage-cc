@@ -1,0 +1,33 @@
+fn main() {
+	// declarations
+	let ctr: u8;
+	let count: [u8;5] = [1,2,3,4,5];
+	let res: u8;
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# ARRAY VALUES USED IN MATHEMATICAL CALCULATIONS #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	ctr = 0;
+	outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("count[{}] = {}", ctr, count[ctr]);
+	outfile.writeln();
+
+	outfile.writeln("   1     +    3     +    5     = 9");
+	outfile.writeln("count[0] + count[2] + count[4] = ", endl=false);
+	res = count[0] count[2] count[4] + +;
+	outfile.writeln("{}", res);
+
+	outfile.close();
+}

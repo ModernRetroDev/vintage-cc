@@ -1,0 +1,12 @@
+fn print_hello() {
+	println("Hello world!");
+}
+
+fn main() {
+	println("#-------------------------------------------------#");
+	println("# CALL A SIMPLE FUNCTION (NO ARGS, RETURN VALUES) #");
+	println("#-------------------------------------------------#");
+	println();
+
+	print_hello();
+}

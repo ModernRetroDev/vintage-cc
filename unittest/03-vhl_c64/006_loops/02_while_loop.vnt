@@ -1,0 +1,29 @@
+fn main() {
+	// declarations
+	let ctr: u8;
+	let array: [u8;10] = [2,4,6,8,10,12,14,16,18,20];
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	ctr = 0;
+	while ctr 10 < {
+		outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("* iterate over a while loop 0x14 (20) times; print ctr")
+	ctr = 0;
+	while ctr 0x14 < {
+		ctr = ctr 1 +;
+	}
+	outfile.writeln("ctr = {}", ctr);
+
+	outfile.close();
+}

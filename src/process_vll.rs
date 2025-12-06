@@ -2,6 +2,8 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
+use crate::runconfig;
+
 use crate::vll::line_part::LinePart;
 
 use crate::vll::builtins;
@@ -52,7 +54,7 @@ use crate::vll::outputs;
 
 
 fn show_usage() {
-	println!("Usage: vintagecc FILE");
+	println!("Usage: vintagecc [--target=] FILE");
 	println!();
 }
 
@@ -416,8 +418,10 @@ fn process_source(s: String) {
 	outputs::write();
 }
 
-pub fn process_vll() {
+pub fn process_vll(cfg: runconfig::RunCfg) {
 	let args: Vec<_> = env::args().collect();
+	let target_str: String;
+	let source_str: String;
 	let source: Option<String>;
 
 	if args.len() == 1 {
@@ -425,9 +429,11 @@ pub fn process_vll() {
 		return;
 	}
 
-	outputs::set_platform("x16");
+	let platform: String = cfg.target.clone().unwrap();
+	outputs::set_platform(&platform);
 
-	source = load_source_file(&args[1]);
+	let srcfile: String = cfg.srcfile.clone().unwrap();
+	source = load_source_file(&srcfile);
 	match source {
 		None => return,
 		Some(source) => process_source(source),

@@ -40,8 +40,11 @@ fn get_fn_requirements(fnname: &str) -> Option<Vec<String>> {
 
     match get_builtin_path() {
         Some(bpath) => {
-            fpath = format!("{}/{}/6502/{}.s", 
-                bpath, outputs::get_platform(), fnname);
+            fpath = format!("{}/{}/{}/{}.s", 
+                bpath,
+                outputs::get_platform(),
+                outputs::get_cpuarch(),
+                fnname);
         },
         None => {
             return None;
@@ -85,8 +88,11 @@ fn get_fn_lines(fnname: &str) -> Option<Vec<String>> {
 
     match get_builtin_path() {
         Some(bpath) => {
-            fpath = format!("{}/{}/6502/{}.s", 
-                bpath, outputs::get_platform(), fnname);
+            fpath = format!("{}/{}/{}/{}.s", 
+                bpath, 
+                outputs::get_platform(), 
+                outputs::get_cpuarch(),
+                fnname);
         },
         None => {
             return None;

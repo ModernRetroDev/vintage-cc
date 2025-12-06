@@ -1,0 +1,56 @@
+fn main() {
+	// declarations
+	let a: u16;
+	let outfile: file;
+	let b: u8  = 0xA1;
+	//           ^^^^------- 161
+	let c: u16 = 0x10A1;
+	//           ^^^^^^----- 4257
+	let d: u8  = 0b11111111;
+	//           ^^^^------- 255
+	let e: u16 = 0b111111111;
+	//           ^^^^------- 511
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("*** print out a few binary u16 values***");
+	a = 0x0000;
+	outfile.writeln(" * 0x0000     (0) :   {}", a);
+	a = 0x0001;
+	outfile.writeln(" * 0x0001     (1) :   {}", a);
+	a = 0x0002;
+	outfile.writeln(" * 0x0002     (2) :   {}", a);
+	a = 0x0004;
+	outfile.writeln(" * 0x0004     (4) :   {}", a);
+	a = 0x0008;
+	outfile.writeln(" * 0x0008     (8) :   {}", a);
+	a = 0x0010;
+	outfile.writeln(" * 0x0010    (16) :   {}", a);
+	a = 0x0020;
+	outfile.writeln(" * 0x0020    (32) :   {}", a);
+	a = 0x0040;
+	outfile.writeln(" * 0x0040    (64) :   {}", a);
+	a = 0x0080;
+	outfile.writeln(" * 0x0080   (128) :   {}", a);
+	a = 0x0100;
+	outfile.writeln(" * 0x0100   (256) :   {}", a);
+	a = 0xFFFF;
+	outfile.writeln(" * 0xFFFF (65535) :   {}", a);
+	outfile.writeln();
+
+	outfile.writeln("*** print a u8 and u16 initialized w/hex values***");
+	outfile.writeln(" b = 0xA1   (161);  {}", b);
+	outfile.writeln(" c = 0x10A1 (4257); {}", c);
+	outfile.writeln();
+
+	outfile.writeln("*** print a u8 and u16 initialized w/binary values***");
+	outfile.writeln(" d = 0b11111111  (255); {}", d);
+	outfile.writeln(" e = 0b111111111 (511); {}", e);
+
+	outfile.close();
+}

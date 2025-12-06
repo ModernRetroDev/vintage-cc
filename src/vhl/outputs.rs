@@ -500,7 +500,7 @@ impl FnBlock {
 
 static mut ACTIVE_FN:       String = String::new();
 static mut ACTIVE_DEFBLK:   String = String::new();
-// static mut PLATFORM:        String = String::new();
+static mut PLATFORM:        String = String::new();
 static mut OUTPUT_FILENAME: String = String::new();
 static mut DEF_BLOCKS:      Vec<DefBlock> = Vec::new();
 static mut FN_BLOCKS:       Vec<FnBlock> = Vec::new();
@@ -671,6 +671,30 @@ pub fn set_active_defblk(defblk_name: &str) {
         ACTIVE_DEFBLK = defblk_name.to_string();
 
         DEF_BLOCKS.push(new_def_block(defblk_name));
+    }
+}
+
+pub fn get_platform() -> String {
+    unsafe {
+        return PLATFORM.clone();
+    }
+}
+
+pub fn set_platform(platform: &str) {
+    match &platform[..] {
+        "c64" => {
+            unsafe {
+                PLATFORM = platform.to_string();
+            }
+        },
+        "x16" => {
+            unsafe {
+                PLATFORM = platform.to_string();
+            }
+        },
+        _ => {
+            println!("TODO: Unsupported platform `{}`.", &platform);
+        }
     }
 }
 

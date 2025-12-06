@@ -1,0 +1,58 @@
+fn main() {
+	// declarations
+	let a: u8 = 5;
+	let b: u8 = 7;
+	let c: u8 = 0;
+	let d: u16 = 1000;
+	let e: u16 = 500;
+	let f: u16 = 0;
+	let outfile:    file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#-------------------------------------#");
+	outfile.writeln("# TEST OUT RPN EVALUATION (I.E. MATH) #");
+	outfile.writeln("#-------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("RPN math using u8 values");
+	outfile.writeln("------------------------");
+	outfile.writeln("a = {}, b = {}", a, b);
+	outfile.writeln();
+	c = a b +;
+	outfile.writeln("a ({}) + b ({}) = {}", a, b, c);
+	outfile.writeln();
+
+	c = a b + b + a -;
+	outfile.writeln("a b + b + a - = {}", c);
+	outfile.writeln();
+
+	c = a b b + + a -;
+	outfile.writeln("a b b + + a - = {}", c);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("RPN math using u16 values");
+	outfile.writeln("-------------------------");
+	outfile.writeln("d = {}, e = {}", d, e);
+	outfile.writeln();
+
+	f = d e +;
+	outfile.writeln("d e + = {}", f);
+	outfile.writeln();
+
+	f = d d e + +;
+	outfile.writeln("d d e + + = {}", f);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("RPN math using u8/u16 values");
+	outfile.writeln("----------------------------");
+	outfile.writeln();
+
+	f = d e a + +;
+	outfile.writeln("d e a + + = {}", f);
+	outfile.writeln();
+
+	outfile.close();
+}

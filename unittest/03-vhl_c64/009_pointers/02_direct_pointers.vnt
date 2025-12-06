@@ -1,0 +1,106 @@
+fn main() {
+	let outfile: file;
+	let bnk_u8:  u8@  = 0x0010;
+	let bnk_u16: u16@ = 0x0011;
+	let chk_u8:  u8@;
+	let chk_u16: u16@;
+	let std_u8:  u8;
+	let std_u16: u16;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#-----------------------------------------------------#");
+	outfile.writeln("# WRITE VALUES TO MEMORY ADDRESSES AND READ THEM BACK #");
+	outfile.writeln("#-----------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("Set some initial values for 0x0010 and 0x0011");
+	outfile.writeln("---------------------------------------------");
+	outfile.writeln();
+
+	// values are dereferenced by default; both when setting and getting
+	bnk_u8  = 55;
+	bnk_u16 = 1337;
+
+	outfile.writeln("bnk_u8  @{} = `{}`", @bnk_u8,  bnk_u8);
+	outfile.writeln("bnk_u16 @{} = `{}`", @bnk_u16, bnk_u16);
+	outfile.writeln();
+
+	std_u8 = bnk_u8;
+	outfile.writeln("std_u8 = bnk_u8 = {}", std_u8);
+
+	std_u8 = bnk_u8 10 +;
+	outfile.writeln("std_u8 = bnk_u8 + 10 = {}", std_u8);
+	outfile.writeln();
+
+	outfile.writeln("Directly set values using `rpn_eval` expressions");
+	outfile.writeln("---------------------------------------------------");
+	outfile.writeln();
+
+	u8@:0x0018 = 0xFF;
+	@chk_u8 = 0x0018;
+	outfile.writeln("u8@0x0018 = 0xFF; 0x{:X}", chk_u8);
+	u16@:0x001A = 6969;
+	@chk_u16 = 0x001A;
+	outfile.writeln("u16@0x001A = 6969; {}", chk_u16);
+	outfile.writeln();
+
+	outfile.writeln("Directly access values using `rpn_eval` expressions");
+	outfile.writeln("---------------------------------------------------");
+	outfile.writeln();
+
+	std_u8 = u8@:0x0010;
+	outfile.writeln("std_u8 = u8@0x0010 = {}", std_u8);
+	std_u8 = u8@:0x0010 10 +;
+	outfile.writeln("std_u8 = u8@0x0010 + 10 = {}", std_u8);
+
+	std_u16 = u16@:0x0011;
+	outfile.writeln("std_u16 = u8@0x0011 = {}", std_u16);
+	std_u16 = u16@:0x0011 200 +;
+	outfile.writeln("std_u16 = u8@0x0011 + 200 = {}", std_u16);
+	outfile.writeln();
+
+	outfile.writeln("Directly access values using `if` expressions");
+	outfile.writeln("---------------------------------------------");
+	outfile.writeln();
+
+	outfile.writeln("IS u8@0x0010 == 55: ... ", endl=false);
+	if u8@:0x0010 55 == {
+		outfile.writeln("YES");
+	} else {
+		outfile.writeln("NO");
+	}
+
+	outfile.writeln("IS u16@0x0011 == 1337: ... ", endl=false);
+	if u16@:0x0011 1337 == {
+		outfile.writeln("YES");
+	} else {
+		outfile.writeln("NO");
+	}
+	outfile.writeln();
+
+	outfile.writeln("Directly access values using `while` expressions");
+	outfile.writeln("------------------------------------------------");
+	outfile.writeln();
+
+	outfile.writeln("for (std_u8 = 0; std_u8 < u8@:0x0010; std_u8 += 10) ...");
+	outfile.writeln();
+	std_u8 = 0;
+	while std_u8 u8@:0x0010 < {
+		outfile.writeln(" * std_u8 = {}", std_u8);
+		std_u8 = std_u8 10 +;
+	}
+	outfile.writeln(" * break");
+	outfile.writeln();
+
+	outfile.writeln("for (std_u16 = 0; std_u16 < u16@:0x0011; std_u16 += 100) ...");
+	outfile.writeln();
+	std_u16 = 0;
+	while std_u16 u16@:0x0011 < {
+		outfile.writeln(" * std_u16 = {}", std_u16);
+		std_u16 = std_u16 100 +;
+	}
+	outfile.writeln(" * break");
+
+	outfile.close();
+}

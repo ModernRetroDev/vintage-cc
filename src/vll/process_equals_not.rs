@@ -36,6 +36,16 @@ fn as_types_bool_bool(part: LinePart) -> bool {
         rhs_res = format!("#{}", &rhs);
     }
 
+    let branch_ins: String = match &outputs::get_platform()[..] {
+        "c64" => { "jmp".to_string() }
+        "x16" => { "bra".to_string() }
+        _     => {
+            println!("ERROR: ln:{} EVAL_EQ_NOT: Unhandled platform `{}`",
+                part.ln_no, outputs::get_platform());
+            return true;
+        }
+    };
+
     outputs::mainfn_append(&format!("   ; equals_not__bool_bool {retvar} {rhs}"));
 
     evalname     = get::unique_eval_label();
@@ -46,7 +56,7 @@ fn as_types_bool_bool(part: LinePart) -> bool {
 
     outputs::mainfn_append(&format!("   beq {evalname}"));
     outputs::mainfn_append(         "   lda #0; false");
-    outputs::mainfn_append(&format!("   bra {evalname_out}"));
+    outputs::mainfn_append(&format!("   {branch_ins} {evalname_out}"));
     outputs::mainfn_append(&format!("{evalname}:"));
     outputs::mainfn_append(         "   lda #1; true");
     outputs::mainfn_append(&format!("{evalname_out}:"));

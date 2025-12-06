@@ -255,9 +255,29 @@ impl FnBlock {
             self.lines_main.insert(1, "; MAIN FUNCTION                                          ;".to_string());
             self.lines_main.insert(2, ";--------------------------------------------------------;".to_string());
             self.lines_main.insert(3, "fn_main: ".to_string());
-            self.lines_main.insert(4, "   ; set output mode to ISO".to_string());
-            self.lines_main.insert(5, "   lda #$0F".to_string());
-            self.lines_main.insert(6, "   jsr BSOUT".to_string());
+
+            // match 
+            match &get_platform()[..] {
+                "c64" => {
+                    self.lines_main.insert(4,
+                        "   ; change character set to lower".to_string());
+                    self.lines_main.insert(5,
+                        "   lda 23".to_string());
+                    self.lines_main.insert(6,
+                        "   sta 53272".to_string());
+                },
+                "x16" => {
+                    self.lines_main.insert(4,
+                        "   ; set output mode to ISO".to_string());
+                    self.lines_main.insert(5,
+                        "   lda #$0F".to_string());
+                    self.lines_main.insert(6,
+                        "   jsr BSOUT".to_string());
+                },
+                _ => {
+                    println!("WARNING: Unhandled Platform in `write_output`.");
+                }
+            }
             unsafe {
                 if HAS_INIT_FN {
                     self.lines_main.insert(7,  "".to_string());
@@ -388,7 +408,7 @@ impl FnBlock {
                 self.lines_vardefs.push(format!(
                     "   .byte $00 ; mode (u8)"));
                 self.lines_vardefs.push(format!(
-                    "   .byte $00 ; device (u8)"));
+                    "   .byte $08 ; device (u8)"));
                 self.lines_vardefs.push(format!(
                     "   .byte $00 ; channel (u8)"));
                 self.lines_vardefs.push(format!(
@@ -515,6 +535,7 @@ impl FnBlock {
 static mut HAS_INIT_FN:         bool = false;
 static mut ACTIVE_FN:           String = String::new();
 static mut PLATFORM:            String = String::new();
+static mut CPU_ARCH:            String = String::new();
 static mut OUTPUT_FILENAME:     String = String::new();
 static mut FN_BLOCKS:           Vec<FnBlock> = Vec::new();
 static mut LINES_PLATFORM_BP:   Vec<String>  = Vec::new();
@@ -570,6 +591,12 @@ pub fn get_platform() -> String {
     }
 }
 
+pub fn get_cpuarch() -> String {
+    unsafe {
+        return CPU_ARCH.clone();
+    }
+}
+
 pub fn set_platform(platform: &str) {
     unsafe {
         LINES_PLATFORM_BP = Vec::new();
@@ -577,20 +604,43 @@ pub fn set_platform(platform: &str) {
         LINES_PLATFORM_BP.push("; PLATFORM BOILERPLATE                                   ;".to_string());
         LINES_PLATFORM_BP.push(";--------------------------------------------------------;".to_string());
     }
-    if platform == "x16" {
-        unsafe {
-            PLATFORM = platform.to_string();
+    match &platform[..] {
+        "c64" => {
+            unsafe {
+                CPU_ARCH = "6510".to_string();
+                PLATFORM = platform.to_string();
 
-            LINES_PLATFORM_BP.push(".include \"x16.inc\"".to_string());
-            LINES_PLATFORM_BP.push("".to_string());
-            LINES_PLATFORM_BP.push(".org $080D".to_string());
-            LINES_PLATFORM_BP.push(".segment \"STARTUP\"".to_string());
-            LINES_PLATFORM_BP.push(".segment \"INIT\"".to_string());
-            LINES_PLATFORM_BP.push(".segment \"ONCE\"".to_string());
-            LINES_PLATFORM_BP.push(".segment \"CODE\"".to_string());
-            LINES_PLATFORM_BP.push("".to_string());
-            LINES_PLATFORM_BP.push("   jmp fn_main".to_string());
-            LINES_PLATFORM_BP.push("".to_string());
+                LINES_PLATFORM_BP.push(".include \"x16.inc\"".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+                LINES_PLATFORM_BP.push(".org $080D".to_string());
+                LINES_PLATFORM_BP.push(".segment \"STARTUP\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"INIT\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"ONCE\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"CODE\"".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+                LINES_PLATFORM_BP.push("   jmp fn_main".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+            }
+        },
+        "x16" => {
+            unsafe {
+                CPU_ARCH = "6502".to_string();
+                PLATFORM = platform.to_string();
+
+                LINES_PLATFORM_BP.push(".include \"x16.inc\"".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+                LINES_PLATFORM_BP.push(".org $080D".to_string());
+                LINES_PLATFORM_BP.push(".segment \"STARTUP\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"INIT\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"ONCE\"".to_string());
+                LINES_PLATFORM_BP.push(".segment \"CODE\"".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+                LINES_PLATFORM_BP.push("   jmp fn_main".to_string());
+                LINES_PLATFORM_BP.push("".to_string());
+            }
+        },
+        _ => {
+            println!("TODO: Unsupported platform `{}`.", &platform);
         }
     }
 }

@@ -1,0 +1,72 @@
+fn main() {
+	// declarations
+	let ctr:  u8;
+	let str1: str = "Hello World!";
+	let next: char;
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# PRINT ALL VALUES FROM WITHIN A STRING #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("# for next in str1 ...");
+	ctr = 0;
+	for next in str1 {
+		outfile.writeln("str1[{}] = {}", ctr, next);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _ in str1 ...");
+	ctr = 0;
+	for _ in str1 {
+		outfile.writeln("str1[{}] = {}", ctr, str1[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for next in [all] str1");
+	ctr = 0;
+	for next in [all] str1 {
+		outfile.writeln("str1[{}] = {}", ctr, next);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _ in [all] str1");
+	ctr = 0;
+	for _ in [all] str1 {
+		outfile.writeln("str1[{}] = {}", ctr, str1[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, next in [enumerate] str1");
+	for ctr, next in [enumerate] str1 {
+		outfile.writeln("str1[{}] = {}", ctr, next);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _, next in [enumerate] str1");
+	for _, next in [enumerate] str1 {
+		outfile.writeln("str1[?] = {}", next);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, _ in [enumerate] str1");
+	for ctr, _ in [enumerate] str1 {
+		outfile.writeln("str1[{}] = ?", ctr);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, _ in [enumerate,all] str1");
+	for ctr, _ in [enumerate,all] str1 {
+		outfile.writeln("str1[{}] = ?", ctr);
+	}
+	outfile.writeln();
+
+	outfile.close();
+}

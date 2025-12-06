@@ -2,6 +2,8 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
+use crate::runconfig;
+
 use crate::vhl::line_part::LinePart;
 use crate::vhl::preproc;
 
@@ -276,7 +278,7 @@ fn process_source(s: String) -> bool {
     return false;
 }
 
-pub fn process_vhl() {
+pub fn process_vhl(cfg: runconfig::RunCfg) {
     let args: Vec<_> = env::args().collect();
     let source: Option<String>;
     let failed: bool;
@@ -286,9 +288,11 @@ pub fn process_vhl() {
         return;
     }
 
-    // outputs::set_platform("x16");
+    let platform: String = cfg.target.clone().unwrap();
+    outputs::set_platform(&platform);
 
-    source = load_source_file(&args[1]);
+    let srcfile: String = cfg.srcfile.clone().unwrap();
+    source = load_source_file(&srcfile);
     match source {
         None => { failed = true; },
         Some(source) => failed = process_source(source),

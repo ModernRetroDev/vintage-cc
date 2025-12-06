@@ -1,0 +1,43 @@
+fn print_sum(a: u8, b: u8, outfile: file) {
+	let combined: u8 = 0;
+
+	combined = a b +;
+	outfile.writeln("{} + {} = {}", a, b, combined);
+}
+
+fn main() {
+	let x: u8 = 10;
+	let y: u8 = 20;
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#---------------------------------------------------#");
+	outfile.writeln("# CALL A FUNCTION (WITH ARGS, BUT NO RETURN VALUES) #");
+	outfile.writeln("#---------------------------------------------------#");
+	outfile.writeln();
+	outfile.writeln("x = {}", x);
+	outfile.writeln("y = {}", y);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("print_sum(5, 3)");
+	outfile.writeln("---------------");
+	print_sum(5, 3, outfile);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("print_sum(x, y)");
+	outfile.writeln("---------------");
+	print_sum(x, y, outfile);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("print_sum(5, x)")
+	outfile.writeln("---------------");
+	print_sum(5, x, outfile);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.close();
+}

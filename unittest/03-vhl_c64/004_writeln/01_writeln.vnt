@@ -1,0 +1,16 @@
+fn main() {
+	// declarations
+	let outfile: file;
+
+	// open/create/append
+	outfile.create("UTEST");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# TEST OUT WRITELN FUNCTION (I.E., FILE WRITING) #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("Hello World!");
+
+	outfile.close();
+}

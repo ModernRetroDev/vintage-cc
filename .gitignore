@@ -2,3 +2,7 @@
 *.s.list
 UTEST.PRG
 unittest/02-vhl/*/*.s
+unittest/03-vhl_c64/*/*.s
+unittest/03-vhl_c64/*/*.vll
+unittest/03-vhl_c64/*/*.d64
+unittest/03-vhl_c64/*/utest.prg

@@ -1,0 +1,142 @@
+fn main() {
+	// declarations
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#---------------------------------------------#");
+	outfile.writeln("# TEST OUT CONDITIONALS (IF / ELSE IF / ELSE) #");
+	outfile.writeln("#---------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("if 0x5 (5) < 0x3 (3): ", endl=false);
+	if  0x5  0x3  < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 0x14 (20) - 0xA (10) < 0xF (15): ", endl=false);
+	if 0x14  0xA - 0xF < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("if / elif / else:");
+	outfile.writeln("----------------");
+	outfile.writeln("if 5 < 3; elif 3 < 5; else: ", endl=false);
+
+	if 0x5 0x3 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 0x3 0x5 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+
+
+	outfile.writeln("if 3 < 5; elif 5 < 3; else: ", endl=false);
+	if 0x3 0x5 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 0x5 0x3 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+
+
+
+	outfile.writeln("if 3 < 3; elif 3 < 3; else: ", endl=false);
+	if 0x3 0x3 < {
+		outfile.writeln("TRUE (IF)");
+	} else if 0x3 0x3 < {
+		outfile.writeln("TRUE (ELIF)");
+	} else {
+		outfile.writeln("FALSE (ELSE)");
+	}
+	outfile.writeln();
+	outfile.writeln();
+
+
+	outfile.writeln("other comparison types:");
+	outfile.writeln("-----------------------");
+	outfile.writeln("if 5 > 3: ", endl=false);
+	if 0x5 0x3 > {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 3 > 5: ", endl=false);
+	if 0x3 0x5 > {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 == 5: ", endl=false);
+	if 0x5 0x5 == {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 == 3: ", endl=false);
+	if 0x5 0x3 == {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 != 5: ", endl=false);
+	if 0x5 0x5 != {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 != 3: ", endl=false);
+	if 0x5 0x3 != {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 >= 3: ", endl=false);
+	if 0x5 0x3 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 5 >= 5: ", endl=false);
+	if 0x5 0x5 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 3 >= 5: ", endl=false);
+	if 0x3 0x5 >= {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.close();
+}
