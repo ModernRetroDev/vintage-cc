@@ -1,0 +1,71 @@
+fn main() {
+	// declarations
+	let ctr:   u8;
+	let ctr2:  u8;
+	let undef: [u8;20];
+	let outfile: file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln("# BREAK OUT OF NESTED LOOPS USING A LABELED LOOP #");
+	outfile.writeln("#------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("# break out of named `loop`");
+	ctr  = 0;
+	loop { @outer
+		ctr2 = 0;
+		outfile.writeln("{}:", ctr, endl=false);
+		while ctr2 5 < {
+			outfile.writeln(" {}", ctr2, endl=false);
+
+			if ctr 8 ==   ctr2 3 ==   && {
+				break @outer;
+			}
+			ctr2 = ctr2 1 +;
+		}
+		outfile.writeln("~");
+		ctr = ctr 1 +;
+	}
+	outfile.writeln("!");
+	outfile.writeln();
+
+	outfile.writeln("# break out of named `while` loop");
+	ctr = 0;
+	while ctr 20 < { @outer2
+		ctr2 = 0;
+		outfile.writeln("{}:", ctr, endl=false);
+		while ctr2 5 < {
+			outfile.writeln(" {}", ctr2, endl=false);
+
+			if ctr 8 ==   ctr2 3 ==   && {
+				break @outer2;
+			}
+			ctr2 = ctr2 1 +;
+		}
+		outfile.writeln("~");
+		ctr = ctr 1 +;
+	}
+	outfile.writeln("!");
+	outfile.writeln();
+
+	outfile.writeln("# break out of named `for` loop");
+	for ctr, _ in [enumerate,all] undef { @outer3
+		ctr2 = 0;
+		outfile.writeln("{}:", ctr, endl=false);
+		while ctr2 5 < {
+			outfile.writeln(" {}", ctr2, endl=false);
+
+			if ctr 8 ==   ctr2 3 ==   && {
+				break @outer3;
+			}
+			ctr2 = ctr2 1 +;
+		}
+		outfile.writeln("~");
+	}
+	outfile.writeln("!");
+	outfile.writeln();
+
+	outfile.close();
+}

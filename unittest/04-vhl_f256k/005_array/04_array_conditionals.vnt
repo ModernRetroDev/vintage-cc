@@ -1,0 +1,30 @@
+fn main() {
+	// declarations
+	let a: [u8;5] = [5, 3, 20, 10, 15]; 
+	let outfile: file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# TEST OUT ARRAY VALUES IN CONDITIONALS #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("if 5 < 3: ", endl=false);
+	if a[0]  a[1]  < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("if 20 - 10 < 15: ", endl=false);
+	if a[2]  a[3] - a[4] < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.close();
+}

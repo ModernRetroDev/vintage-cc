@@ -5,6 +5,8 @@ use std::fs::File;
 use std::io::Write;
 use std::sync::{LazyLock, Mutex};
 
+use crate::vll::builtins;
+
 struct FnBlock {
     fn_name:        String,
     module_name:    Option<String>,
@@ -266,6 +268,8 @@ impl FnBlock {
                     self.lines_main.insert(6,
                         "   sta 53272".to_string());
                 },
+                "f256k" => {
+                }
                 "x16" => {
                     self.lines_main.insert(4,
                         "   ; set output mode to ISO".to_string());
@@ -376,11 +380,13 @@ impl FnBlock {
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
                     "   .byte ${:02X}", 0));
+                self.lines_vardefs.push("".to_string());
             } else if vartype == "char".to_string() {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
                 self.lines_vardefs.push(format!(
                     "   .byte ${:02X}", 0));
+                self.lines_vardefs.push("".to_string());
             } else if vartype == "u8".to_string() {
                 self.lines_vardefs.push(format!(
                     "{}: ; type: {}", varname, vartype));
@@ -407,12 +413,24 @@ impl FnBlock {
                         varname, varname));
                 self.lines_vardefs.push(format!(
                     "   .byte $00 ; mode (u8)"));
-                self.lines_vardefs.push(format!(
-                    "   .byte $08 ; device (u8)"));
-                self.lines_vardefs.push(format!(
-                    "   .byte $00 ; channel (u8)"));
-                self.lines_vardefs.push(format!(
-                    "   .byte $00 ; status (u8)"));
+                match &get_platform()[..] {
+                    "f256k" => {
+                        self.lines_vardefs.push(format!(
+                            "   .byte $08 ; drive (u8)"));
+                        self.lines_vardefs.push(format!(
+                            "   .byte $00 ; stream (u8)"));
+                        self.lines_vardefs.push(format!(
+                            "   .byte $00 ; status (u8)"));
+                    },
+                    _ => {
+                        self.lines_vardefs.push(format!(
+                            "   .byte $08 ; device (u8)"));
+                        self.lines_vardefs.push(format!(
+                            "   .byte $00 ; channel (u8)"));
+                        self.lines_vardefs.push(format!(
+                            "   .byte $00 ; status (u8)"));
+                    },
+                }
                 self.lines_vardefs.push(format!(
                     "   .byte $00, $00 ; fname (u16)"));
                 self.lines_vardefs.push("".to_string());
@@ -620,6 +638,41 @@ pub fn set_platform(platform: &str) {
                 LINES_PLATFORM_BP.push("".to_string());
                 LINES_PLATFORM_BP.push("   jmp fn_main".to_string());
                 LINES_PLATFORM_BP.push("".to_string());
+            }
+        },
+        "f256k" => {
+            unsafe {
+                CPU_ARCH = "6502".to_string();
+                PLATFORM = platform.to_string();
+
+                match builtins::get_boilerplate_lines() {
+                    Some(bp_lines) => {
+                        for ln in bp_lines {
+                            LINES_PLATFORM_BP.push(ln);
+                        }
+                    },
+                    None => {}
+                }
+
+                init_append("   ; Set Vintage ERR to FALSE");
+                init_append("   lda #0");
+                init_append("   sta VINTAGE_HAS_ERROR");
+                init_append("");
+                init_append("   ; Set the Vintage IO target to STDOUT");
+                init_append("   lda #VINTAGE_IO_TARGET__STDOUT");
+                init_append("   sta VINTAGE_IO_TARGET");
+                init_append("");
+                init_append("   ; Configure textlayer for use");
+                init_append("   jsr _textlayer__home");
+                init_append("");
+                init_append("   ; Clear the textlayer");
+                init_append("   jsr _textlayer__clear");
+                init_append("");
+                init_append("   ; Initialize F256 event handler");
+                init_append("   lda #<VINTAGE_NEXT_EVENT");
+                init_append("   sta KERNEL_ARGS_EVENTS");
+                init_append("   lda #>VINTAGE_NEXT_EVENT");
+                init_append("   sta KERNEL_ARGS_EVENTS+1");
             }
         },
         "x16" => {
@@ -846,6 +899,12 @@ pub fn mainfn_append(ln: &str) {
 pub fn builtin_append(ln: &str) {
     unsafe {
         LINES_BUILTIN_FNS.push(ln.to_string());
+    }
+}
+
+pub fn init_append(ln: &str) {
+    unsafe {
+        LINES_INIT_FN.push(ln.to_string());
     }
 }
 

@@ -1,0 +1,1 @@
+#------------------------------------## CALL A FUNCTION (WITH STRING ARGS) ##------------------------------------#str1 = `Hello World!`str2 = `Something Else...`print_string(str1)------------------`Hello World!`print_string(str2)------------------`Something Else...`

@@ -119,6 +119,46 @@ fn get_fn_lines(fnname: &str) -> Option<Vec<String>> {
     return Some(fn_lines);
 }
 
+pub fn get_boilerplate_lines() -> Option<Vec<String>> {
+    //------------------------------------------------------------------------//
+    // Get boilerplate code for the target platform.                          //
+    //------------------------------------------------------------------------//
+    let mut bp_lines: Vec<String> = Vec::new();
+    let mut extract_lns: bool = false;
+    let     fpath: String;
+
+    match get_builtin_path() {
+        Some(bpath) => {
+            fpath = format!("{}/{}/{}/_boilerplate.s", 
+                bpath, 
+                outputs::get_platform(), 
+                outputs::get_cpuarch());
+        },
+        None => {
+            return None;
+        }
+    }
+
+    if !Path::new(&fpath).exists() {
+        println!("ERROR: Built-in source file `{}` does not exist.", fpath);
+        return None;
+    }
+
+    let contents = fs::read_to_string(&fpath).unwrap();
+    let lines = contents.lines();
+
+    for line in lines {
+        let trimmed = line.trim();
+        if extract_lns {
+            bp_lines.push(line.to_string());
+        } else if trimmed == ";[BUILTIN-BLOCK-START]".to_string() {
+            extract_lns = true;
+        }
+    }
+
+    return Some(bp_lines);
+}
+
 pub fn mark_as_used(fnname: &str) {
     let mut present: bool = false;
     unsafe {
@@ -131,6 +171,14 @@ pub fn mark_as_used(fnname: &str) {
 
         if !present {
             USED_BUILTIN_FNS.push(fnname.to_string());
+            match get_fn_requirements(fnname) {
+                Some(reqs) => {
+                    for req in reqs {
+                        mark_as_used(&req);
+                    }
+                },
+                None => {},
+            }
         }
     }
 }

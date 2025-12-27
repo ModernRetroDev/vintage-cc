@@ -1,0 +1,28 @@
+fn main() {
+	// declarations
+	let bool_false: bool = false;
+	let bool_true:  bool = true;
+	let outfile:    file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#---------------------------------------------------------#");
+	outfile.writeln("# PRINT COMPLEX LINES (STRINGS WITH LITERALS & VARIABLES) #");
+	outfile.writeln("#---------------------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("The following are two bool variables (false and true):");
+	outfile.writeln("bool_false = `{}`", bool_false);
+	outfile.writeln("bool_true  = `{}`", bool_true);
+	outfile.writeln();
+
+	outfile.writeln("Here are two vars on the same line:");
+	outfile.writeln("bool_false = `{}`, bool_true  = `{}`", bool_false, bool_true);
+	outfile.writeln();
+
+	outfile.writeln("The following shows a suppressed endline (using endl=false):");
+	outfile.writeln("bool_false = ", endl=false);
+	outfile.writeln("{}", bool_false);
+
+	outfile.close();
+}

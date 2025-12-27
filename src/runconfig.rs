@@ -23,7 +23,7 @@ pub fn show_usage() {
     println!("Options:");
     println!("  -h, --help        Show help/usage info (this text)");
     println!("  -l, --level=LVL   LVL is the compilation level: [vll, vhl]");
-    println!("  -t, --target=TGT  TGT is the target platform: [c64, x16]");
+    println!("  -t, --target=TGT  TGT is the target platform: [c64, f256k, x16]");
     println!();
 }
 

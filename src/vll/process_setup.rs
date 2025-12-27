@@ -11,7 +11,8 @@ fn as_type_file(part: LinePart) -> bool {
     let     retvar_res:   String;
     let     fmode       = retvar_part.get_next().next;
     let     fmode_part  = retvar_part.get_next();
-    // let     fmode_res:    String;
+    let     fmode_res:    String;
+    let     fmode_u8:     u8;
     let     fname:        String;
     let     fname_part:   LinePart;
     let     fname_res:    String;
@@ -30,14 +31,14 @@ fn as_type_file(part: LinePart) -> bool {
 
     // read in the file mode
     if fmode_part.is_varname() {
-        // fmode_res = get::var_fullname(&fmode);
+        fmode_res = get::var_fullname(&fmode);
         fname      = fmode_part.get_next().next;
         fname_part = fmode_part.get_next();
     } else {
         let achar = retvar_part.get_next_char();
         match achar {
-            Some(_) => {
-                // fmode_res = format!("#${:02X}", achar);
+            Some(val) => {
+                fmode_res  = char::from(val).to_string();
                 fname      = fmode_part.get_next_after_char().next;
                 fname_part = fmode_part.get_next_after_char();
             },
@@ -78,6 +79,17 @@ fn as_type_file(part: LinePart) -> bool {
         outputs::varvalues_append(str_bytes);
     }
 
+    // READ = 0; WRITE = 1
+    match &fmode_res[..] {
+        "r" => { fmode_u8 = 0; },
+        "w" => { fmode_u8 = 1; },
+        _ => {
+            println!("ERROR: unsupported file mode `{}` on LN {}", 
+                fmode_res, part.ln_no);
+            return true;
+        }
+    }
+
     outputs::mainfn_append(&format!("   ; setup__file {} {} {}", 
         retvar, fmode, fname));
     outputs::mainfn_append(&format!("   lda #<{}", retvar_res));
@@ -89,6 +101,8 @@ fn as_type_file(part: LinePart) -> bool {
     outputs::mainfn_append(         "   sta ZP_PTR_2");
     outputs::mainfn_append(&format!("   lda #>{}", fname_res));
     outputs::mainfn_append(         "   sta ZP_PTR_2+1");
+    //
+    outputs::mainfn_append(&format!("   ldx #{}", fmode_u8));
     //
     outputs::mainfn_append(         "   jsr _setup__file");
     outputs::mainfn_append("");

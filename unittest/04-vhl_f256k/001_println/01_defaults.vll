@@ -1,0 +1,134 @@
+fn main
+    var__bool bool_false
+    var__bool bool_true
+    var__u16 big_u
+    var__u8 small_u
+    var__str8 test_str = "Hello World!"
+    var__file outfile
+
+    equals__bool_bool .bool_false false
+    equals__bool_bool .bool_true true
+    equals__u16_u16 .big_u 1337
+    equals__u8_u8 .small_u 10
+
+    # outfile.create("out.utest");
+    setup__file .outfile 'w' "out.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-----------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# PRINT A VARIETY OF DEFAULT VALUES #");
+    setout__file .outfile
+    print__str8 "# PRINT A VARIETY OF DEFAULT VALUES #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-----------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("This and the preceding lines were strings.");
+    setout__file .outfile
+    print__str8 "This and the preceding lines were strings."
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("The following are two bool variables (false and true):");
+    setout__file .outfile
+    print__str8 "The following are two bool variables (false and true):"
+    print__endl
+    setout__default
+
+    # outfile.writeln("{}", bool_false);
+    setout__file .outfile
+    print__bool .bool_false
+    print__endl
+    setout__default
+
+    # outfile.writeln("{}", bool_true);
+    setout__file .outfile
+    print__bool .bool_true
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("The following is a u8 variable:");
+    setout__file .outfile
+    print__str8 "The following is a u8 variable:"
+    print__endl
+    setout__default
+
+    # outfile.writeln("{}", small_u);
+    setout__file .outfile
+    print__u8 .small_u
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("The following is a u16 variable:");
+    setout__file .outfile
+    print__str8 "The following is a u16 variable:"
+    print__endl
+    setout__default
+
+    # outfile.writeln("{}", big_u);
+    setout__file .outfile
+    print__u16 .big_u
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("The following is a str variable:");
+    setout__file .outfile
+    print__str8 "The following is a str variable:"
+    print__endl
+    setout__default
+
+    # outfile.writeln("{}", test_str);
+    setout__file .outfile
+    print__str8 .test_str
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("This string includes a newline here:\n... and continued.");
+    setout__file .outfile
+    print__str8 "This string includes a newline here:\n... and continued."
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+endfn
+

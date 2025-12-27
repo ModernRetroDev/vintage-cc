@@ -1,0 +1,79 @@
+;[BUILTIN-BLOCK-START]
+; Zero-Page Registers
+r0  = $02
+r1  = $04
+r2  = $06
+r3  = $08
+r4  = $0A
+r5  = $0C
+r6  = $0E
+r7  = $10
+r8  = $12
+r9  = $14
+r10 = $16
+r11 = $18
+r12 = $1A
+r13 = $1C
+r14 = $1E
+r15 = $20
+
+; Zero-Page Temporary Pointers
+ZP_PTR_1 = $7E
+ZP_PTR_2 = $22
+ZP_PTR_3 = $24
+ZP_PTR_4 = $26
+
+; F256 MicroKernel
+;
+; Kernel Functions
+KERNEL_FN_FILE_CLOSE = $FF68
+KERNEL_FN_FILE_OPEN  = $FF5C
+KERNEL_FN_FILE_WRITE = $FF64
+KERNEL_FN_NEXT_EVENT = $FF00
+KERNEL_FN_YIELD      = $FF0C
+; Kernel Function Arguments
+KERNEL_ARGS_EVENTS              = $F0
+KERNEL_ARGS_FILE_CLOSE_STREAM   = $F3
+KERNEL_ARGS_FILE_OPEN_FNAME     = $FB
+KERNEL_ARGS_FILE_OPEN_FNAME_LEN = $FD
+KERNEL_ARGS_FILE_OPEN_DRIVE     = $F3
+KERNEL_ARGS_FILE_OPEN_COOKIE    = $F4
+KERNEL_ARGS_FILE_OPEN_MODE      = $F5
+KERNEL_ARGS_FILE_WRITE_STREAM   = $F3
+KERNEL_ARGS_FILE_WRITE_BUF      = $FB
+KERNEL_ARGS_FILE_WRITE_BUFLEN   = $FD
+; Kernel Function Defines
+KERNEL_EVENT_FILE__CLOSED = $32
+KERNEL_EVENT_FILE__OPENED = $2A
+KERNEL_EVENT_FILE__WROTE  = $2E
+KERNEL_EVENT_FILE__ERROR  = $38
+KERNEL_EVENT_FILE__EOF    = $30
+KERNEL_FILE_OPEN_DRIVE__SD_CARD = $00
+KERNEL_FILE_OPEN_DRIVE__IEC_8   = $01
+KERNEL_FILE_OPEN_DRIVE__IEC_9   = $02
+; Vintage Addresses
+VINTAGE_HAS_ERROR  = $D7
+VINTAGE_NEXT_EVENT = $D8
+VINTAGE_TEMP_A     = $E9
+VINTAGE_TEMP_X     = $EA
+VINTAGE_TEMP_Y     = $EB
+;
+VINTAGE_IO_TARGET      = $E6 ; 0 = stdout; 1 = file
+VINTAGE_IO_STREAM      = $E7 ; if writing to a file; this is the stream #
+VINTAGE_IO_NEXT_CHAR   = $E8 ; if writing to a file; this contains the next char
+VINTAGE_TEXTLAYER_LINE = $EC
+VINTAGE_TEXTLAYER_ROW  = $EE
+VINTAGE_TEXTLAYER_COL  = $EF
+
+; Vintage Defines
+VINTAGE_IO_TARGET__STDOUT = $00
+VINTAGE_IO_TARGET__FILE   = $01
+
+.org $0300
+.segment "STARTUP"
+.segment "INIT"
+.segment "ONCE"
+.segment "CODE"
+
+   jmp fn_main
+

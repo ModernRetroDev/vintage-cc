@@ -48,9 +48,10 @@ fn as_type_u8(part: LinePart) -> bool {
     };
 
     let branch_ins: String = match &outputs::get_platform()[..] {
-        "c64" => { "jmp".to_string() }
-        "x16" => { "bra".to_string() }
-        _     => {
+        "c64"   => { "jmp".to_string() }
+        "f256k" => { "bra".to_string() }
+        "x16"   => { "bra".to_string() }
+        _       => {
             println!("ERROR: ln:{} EVAL_EQ: Unhandled platform `{}`",
                 part.ln_no, outputs::get_platform());
             return true;

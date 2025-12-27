@@ -6,9 +6,19 @@ use crate::vll::line_part::LinePart;
 
 
 fn as_type_default(_part: LinePart) -> bool {
-    outputs::mainfn_append("   ; setout__default");
-    outputs::mainfn_append("   jsr CLRCHN");
-    outputs::mainfn_append("");
+    match &outputs::get_platform()[..] {
+        "f256k" => {
+            outputs::mainfn_append("   ; setout__default");
+            outputs::mainfn_append("   lda #VINTAGE_IO_TARGET__STDOUT");
+            outputs::mainfn_append("   sta VINTAGE_IO_TARGET");
+            outputs::mainfn_append("");
+        },
+        _ => {
+            outputs::mainfn_append("   ; setout__default");
+            outputs::mainfn_append("   jsr CLRCHN");
+            outputs::mainfn_append("");
+        }
+    }
 
     return false
 }

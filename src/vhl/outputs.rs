@@ -687,6 +687,11 @@ pub fn set_platform(platform: &str) {
                 PLATFORM = platform.to_string();
             }
         },
+        "f256k" => {
+            unsafe {
+                PLATFORM = platform.to_string();
+            }
+        },
         "x16" => {
             unsafe {
                 PLATFORM = platform.to_string();

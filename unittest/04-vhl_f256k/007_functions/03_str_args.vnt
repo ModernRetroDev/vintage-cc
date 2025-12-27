@@ -1,0 +1,32 @@
+fn print_string(s: str, outfile: file) {
+	outfile.writeln("`{}`", s);
+}
+
+fn main() {
+	let str1:    str = "Hello World!";
+	let str2:    str = "Something Else...";
+	let outfile: file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#------------------------------------#");
+	outfile.writeln("# CALL A FUNCTION (WITH STRING ARGS) #");
+	outfile.writeln("#------------------------------------#");
+	outfile.writeln();
+	outfile.writeln("str1 = `{}`", str1);
+	outfile.writeln("str2 = `{}`", str2);
+	outfile.writeln();
+	outfile.writeln();
+
+	outfile.writeln("print_string(str1)");
+	outfile.writeln("------------------");
+	print_string(str1, outfile);
+	outfile.writeln();
+
+	outfile.writeln("print_string(str2)");
+	outfile.writeln("------------------");
+	print_string(str2, outfile);
+	outfile.writeln();
+
+	outfile.close();
+}

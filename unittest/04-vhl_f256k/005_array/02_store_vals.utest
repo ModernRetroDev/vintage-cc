@@ -1,0 +1,1 @@
+#-------------------------------------------------## SAVE SOME VALUES INTO AN ARRAY; PRINT THEM BACK ##-------------------------------------------------#BEFORE:undef[0] = 0undef[1] = 0undef[2] = 0undef[3] = 0undef[4] = 0AFTER:undef[0] = 1undef[1] = 3undef[2] = 5undef[3] = 7undef[4] = 13

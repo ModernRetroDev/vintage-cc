@@ -1,0 +1,72 @@
+fn main() {
+	// declarations
+	let ctr: u8;
+	let array: [u8;10] = [2,4,6,8,10,12,14,16,18,20];
+	let next: u8;
+	let outfile: file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("# for next in array ...");
+	ctr = 0;
+	for next in array {
+		outfile.writeln("array[{}] = {}", ctr, next);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _ in array ...");
+	ctr = 0;
+	for _ in array {
+		outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for next in [all] array");
+	ctr = 0;
+	for next in [all] array {
+		outfile.writeln("array[{}] = {}", ctr, next);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _ in [all] array");
+	ctr = 0;
+	for _ in [all] array {
+		outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+		ctr = ctr 1 +;
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, next in [enumerate] array");
+	for ctr, next in [enumerate] array {
+		outfile.writeln("array[{}] = {}", ctr, next);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for _, next in [enumerate] array");
+	for _, next in [enumerate] array {
+		outfile.writeln("array[?] = {}", next);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, _ in [enumerate] array");
+	for ctr, _ in [enumerate] array {
+		outfile.writeln("array[{}] = ?", ctr);
+	}
+	outfile.writeln();
+
+	outfile.writeln("# for ctr, _ in [enumerate,all] array");
+	for ctr, _ in [enumerate,all] array {
+		outfile.writeln("array[{}] = ?", ctr);
+	}
+	outfile.writeln();
+
+	outfile.close();
+}

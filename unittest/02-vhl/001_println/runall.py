@@ -6,6 +6,7 @@ builtins_dir = '../../../builtin'
 vlang_bin    = '../../../target/debug/vintagecc'
 vll_suffix     = '.vll'
 vintage_suffix = '.vnt'
+target         = '--target=x16'
 
 modified_env = os.environ.copy()
 modified_env['VINTAGECC_BUILTINS_PATH'] = builtins_dir
@@ -30,10 +31,10 @@ for utest in utests:
 	print(f"# Running UNIT TEST: `{utest}`")
 	print('#----------------------------------------------------------------#')
 
-	subprocess.run([vlang_bin, utest], env=modified_env)
+	subprocess.run([vlang_bin, target, utest], env=modified_env)
 
 	utest_vll = get_vll_name(utest)
-	subprocess.run([vlang_bin, utest_vll], env=modified_env)
+	subprocess.run([vlang_bin, target, utest_vll], env=modified_env)
 
 	assmname = utest_vll.split('.')[0] + '.s'
 	subprocess.run([

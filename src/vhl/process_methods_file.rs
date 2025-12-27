@@ -158,6 +158,11 @@ pub fn now(part: LinePart, line: &str) -> bool {
                             &format!("    setup__file .{} 'w' \"@0:{},S,W\"", 
                                 varname, &fname_arg[1..fname_len-1]));
                     },
+                    "f256k" => {
+                        outputs::lines_main_push(
+                            &format!("    setup__file .{} 'w' \"{}", 
+                                varname, &fname_arg[1..]));
+                    },
                     "x16" => {
                         outputs::lines_main_push(
                             &format!("    setup__file .{} 'w' \"@:{}", 

@@ -1,0 +1,53 @@
+fn main() {
+	// declarations
+	let ctr: u8;
+	let array: [u8;10] = [2,4,6,8,10,12,14,16,18,20];
+	let undef: [u8;5];
+	let outfile: file;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln("# PRINT ALL VALUES FROM WITHIN AN ARRAY #");
+	outfile.writeln("#---------------------------------------#");
+	outfile.writeln();
+
+	ctr = 0;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("array[{}] = {}", ctr, array[ctr]);
+	outfile.writeln();
+
+	ctr = 9;
+	outfile.writeln("array[{}] = {}", ctr, array[9]);
+	outfile.writeln();
+
+	ctr = 0;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+	ctr = ctr 1 +;
+	outfile.writeln("undef[{}] = {}", ctr, undef[ctr]);
+
+	outfile.close();
+}

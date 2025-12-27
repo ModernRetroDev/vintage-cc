@@ -17,7 +17,7 @@
 var__main__f: ; type: file
    .byte <(var__main__f+2), >(var__main__f+2) ; ptr_addr (u16)
    .byte $00 ; mode (u8)
-   .byte $00 ; device (u8)
+   .byte $08 ; device (u8)
    .byte $00 ; channel (u8)
    .byte $00 ; status (u8)
    .byte $00, $00 ; fname (u16)
@@ -506,6 +506,7 @@ fn_main:
    sta ZP_PTR_2
    lda #>str8_0x0000
    sta ZP_PTR_2+1
+   ldx #1
    jsr _setup__file
 
    ; open__file .f

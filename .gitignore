@@ -6,3 +6,7 @@ unittest/03-vhl_c64/*/*.s
 unittest/03-vhl_c64/*/*.vll
 unittest/03-vhl_c64/*/*.d64
 unittest/03-vhl_c64/*/utest.prg
+unittest/04-vhl_f256k/*/*.s
+unittest/04-vhl_f256k/*/*.vll
+unittest/04-vhl_f256k/*/*.prg
+unittest/04-vhl_f256k/*/*.pgx

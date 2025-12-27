@@ -1,0 +1,12 @@
+;[BUILTIN-BLOCK-START]
+_textlayer__newline:
+   clc
+   lda VINTAGE_TEXTLAYER_LINE
+   adc #80
+   sta VINTAGE_TEXTLAYER_LINE
+   lda VINTAGE_TEXTLAYER_LINE+1
+   adc #0
+   sta VINTAGE_TEXTLAYER_LINE+1
+   lda #0
+   sta VINTAGE_TEXTLAYER_COL
+   rts

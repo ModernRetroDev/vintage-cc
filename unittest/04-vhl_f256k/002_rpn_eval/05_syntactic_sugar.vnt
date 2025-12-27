@@ -1,0 +1,41 @@
+fn main() {
+	// declarations
+	let outfile: file;
+	let a:   u8  = 0b10101010;
+	let b:   u8  = 0b11110000;
+	let res: u8;
+	let a16: u16 = 0b1010101010101010;
+	let b16: u16 = 0b1111000011110000;
+	let r16: u16;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#------------------------------------#");
+	outfile.writeln("# TEST USAGE OF SOME SYNTACTIC SUGAR #");
+	outfile.writeln("#------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("*** Test bitwise_and with u8 values ***");
+	outfile.writeln(" * a (0b10101010) = 0b{:b}", a);
+	outfile.writeln(" * b (0b11110000) = 0b{:b}", b);
+	outfile.writeln();
+
+	res = a;
+	res &= b;
+	outfile.writeln(" * a b &; (0b10100000) = 0b{:b}", res);
+	// res = a 0b00001111 &;
+	// outfile.writeln(" * a 0b00001111 &; (0b00001010) = 0b{:b}", res);
+	// outfile.writeln();
+
+	// outfile.writeln("*** Test bitwise_and with u16 values ***");
+	// outfile.writeln(" * a16 (0b1010101010101010) = 0b{:b}", a16);
+	// outfile.writeln(" * b16 (0b1111000011110000) = 0b{:b}", b16);
+	// outfile.writeln();
+
+	// r16 = a16 b16 &;
+	// outfile.writeln(" * a16 b16 &; (0b1010000010100000) = 0b{:b}", r16);
+	// r16 = a16 0b0000000011111111 &;
+	// outfile.writeln(" * b16 0b0000000011111111 | (0b0000000010101010) = 0b{:b}", r16);
+
+	outfile.close();
+}

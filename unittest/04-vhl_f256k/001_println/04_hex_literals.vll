@@ -1,0 +1,222 @@
+fn main
+    var__u16 a
+    var__u8 b
+    var__u16 c
+    var__u8 d
+    var__u16 e
+    var__file outfile
+    var__u8 _stk_8_0
+    var__u16 _stk_16_0
+
+    equals__u8_u8 .b 0xA1
+    equals__u16_u16 .c 0x10A1
+    equals__u8_u8 .d 0b11111111
+    equals__u16_u16 .e 0b111111111
+
+    # outfile.create("out.utest");
+    setup__file .outfile 'w' "out.utest"
+    open__file .outfile
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #");
+    setout__file .outfile
+    print__str8 "# PRINT VALUES SPECIFIED AS HEXADECIMAL LITERALS #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#------------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#------------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print out a few binary u16 values***");
+    setout__file .outfile
+    print__str8 "*** print out a few binary u16 values***"
+    print__endl
+    setout__default
+
+    # a = 0x0000;
+    equals__u16_u8 ._stk_16_0 0x0000
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0000     (0) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0000     (0) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0001;
+    equals__u16_u8 ._stk_16_0 0x0001
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0001     (1) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0001     (1) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0002;
+    equals__u16_u8 ._stk_16_0 0x0002
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0002     (2) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0002     (2) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0004;
+    equals__u16_u8 ._stk_16_0 0x0004
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0004     (4) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0004     (4) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0008;
+    equals__u16_u8 ._stk_16_0 0x0008
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0008     (8) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0008     (8) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0010;
+    equals__u16_u8 ._stk_16_0 0x0010
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0010    (16) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0010    (16) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0020;
+    equals__u16_u8 ._stk_16_0 0x0020
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0020    (32) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0020    (32) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0040;
+    equals__u16_u8 ._stk_16_0 0x0040
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0040    (64) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0040    (64) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0080;
+    equals__u16_u8 ._stk_16_0 0x0080
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0080   (128) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0080   (128) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0x0100;
+    equals__u16_u16 ._stk_16_0 0x0100
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0x0100   (256) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0x0100   (256) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # a = 0xFFFF;
+    equals__u16_u16 ._stk_16_0 0xFFFF
+    equals__u16_u16 .a ._stk_16_0
+
+    # outfile.writeln(" * 0xFFFF (65535) :   {}", a);
+    setout__file .outfile
+    print__str8 " * 0xFFFF (65535) :   "
+    print__u16 .a
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print a u8 and u16 initialized w/hex values***");
+    setout__file .outfile
+    print__str8 "*** print a u8 and u16 initialized w/hex values***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" b = 0xA1   (161);  {}", b);
+    setout__file .outfile
+    print__str8 " b = 0xA1   (161);  "
+    print__u8 .b
+    print__endl
+    setout__default
+
+    # outfile.writeln(" c = 0x10A1 (4257); {}", c);
+    setout__file .outfile
+    print__str8 " c = 0x10A1 (4257); "
+    print__u16 .c
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("*** print a u8 and u16 initialized w/binary values***");
+    setout__file .outfile
+    print__str8 "*** print a u8 and u16 initialized w/binary values***"
+    print__endl
+    setout__default
+
+    # outfile.writeln(" d = 0b11111111  (255); {}", d);
+    setout__file .outfile
+    print__str8 " d = 0b11111111  (255); "
+    print__u8 .d
+    print__endl
+    setout__default
+
+    # outfile.writeln(" e = 0b111111111 (511); {}", e);
+    setout__file .outfile
+    print__str8 " e = 0b111111111 (511); "
+    print__u16 .e
+    print__endl
+    setout__default
+
+    close__file .outfile
+endfn
+
