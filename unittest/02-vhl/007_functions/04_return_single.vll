@@ -1,0 +1,151 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn returns_5_literal
+    var__u8 _ret_0
+
+    # return 5;
+    equals__u8_u8 ._ret_0 5
+    return
+
+endfn
+
+fn returns_5_var
+    var__u8 _ret_0
+    var__u8 five
+
+    equals__u8_u8 .five 5
+
+    # return five;
+    equals__u8_u8 ._ret_0 .five
+    return
+
+endfn
+
+fn returns_10_literal
+    var__u8 _ret_0
+
+    # return 10;
+    equals__u8_u8 ._ret_0 10
+    return
+
+endfn
+
+fn returns_10_var
+    var__u8 _ret_0
+    var__u8 ten
+
+    equals__u8_u8 .ten 10
+
+    # return ten;
+    equals__u8_u8 ._ret_0 .ten
+    return
+
+endfn
+
+fn main
+    var__u8 retval
+    var__file outfile
+
+    # outfile.create("04_return_single.utest");
+    setup__file .outfile 'w' "@:04_return_single.utest"
+    open__file .outfile
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #");
+    setout__file .outfile
+    print__str8 "# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # retval = returns_5_literal();
+    call returns_5_literal
+    equals__u8_u8 .retval .returns_5_literal._ret_0
+
+    # outfile.writeln("returns_5_literal() -> {}", retval);
+    setout__file .outfile
+    print__str8 "returns_5_literal() -> "
+    print__u8 .retval
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # retval = returns_5_var();
+    call returns_5_var
+    equals__u8_u8 .retval .returns_5_var._ret_0
+
+    # outfile.writeln("returns_5_var() -> {}", retval);
+    setout__file .outfile
+    print__str8 "returns_5_var() -> "
+    print__u8 .retval
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # retval = returns_10_literal();
+    call returns_10_literal
+    equals__u8_u8 .retval .returns_10_literal._ret_0
+
+    # outfile.writeln("returns_10_literal() -> {}", retval);
+    setout__file .outfile
+    print__str8 "returns_10_literal() -> "
+    print__u8 .retval
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # retval = returns_10_var();
+    call returns_10_var
+    equals__u8_u8 .retval .returns_10_var._ret_0
+
+    # outfile.writeln("returns_10_var() -> {}", retval);
+    setout__file .outfile
+    print__str8 "returns_10_var() -> "
+    print__u8 .retval
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

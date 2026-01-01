@@ -1,0 +1,33 @@
+fn returns_fives() -> (u8, u8) {
+	let five: u8 = 5;
+
+	return (5, five);
+}
+
+fn returns_tens() -> (u8, u8) {
+	let ten: u8 = 10;
+	return (10, ten);
+}
+
+fn main() {
+	let retvalA: u8;
+	let retvalB: u8;
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln("# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #");
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln();
+
+	(retvalA, retvalB) = returns_fives();
+	outfile.writeln("returns_fives() -> ({}, {})", retvalA, retvalB);
+	outfile.writeln();
+	//
+	(retvalA, retvalB) = returns_tens();
+	outfile.writeln("returns_tens() -> ({}, {})", retvalA, retvalB);
+	outfile.writeln();
+
+	outfile.close();
+}

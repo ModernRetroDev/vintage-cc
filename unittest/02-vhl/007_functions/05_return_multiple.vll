@@ -1,0 +1,114 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn returns_fives
+    var__u8 _ret_0
+    var__u8 _ret_1
+    var__u8 five
+
+    equals__u8_u8 .five 5
+
+    # return (5, five);
+    equals__u8_u8 ._ret_0 5
+    equals__u8_u8 ._ret_1 .five
+    return
+
+endfn
+
+fn returns_tens
+    var__u8 _ret_0
+    var__u8 _ret_1
+    var__u8 ten
+
+    equals__u8_u8 .ten 10
+
+    # return (10, ten);
+    equals__u8_u8 ._ret_0 10
+    equals__u8_u8 ._ret_1 .ten
+    return
+
+endfn
+
+fn main
+    var__u8 retvalA
+    var__u8 retvalB
+    var__file outfile
+
+    # outfile.create("05_return_multiple.utest");
+    setup__file .outfile 'w' "@:05_return_multiple.utest"
+    open__file .outfile
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #");
+    setout__file .outfile
+    print__str8 "# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # (retvalA, retvalB) = returns_fives();
+    call returns_fives
+    equals__u8_u8 .retvalA .returns_fives._ret_0
+    equals__u8_u8 .retvalB .returns_fives._ret_1
+
+    # outfile.writeln("returns_fives() -> ({}, {})", retvalA, retvalB);
+    setout__file .outfile
+    print__str8 "returns_fives() -> ("
+    print__u8 .retvalA
+    print__str8 ", "
+    print__u8 .retvalB
+    print__str8 ")"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # (retvalA, retvalB) = returns_tens();
+    call returns_tens
+    equals__u8_u8 .retvalA .returns_tens._ret_0
+    equals__u8_u8 .retvalB .returns_tens._ret_1
+
+    # outfile.writeln("returns_tens() -> ({}, {})", retvalA, retvalB);
+    setout__file .outfile
+    print__str8 "returns_tens() -> ("
+    print__u8 .retvalA
+    print__str8 ", "
+    print__u8 .retvalB
+    print__str8 ")"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

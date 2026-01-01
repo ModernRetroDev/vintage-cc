@@ -45,6 +45,7 @@ struct FnBlock {
     module_name:    Option<String>,
     //
     fn_args:        Vec<FnArg>,
+    fn_rets:        Vec<FnArg>,
     //
     var_names:      Vec<String>,
     var_types:      Vec<String>,
@@ -77,6 +78,7 @@ fn new_fn_block(fn_name: &str) -> FnBlock {
         module_name    : None,
         //
         fn_args        : Vec::new(),
+        fn_rets        : Vec::new(),
         //
         var_names      : Vec::new(),
         var_types      : Vec::new(),
@@ -266,6 +268,10 @@ impl FnBlock {
 
     pub fn set_fn_args(&mut self, fn_args: Vec<FnArg>) {
         self.fn_args = fn_args;
+    }
+
+    pub fn set_fn_rets(&mut self, fn_rets: Vec<FnArg>) {
+        self.fn_rets = fn_rets;
     }
 
     pub fn set_var_index(&mut self, varname: &str) {
@@ -625,6 +631,29 @@ pub fn get_fn_arg_varname_in_active_fn(arg_name: &str) -> String {
     }
 }
 
+pub fn get_required_fn_rets_count(fn_name: &str) -> Option<u8> {
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            if fn_blk.fn_name == fn_name {
+                // return true;
+                return Some(fn_blk.fn_rets.len().try_into().unwrap());
+            }
+        }
+    }
+    return None;
+}
+
+pub fn get_fn_ret_type_by_pos(fn_name: &str, arg_pos: usize) -> Option<String> {
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            if fn_blk.fn_name == fn_name {
+                return Some(fn_blk.fn_rets[arg_pos].arg_type.clone());
+            }
+        }
+        return None;
+    }
+}
+
 pub fn set_output_filename(outname: &str) {
     unsafe {
         OUTPUT_FILENAME = outname.to_string();
@@ -656,6 +685,13 @@ pub fn set_fn_args_in_active_fn(fn_args: Vec<FnArg>) {
     unsafe {
         let last_ind = FN_BLOCKS.len() - 1;
         FN_BLOCKS[last_ind].set_fn_args(fn_args);
+    }
+}
+
+pub fn set_fn_returns_in_active_fn(fn_rets: Vec<FnArg>) {
+    unsafe {
+        let last_ind = FN_BLOCKS.len() - 1;
+        FN_BLOCKS[last_ind].set_fn_rets(fn_rets);
     }
 }
 

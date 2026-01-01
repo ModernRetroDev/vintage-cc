@@ -1,6 +1,7 @@
 use crate::vhl::array;
 use crate::vhl::fn_args;
 use crate::vhl::outputs;
+use crate::vhl::process_fn_call;
 
 use crate::vhl::line_part::LinePart;
 
@@ -14,6 +15,16 @@ fn eval_part_is_op(part: &str) -> bool {
         "<<" => { return true },
         ">>" => { return true },
         _ => { return false }
+    }
+}
+
+fn eval_part_is_fn_call(part: &LinePart) -> bool {
+    if process_fn_call::is_simple_fn_call(part) {
+        return true;
+    } else if process_fn_call::is_fn_call_with_args(part) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -164,7 +175,341 @@ fn eval_is_decrement(part: LinePart) -> bool {
     return false;
 }
 
-pub fn now(part: LinePart) -> bool {
+
+fn get_lhs_vars(line: &str, ln_no: u64) -> Option<Vec<String>> {
+    let mut lhs_vars: Vec<String> = Vec::new();
+
+    let mut var_ind:  u8     = 0;
+    let mut multi:    bool   = false;
+    let mut first:    bool   = true;
+    let mut next_var: String = "".to_string();
+    let mut capture:  String = "var".to_string();
+    let mut skip:     bool   = true;
+
+    let trimmed = line.trim();
+
+    for c in trimmed.chars() {
+        if first {
+            if c == ' ' || c == '\t' {
+                continue;
+            }
+            // else
+            first = false;
+        }
+
+        if capture == "var" {
+            if c == ' ' || c == '\t' {
+                if next_var == "" {
+                    // leading whitespace
+                    continue;
+                } else if multi {
+                    println!(
+                        "ERROR: ln:{} EVAL: Multi-return values must be separated by a `,` between each value.",
+                        ln_no);
+                    return None;
+                } else {
+                    lhs_vars.push(next_var.clone());
+                    capture = "equals".to_string();
+                    first   = true;
+                    continue;
+                }
+            } else if c == '(' {
+                multi = true;
+                if next_var == "" && var_ind == 0 {
+                    multi = true;
+                    continue
+                } else {
+                    println!(
+                        "ERROR: ln:{} EVAL: For multi-return values; the `(` must occur first.",
+                        ln_no);
+                    return None;
+                }
+            } else if c == ',' {
+                if !multi {
+                    println!(
+                        "ERROR: ln:{} EVAL: Unexpected comma; multi-return vars start with a `(`.",
+                        ln_no);
+                    return None;
+                } else if next_var == "" {
+                    println!(
+                        "ERROR: ln:{} EVAL: Empty/blank return var provided.",
+                        ln_no);
+                    return None;
+                } else {
+                    // this should be a fine return value
+                    lhs_vars.push(next_var.clone());
+                    var_ind += 1;
+                    next_var = "".to_string();
+                    first         = true;
+                }
+            } else if c == ')' {
+                if !multi {
+                    println!(
+                        "ERROR: ln:{} EVAL: Unexpected `)`; only used for multi-return vars.",
+                        ln_no);
+                    return None;
+                } else if next_var == "" {
+                    println!(
+                        "ERROR: ln:{} EVAL: Empty/blank argument type provided.",
+                        ln_no);
+                    return None;
+                } else {
+                    // the final type of a multi-return evaluation
+                    lhs_vars.push(next_var.clone());
+                    capture = "equals".to_string();
+                    first   = true;
+                    continue;
+                }
+            } else {
+                next_var.push(c);
+            }
+        } else if capture == "equals" {
+            if c != '=' {
+                println!(
+                    "ERROR: ln:{} EVAL: Expected `=`; got `{}`.",
+                    ln_no, c);
+                return None;
+            }
+            break;
+        }
+    }
+
+    return Some(lhs_vars);
+}
+
+fn as_fn_call_return(part: &LinePart, line: &str) -> bool {
+    let     varname:       String;
+    let     var_is_ref:    bool;
+    let     var_is_deref:  bool;
+    let mut sugar:         Option<String> = None;
+    let mut next:          LinePart;
+    let mut eval_parts:    Vec<String>  = Vec::new();
+    let mut trailing_eval: Option<String> = None;
+    let mut cur_stk_sz:    u8 = 0;
+    let mut req_stk_sz:    u8 = 0;
+    let mut req_elem_sz:   u8;
+    let mut terminated:    bool = false;
+    let mut deref_btype:   String = "".to_string();
+
+    if part.next.starts_with("@") {
+        var_is_ref = true;
+        varname = part.next[1..].to_string();
+    } else {
+        var_is_ref = false;
+        varname = part.next.clone();
+    }
+
+    let lhs_vars = match get_lhs_vars(line, part.ln_no) {
+        Some(vars) => { vars },
+        None => { return true }
+    };
+    let req_rets = lhs_vars.len();
+
+    next = part.get_next();
+    loop {
+        let mut is_lhs_var: bool = false;
+        for lhsvar in &lhs_vars {
+            let next_str = &next.next;
+            if next_str.find(lhsvar).is_some() {
+                is_lhs_var = true;
+                break;
+            }
+        }
+        if is_lhs_var {
+            next = next.get_next();
+            continue;
+        }
+
+        match &next.next[..] {
+            "=" => {},
+            _   => {
+                println!(
+                    "ERROR: ln:{} Eval RPN with fn returns only supports `=`, not `{}`.",
+                    part.ln_no, next.next);
+                return true;
+            }
+        }
+        break;
+    }
+
+    let trimmed: String = line.trim().to_string();
+    outputs::lines_main_push(&format!("    # {}", trimmed));
+
+    next = next.get_next();
+    if process_fn_call::is_simple_fn_call(&next) {
+        if process_fn_call::as_simple_fn_call(&next, false) {
+            return true;
+        }
+    } else if process_fn_call::is_fn_call_with_args(&next) {
+        if process_fn_call::as_fn_call_with_args(line, part.ln_no, true, false) {
+           return true;
+        }
+    } else {
+        println!(
+            "ERROR: ln:{} EVAL: Unsupported type of function call.",
+            part.ln_no);
+        return true;
+    }
+
+    let mut fn_name: String = next.next.to_string();
+    match fn_name.find("(") {
+        Some(index) => {
+            let stop = index;
+            fn_name = (fn_name[..stop]).to_string();
+        },
+        None => {
+            println!("Skipping!!!");
+            return true;
+        }
+    }
+
+    // Make sure that there are enough return values on the LHS
+    match outputs::get_required_fn_rets_count(&fn_name) {
+        Some(provided_rets_count) => {
+            if req_rets != provided_rets_count.into() {
+                println!(
+                    "ERROR: ln:{} EVAL: Expecting {} return value(s); function `{}` returns {}.",
+                    part.ln_no, req_rets, fn_name, provided_rets_count);
+                return true;
+            }
+        },
+        None => {
+            println!(
+                "ERROR: ln:{} RETURN: Failed to determine return vars for Function `{}`.",
+                part.ln_no, fn_name);
+            return true;
+        }
+    }
+
+    let mut retvar_pos: usize = 0;
+    while retvar_pos < req_rets.into() {
+
+        // get the name type and size of the variable on the left hand side
+        let lhsvar_name: String = lhs_vars[retvar_pos].clone();
+        let lhsvar_type: String = outputs::get_vartype(&lhsvar_name).unwrap();
+
+        let req_elem_sz: u8 = match &lhsvar_type[..] {
+            "u8"  => { 1 },
+            "u16" => { 2 },
+            "u24" => { 3 },
+            "ptr" => { 2 },
+            _     => {
+                println!(
+                    "ERROR: ln:{} EVAL: Unsupported vartype `{}` in LHS of return.",
+                    part.ln_no, lhsvar_type);
+                return true;
+            }
+        };
+
+        // get the types of the return values from the function
+        let ret_type = outputs::get_fn_ret_type_by_pos(
+            &fn_name, retvar_pos).unwrap();
+
+        let resolved_arg: String;
+        if ret_type == "u8" || ret_type == "u8:ptr" || ret_type == "char" {
+            // if ret_type == "u8:ptr" {
+            //     resolved_arg = epart.clone();
+            // } else {
+            //     match fn_args::get_u8_value_str(part.ln_no, &epart, true) {
+            //         Some(u8val) => {
+            //             resolved_arg = u8val.clone();
+            //         },
+            //         None => {
+            //             println!("ERROR: ln:{} Failed to get u8 value of `{}`",
+            //                 part.ln_no, epart);
+            //             return true;
+            //         }
+            //     }
+            // }
+
+            if req_elem_sz == 1 {
+                outputs::lines_main_push(
+                    &format!("    equals__u8_u8 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else if req_elem_sz == 2 {
+                outputs::lines_main_push(
+                    &format!("    equals__u16_u8 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else if req_elem_sz == 3 {
+                outputs::lines_main_push(
+                    &format!("    equals__u24_u8 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else {
+                println!(
+                    "ERROR: ln:{} EVAL of element size `{}` not currently supported.",
+                    part.ln_no, req_elem_sz);
+                return true;
+            }
+        } else if ret_type == "u16" || ret_type == "u16:ptr" {
+            // if ret_type == "u16:ptr" {
+            //     resolved_arg = epart.clone();
+            // } else {
+            //     match fn_args::get_u16_value_str(part.ln_no, &epart, true) {
+            //         Some(u16val) => {
+            //             resolved_arg = u16val.clone();
+            //         },
+            //         None => {
+            //             println!("ERROR: ln:{} Failed to get u16 value of `{}`",
+            //                 part.ln_no, epart);
+            //             return true;
+            //         }
+            //     }
+            // }
+
+            if req_elem_sz == 2 {
+                outputs::lines_main_push(
+                    &format!("    equals__u16_u16 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else if req_elem_sz == 3 {
+                outputs::lines_main_push(
+                    &format!("    equals__u24_u16 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else {
+                println!(
+                    "ERROR: ln:{} EVAL of element size `{}` not currently supported.",
+                    part.ln_no, req_elem_sz);
+                return true;
+            }
+        } else if ret_type == "u24" || ret_type == "u24:ptr" {
+            // if ret_type == "u24:ptr" {
+            //     resolved_arg = epart.clone();
+            // } else {
+            //     match fn_args::get_u24_value_str(part.ln_no, &epart, true) {
+            //         Some(u24val) => {
+            //             resolved_arg = u24val.clone();
+            //         },
+            //         None => {
+            //             println!("ERROR: ln:{} Failed to get u24 value of `{}`",
+            //                 part.ln_no, epart);
+            //             return true;
+            //         }
+            //     }
+            // }
+
+            if req_elem_sz == 3 {
+                outputs::lines_main_push(
+                    &format!("    equals__u24_u24 .{} .{}._ret_{}", 
+                        lhsvar_name, fn_name, retvar_pos));
+            } else {
+                println!(
+                    "ERROR: ln:{} EVAL of element size `{}` not currently supported.",
+                    part.ln_no, req_elem_sz);
+                return true;
+            }
+        } else {
+            println!("ERROR: ln:{} Unhandled vartype `{}` for return value {}.",
+                part.ln_no, ret_type, retvar_pos);
+            return true;
+        }
+        retvar_pos += 1;
+    }
+
+    outputs::lines_main_push("");
+
+    return false;
+}
+
+pub fn now(part: LinePart, line: &str) -> bool {
     let     varname:       String;
     let     var_is_ref:    bool;
     let     var_is_deref:  bool;
@@ -188,9 +533,11 @@ pub fn now(part: LinePart) -> bool {
 
     if is_direct_deref(&varname) {
         var_is_deref = true;
+    } else if varname.starts_with('(') {
+        return as_fn_call_return(&part, line);
     } else if outputs::get_vartype(&varname).is_none() {
         println!(
-            "ERROR: ln:{} Unable to save evaluated value to undeclared variable `{}`.",
+            "ERROR: ln:{} EVAL: Unable to save evaluated value to undeclared variable `{}`.",
             part.ln_no, varname);
         return true;
     } else {
@@ -339,6 +686,7 @@ pub fn now(part: LinePart) -> bool {
     //------------------------------------------------------------------------//
     // Else: Operation is more complicated; a stack will be required.         //
     //------------------------------------------------------------------------//
+    let mut first: bool = true;
     loop {
         next = next.get_next();
         if next.next == "" {
@@ -350,6 +698,13 @@ pub fn now(part: LinePart) -> bool {
             }
             break;
         }
+
+        if first {
+            if eval_part_is_fn_call(&next) {
+                return as_fn_call_return(&part, line);
+            }
+        }
+
         let trimmed: String;
         if next.next.ends_with(";") {
             let stop_len = next.next.len() -1;

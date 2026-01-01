@@ -61,7 +61,7 @@ fn resolve_supplied_arg(ln_no: u64, supplied: &str) -> Option<String> {
     return Some(resolved_arg);
 }
 
-fn is_simple_fn_call(part: &LinePart) -> bool {
+pub fn is_simple_fn_call(part: &LinePart) -> bool {
     let mut first_part:   String = "".to_string();
     let mut first_char:   bool   = false;
     let mut expect_paren: bool   = false;
@@ -99,7 +99,7 @@ fn is_simple_fn_call(part: &LinePart) -> bool {
     return false
 }
 
-fn is_fn_call_with_args(part: &LinePart) -> bool {
+pub fn is_fn_call_with_args(part: &LinePart) -> bool {
     let mut first_part:  String = "".to_string();
     let mut first_arg:   String = "".to_string();
     let mut first_char:  bool   = true;
@@ -146,7 +146,7 @@ fn is_fn_call_with_args(part: &LinePart) -> bool {
     return false;
 }
 
-fn as_simple_fn_call(part: &LinePart) -> bool {
+pub fn as_simple_fn_call(part: &LinePart, trailing_newline: bool) -> bool {
     let mut fn_name:   String = "".to_string();
     let mut first_char:   bool   = false;
 
@@ -218,20 +218,40 @@ fn as_simple_fn_call(part: &LinePart) -> bool {
 
     // otherwise we should be good to go.
     outputs::lines_main_push(&format!("    call {}", fn_name));
-    outputs::lines_main_push("");
+    if trailing_newline {
+        outputs::lines_main_push("");
+    }
 
     return false
 }
 
-fn as_fn_call_with_args(line: &str, ln_no: u64) -> bool {
+pub fn as_fn_call_with_args(line: &str, ln_no: u64, skip_lhs: bool, trailing_newline: bool) -> bool {
     let mut fn_name:     String = "".to_string();
     let mut next_arg:    String = "".to_string();
     let mut first_char:  bool   = false;
     let mut expect_arg:  bool   = false;
     let mut expect_term: bool   = false;
+    let     trimmed:     String;
     let mut fn_args: Vec<String> = Vec::new();
 
-    let trimmed = line.trim();
+    if skip_lhs {
+        // if this is a case like `x = fn_return()`; skip over the lhs & `=`.
+        match line.find("=") {
+            Some(index) => {
+                let start = index + 1;
+                let rhs = (line[start..]).to_string();
+                trimmed = rhs.trim().to_string();
+            },
+            None => {
+                println!("Skipping!!!");
+                return true;
+            }
+        }
+
+    } else {
+        trimmed = line.trim().to_string();
+    }
+
     for c in trimmed.chars() {
         if first_char {
             if !c.is_ascii_alphabetic() {
@@ -381,7 +401,9 @@ fn as_fn_call_with_args(line: &str, ln_no: u64) -> bool {
 
     // otherwise we should be good to go.
     outputs::lines_main_push(&format!("    call {}", fn_name));
-    outputs::lines_main_push("");
+    if trailing_newline {
+        outputs::lines_main_push("");
+    }
 
     return false
 }
@@ -391,9 +413,9 @@ pub fn now(part: LinePart, line: &str) -> bool {
     outputs::lines_main_push(&format!("    # {}", line.trim()));
 
     if is_simple_fn_call(&part) {
-        return as_simple_fn_call(&part);
+        return as_simple_fn_call(&part, true);
     } else if is_fn_call_with_args(&part) {
-        return as_fn_call_with_args(line, part.ln_no);
+        return as_fn_call_with_args(line, part.ln_no, false, true);
     } else {
         println!(
             "ERROR: ln:{} FN_CALL: Unsupported type of function call.",

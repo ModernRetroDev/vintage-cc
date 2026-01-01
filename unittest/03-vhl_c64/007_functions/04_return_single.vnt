@@ -1,0 +1,45 @@
+fn returns_5_literal() -> u8 {
+	return 5;
+}
+
+fn returns_5_var() -> u8 {
+	let five: u8 = 5;
+	return five;
+}
+
+fn returns_10_literal() -> u8 {
+	return 10;
+}
+
+fn returns_10_var() -> u8 {
+	let ten: u8 = 10;
+	return ten;
+}
+
+fn main() {
+	let retval: u8;
+	let outfile: file;
+
+	outfile.create("UTEST");
+
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln("# CALL A FUNCTION (WITH A SINGLE RETURN VALUE) #");
+	outfile.writeln("#----------------------------------------------#");
+	outfile.writeln();
+
+	retval = returns_5_literal();
+	outfile.writeln("returns_5_literal() -> {}", retval);
+	outfile.writeln();
+	retval = returns_5_var();
+	outfile.writeln("returns_5_var() -> {}", retval);
+	outfile.writeln();
+	//
+	retval = returns_10_literal();
+	outfile.writeln("returns_10_literal() -> {}", retval);
+	outfile.writeln();
+	retval = returns_10_var();
+	outfile.writeln("returns_10_var() -> {}", retval);
+	outfile.writeln();
+
+	outfile.close();
+}

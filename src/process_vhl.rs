@@ -74,7 +74,13 @@ fn line_is_eval_eq_rpn(ln_no: u64, line: &str) -> bool {
     let varname: LinePart = line_get_first(ln_no, line);
     let rpn_eq:  LinePart = varname.get_next();
 
-    if varname.next.contains('(') {
+    if varname.next.starts_with('(') {
+        if line.contains('=') {
+            // this is likely a multi-value return from a function call
+            return true;
+        }
+    } else if varname.next.contains('(') {
+        // otherwise, this is probably just a function call.
         return false;
     }
 
@@ -193,7 +199,7 @@ fn process_source(s: String) -> bool {
             continue;
         }
         if line_is_eval_eq_rpn(ln_no, &res_line) {
-            if process_eval_eq_rpn::now(next) {
+            if process_eval_eq_rpn::now(next, &res_line) {
                 return true;
             }
             continue;
@@ -242,7 +248,7 @@ fn process_source(s: String) -> bool {
             continue;
         }
         if next.is_return() {
-            if process_return::now(next) {
+            if process_return::now(next, &res_line) {
                 return true;
             }
             continue;
