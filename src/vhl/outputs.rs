@@ -631,6 +631,41 @@ pub fn get_fn_arg_varname_in_active_fn(arg_name: &str) -> String {
     }
 }
 
+pub fn required_fn_rets_is_nonzero(fn_name: &str) -> bool {
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            if fn_blk.fn_name == fn_name {
+                if fn_blk.fn_rets.len() != 0 {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+pub fn fn_has_trailing_return(fn_name: &str) -> bool {
+    unsafe {
+        for fn_blk in FN_BLOCKS.iter() {
+            if fn_blk.fn_name == fn_name {
+                for ln in fn_blk.lines_main.clone().into_iter().rev() {
+                    let trimmed: &str = ln.trim();
+                    if trimmed == "" {
+                        continue;
+                    } else if trimmed.starts_with("//") {
+                        continue;
+                    } else if trimmed == "return" {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 pub fn get_required_fn_rets_count(fn_name: &str) -> Option<u8> {
     unsafe {
         for fn_blk in FN_BLOCKS.iter() {

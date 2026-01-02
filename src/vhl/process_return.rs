@@ -156,6 +156,7 @@ fn get_return_vals(line: &str, ln_no: u64) -> Option<Vec<String>> {
                     ln_no);
                 return None;
             }
+            capture = "terminated".to_string();
             break;
         }
     }

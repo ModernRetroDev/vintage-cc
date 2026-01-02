@@ -35,6 +35,15 @@ pub fn now(part: LinePart) -> bool {
                             part.ln_no);
                         return true;
                     }
+
+                    let active_fn: String = outputs::get_active_fn();
+                    if outputs::required_fn_rets_is_nonzero(&active_fn) {
+                        if !outputs::fn_has_trailing_return(&active_fn) {
+                            println!("ERROR: ln:{} FN `{}` is missing a final return statement.",
+                                part.ln_no, &active_fn);
+                            return true;
+                        }
+                    }
                     outputs::set_active_fn("");
                 },
                 "if" => {
