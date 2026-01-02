@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub struct RunCfg {
     pub help:    bool,
     pub level:   Option<String>,
@@ -5,15 +6,15 @@ pub struct RunCfg {
     pub target:  Option<String>,
 }
 
-impl RunCfg {
-    pub fn show(&self) {
-        println!("RUNCFG:");
-        println!(" - help:    `{:?}`", self.help);
-        println!(" - level:   `{:?}`", self.level);
-        println!(" - srcfile: `{:?}`", self.srcfile);
-        println!(" - target:  `{:?}`", self.target);
-    }
-}
+// impl RunCfg {
+//     pub fn show(&self) {
+//         println!("RUNCFG:");
+//         println!(" - help:    `{:?}`", self.help);
+//         println!(" - level:   `{:?}`", self.level);
+//         println!(" - srcfile: `{:?}`", self.srcfile);
+//         println!(" - target:  `{:?}`", self.target);
+//     }
+// }
 
 pub fn show_usage() {
     println!("Usage: vintagecc [OPTION]... FILE");

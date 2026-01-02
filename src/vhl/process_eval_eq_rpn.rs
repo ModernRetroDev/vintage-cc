@@ -184,7 +184,6 @@ fn get_lhs_vars(line: &str, ln_no: u64) -> Option<Vec<String>> {
     let mut first:    bool   = true;
     let mut next_var: String = "".to_string();
     let mut capture:  String = "var".to_string();
-    let mut skip:     bool   = true;
 
     let trimmed = line.trim();
 
@@ -214,7 +213,6 @@ fn get_lhs_vars(line: &str, ln_no: u64) -> Option<Vec<String>> {
                     continue;
                 }
             } else if c == '(' {
-                multi = true;
                 if next_var == "" && var_ind == 0 {
                     multi = true;
                     continue
@@ -278,26 +276,7 @@ fn get_lhs_vars(line: &str, ln_no: u64) -> Option<Vec<String>> {
 }
 
 fn as_fn_call_return(part: &LinePart, line: &str) -> bool {
-    let     varname:       String;
-    let     var_is_ref:    bool;
-    let     var_is_deref:  bool;
-    let mut sugar:         Option<String> = None;
     let mut next:          LinePart;
-    let mut eval_parts:    Vec<String>  = Vec::new();
-    let mut trailing_eval: Option<String> = None;
-    let mut cur_stk_sz:    u8 = 0;
-    let mut req_stk_sz:    u8 = 0;
-    let mut req_elem_sz:   u8;
-    let mut terminated:    bool = false;
-    let mut deref_btype:   String = "".to_string();
-
-    if part.next.starts_with("@") {
-        var_is_ref = true;
-        varname = part.next[1..].to_string();
-    } else {
-        var_is_ref = false;
-        varname = part.next.clone();
-    }
 
     let lhs_vars = match get_lhs_vars(line, part.ln_no) {
         Some(vars) => { vars },
@@ -405,7 +384,7 @@ fn as_fn_call_return(part: &LinePart, line: &str) -> bool {
         let ret_type = outputs::get_fn_ret_type_by_pos(
             &fn_name, retvar_pos).unwrap();
 
-        let resolved_arg: String;
+        // let resolved_arg: String;
         if ret_type == "u8" || ret_type == "u8:ptr" || ret_type == "char" {
             // if ret_type == "u8:ptr" {
             //     resolved_arg = epart.clone();
@@ -704,6 +683,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                 return as_fn_call_return(&part, line);
             }
         }
+        first = false;
 
         let trimmed: String;
         if next.next.ends_with(";") {

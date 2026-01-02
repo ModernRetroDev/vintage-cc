@@ -42,7 +42,6 @@ fn get_evalpart_basetype(ln_no: u64, epart: &str) -> Option<String> {
 fn get_return_vals(line: &str, ln_no: u64) -> Option<Vec<String>> {
     let mut fn_rets: Vec<String> = Vec::new();
 
-    let mut retval_ind:  u8     = 0;
     let mut multi:       bool   = false;
     let mut first:       bool   = true;
     let mut next_retval: String = "".to_string();
@@ -95,10 +94,12 @@ fn get_return_vals(line: &str, ln_no: u64) -> Option<Vec<String>> {
                 } else {
                     if next_retval == "" {
                         // this return has no return values
+                        capture = "terminated".to_string();
                         break;
                     }
                     // end of a single return type
                     fn_rets.push(next_retval.clone());
+                    capture = "terminated".to_string();
                     break;
                 }
             } else if c == '(' {
@@ -124,7 +125,6 @@ fn get_return_vals(line: &str, ln_no: u64) -> Option<Vec<String>> {
                 } else {
                     // this should be a fine return value
                     fn_rets.push(next_retval.clone());
-                    retval_ind += 1;
                     next_retval = "".to_string();
                     first         = true;
                 }
@@ -158,6 +158,12 @@ fn get_return_vals(line: &str, ln_no: u64) -> Option<Vec<String>> {
             }
             break;
         }
+    }
+    if capture != "terminated" {
+        println!(
+            "ERROR: ln:{} RETURN: Misisng line terminator.",
+            ln_no);
+        return None;
     }
 
     return Some(fn_rets);

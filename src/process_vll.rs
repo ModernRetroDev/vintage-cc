@@ -420,8 +420,6 @@ fn process_source(s: String) {
 
 pub fn process_vll(cfg: runconfig::RunCfg) {
 	let args: Vec<_> = env::args().collect();
-	let target_str: String;
-	let source_str: String;
 	let source: Option<String>;
 
 	if args.len() == 1 {
