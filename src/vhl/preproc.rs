@@ -4,63 +4,98 @@ use crate::vhl::outputs;
 pub fn resolve_line(ln_no: u64, line: &str) -> Option<String> {
     // return Some(line.to_string());
     let mut resolved: String = "".to_string();
+    let mut context:  String = "search".to_string();
+    let mut escaped:  bool   = false;
+    let mut defstr: String = "".to_string();
 
     if !line.contains("#") {
         return Some(line.to_string());
     }
 
-    //------------------------------------------------------------------------//
-    // Otherwise, we need to make sure it's not within a string.              //
-    //------------------------------------------------------------------------//
-    if line.contains("\"") {
-        println!("[TODO]: Preproc defines not currently handled with strings");
-        return Some(line.to_string());
-    }
-
-    let mut indef: bool = false;
-    let mut defstr: String = "".to_string();
-
     for c in line.chars() {
-        if indef {
-            if c == '_' || c.is_uppercase() || c.is_digit(10) {
-                defstr.push(c);
-                continue;
-            } else {
-                if !outputs::preproc_def_exists(&defstr) {
-                    println!(
-                        "ERROR: ln:{} Definition name `#{}` does not exist.",
-                        ln_no, &defstr);
-                    return None;
-                } else {
-                    match outputs::preproc_get_def_str(&defstr) {
-                        Some(defval) => {
-                            resolved.push_str(&defval);
-                            defstr = "".to_string();
-                        },
-                        None => {
-                            println!(
-                                "ERROR: ln:{} Unable to resolve definition `#{}`.",
-                                ln_no, &defstr);
-                            return None;
-                        },
-                    }
-                }
-
+        match &context[..] {
+            "search" => {
+                // Searching for a preproc definition or string
                 if c == '#' {
-                    indef = true;
+                    context = "in_def".to_string();
+                } else if c == '"' {
+                    context = "in_string".to_string();
+                    resolved.push(c);
+                } else if c == '\'' {
+                    context = "in_quote".to_string();
+                    resolved.push(c);
                 } else {
-                    indef = false;
                     resolved.push(c);
                 }
                 continue;
-            }
-        } else {
-            if c == '#' {
-                indef = true;
-                continue;
-            } else {
+            },
+            "in_def" => {
+                if c == '_' || c.is_uppercase() || c.is_digit(10) {
+                    defstr.push(c);
+                    continue;
+                } else {
+                    if !outputs::preproc_def_exists(&defstr) {
+                        println!(
+                            "ERROR: ln:{} Definition name `#{}` does not exist.",
+                            ln_no, &defstr);
+                        return None;
+                    } else {
+                        match outputs::preproc_get_def_str(&defstr) {
+                            Some(defval) => {
+                                resolved.push_str(&defval);
+                                defstr = "".to_string();
+                            },
+                            None => {
+                                println!(
+                                    "ERROR: ln:{} Unable to resolve definition `#{}`.",
+                                    ln_no, &defstr);
+                                return None;
+                            },
+                        }
+                    }
+
+                    if c == '#' {
+                        context = "in_def".to_string();
+                    } else if c == '"' {
+                        context = "in_string".to_string();
+                    } else if c == '\'' {
+                        context = "in_quote".to_string();
+                    } else {
+                        context = "search".to_string();
+                        resolved.push(c);
+                    }
+                    continue;
+                }
+            },
+            "in_string" => {
+                if escaped {
+                    escaped = false;
+                } else {
+                    if c == '\\' {
+                        escaped = true;
+                    } else if c == '"' {
+                        // end of the string
+                        context = "search".to_string();
+                    }
+                }
                 resolved.push(c);
-            }
+                continue
+            },
+            "in_quote" => {
+                if escaped {
+                    escaped = false;
+                } else {
+                    if c == '\\' {
+                        escaped = true;
+                    } else if c == '\'' {
+                        // end of the quote
+                        context = "search".to_string();
+                    }
+                }
+                resolved.push(c);
+                continue
+            },
+            _ => {},
         }
     }
 
