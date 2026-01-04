@@ -654,6 +654,8 @@ pub fn set_platform(platform: &str) {
                     None => {}
                 }
 
+                builtins::mark_as_used("textlayer__clear");
+
                 init_append("   ; Set Vintage ERR to FALSE");
                 init_append("   lda #0");
                 init_append("   sta VINTAGE_HAS_ERROR");

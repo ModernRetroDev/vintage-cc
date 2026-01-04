@@ -6,6 +6,7 @@
 _putchar:
    ; push a character to the screen or to an open file
    sta VINTAGE_TEMP_A
+   stx VINTAGE_TEMP_X
    sty VINTAGE_TEMP_Y
 
    lda VINTAGE_IO_TARGET
@@ -53,6 +54,7 @@ _putchar_stdout__newline:
    pla
    sta $0001
    lda VINTAGE_TEMP_A
+   ldx VINTAGE_TEMP_X
    ldy VINTAGE_TEMP_Y
    rts
    ;
@@ -62,6 +64,7 @@ _putchar_stdout__save_col:
    pla
    sta $0001
    lda VINTAGE_TEMP_A
+   ldx VINTAGE_TEMP_X
    ldy VINTAGE_TEMP_Y
    rts
 

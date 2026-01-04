@@ -1,27 +1,27 @@
 ;[BUILTIN-BLOCK-START]
 ; Zero-Page Registers
-r0  = $02
-r1  = $04
-r2  = $06
-r3  = $08
-r4  = $0A
-r5  = $0C
-r6  = $0E
-r7  = $10
-r8  = $12
-r9  = $14
-r10 = $16
-r11 = $18
-r12 = $1A
-r13 = $1C
-r14 = $1E
-r15 = $20
+r0  = $10
+r1  = $12
+r2  = $14
+r3  = $16
+r4  = $18
+r5  = $1A
+r6  = $1C
+r7  = $1E
+r8  = $20
+r9  = $22
+r10 = $24
+r11 = $26
+r12 = $28
+r13 = $2A
+r14 = $2C
+r15 = $2E
 
 ; Zero-Page Temporary Pointers
 ZP_PTR_1 = $7E
-ZP_PTR_2 = $22
-ZP_PTR_3 = $24
-ZP_PTR_4 = $26
+ZP_PTR_2 = $30
+ZP_PTR_3 = $32
+ZP_PTR_4 = $34
 
 ; F256 MicroKernel
 ;
@@ -31,6 +31,17 @@ KERNEL_FN_FILE_OPEN  = $FF5C
 KERNEL_FN_FILE_WRITE = $FF64
 KERNEL_FN_NEXT_EVENT = $FF00
 KERNEL_FN_YIELD      = $FF0C
+; Kernel Registers
+KERNEL_REG_DMA_CRTL           = $DF00
+KERNEL_REG_DMA_FILL_VAL       = $DF01
+KERNEL_REG_DMA_STATUS         = $DF01
+KERNEL_REG_DMA_SRC_ADDR       = $DF04 ; 19 bits
+KERNEL_REG_DMA_DST_ADDR       = $DF08 ; 19 bits
+KERNEL_REG_DMA_1D_COPY_COUNT  = $DF0C ; 19 bits
+KERNEL_REG_DMA_2D_COPY_WIDTH  = $DF0C ; 16 bits
+KERNEL_REG_DMA_2D_COPY_HEIGHT = $DF0E ; 16 bits
+KERNEL_REG_DMA_2D_SRC_STRIDE  = $DF10 ; 16 bits
+KERNEL_REG_DMA_2D_DST_STRIDE  = $DF12 ; 16 bits
 ; Kernel Function Arguments
 KERNEL_ARGS_EVENTS              = $F0
 KERNEL_ARGS_FILE_CLOSE_STREAM   = $F3
@@ -43,6 +54,11 @@ KERNEL_ARGS_FILE_WRITE_STREAM   = $F3
 KERNEL_ARGS_FILE_WRITE_BUF      = $FB
 KERNEL_ARGS_FILE_WRITE_BUFLEN   = $FD
 ; Kernel Function Defines
+KERNEL_DMA_CTRL__START    = $80
+KERNEL_DMA_CTRL__FILL     = $04
+KERNEL_DMA_CTRL__2D       = $02
+KERNEL_DMA_CTRL__ENABLE   = $01
+KERNEL_DMA_STATUS__BUSY   = $80
 KERNEL_EVENT_FILE__CLOSED = $32
 KERNEL_EVENT_FILE__OPENED = $2A
 KERNEL_EVENT_FILE__WROTE  = $2E
