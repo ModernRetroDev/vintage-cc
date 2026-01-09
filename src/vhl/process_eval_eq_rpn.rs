@@ -490,6 +490,7 @@ fn as_fn_call_return(part: &LinePart, line: &str) -> bool {
 
 pub fn now(part: LinePart, line: &str) -> bool {
     let     varname:       String;
+    let     varname0:      String; // may include leading `@`
     let     var_is_ref:    bool;
     let     var_is_deref:  bool;
     let mut sugar:         Option<String> = None;
@@ -502,6 +503,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
     let mut terminated:    bool = false;
     let mut deref_btype:   String = "".to_string();
 
+    varname0 = part.next.clone();
     if part.next.starts_with("@") {
         var_is_ref = true;
         varname = part.next[1..].to_string();
@@ -549,12 +551,19 @@ pub fn now(part: LinePart, line: &str) -> bool {
 
         match epart_type {
             Some(vtype) => {
+                if var_is_ref {
+                    if vtype.ends_with(":ptr") {
+                        outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
+                        outputs::lines_main_push(&format!("    increment__ptr .{}", varname));
+                        return false;
+                    }
+                }
                 match &vtype[..] {
                     "u8" => {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: increment array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    increment__u8 .{}", varname));
                             return false;
                         }
@@ -563,7 +572,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: increment array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    increment__u16 .{}", varname));
                             return false;
                         }
@@ -572,7 +581,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: increment array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    increment__u24 .{}", varname));
                             return false;
                         }
@@ -594,12 +603,19 @@ pub fn now(part: LinePart, line: &str) -> bool {
 
         match epart_type {
             Some(vtype) => {
+                if var_is_ref {
+                    if vtype.ends_with(":ptr") {
+                        outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
+                        outputs::lines_main_push(&format!("    decrement__ptr .{}", varname));
+                        return false;
+                    }
+                }
                 match &vtype[..] {
                     "u8" => {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: decrement array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    decrement__u8 .{}", varname));
                             return false;
                         }
@@ -608,7 +624,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: decrement array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    decrement__u16 .{}", varname));
                             return false;
                         }
@@ -617,7 +633,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                         if array::arg_is_array(&varname) {
                             println!("TODO: EVAL_EQ: decrement array value!!!");
                         } else {
-                            outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+                            outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
                             outputs::lines_main_push(&format!("    decrement__u24 .{}", varname));
                             return false;
                         }
@@ -636,7 +652,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
 
     match sugar {
         Some(op) => {
-            eval_parts.push(varname.clone());
+            eval_parts.push(varname0.clone());
             match &op[..] {
                 "+=" => {
                     trailing_eval = Some("+".to_string());
@@ -797,6 +813,10 @@ pub fn now(part: LinePart, line: &str) -> bool {
                     if req_elem_sz < 3 {
                         req_elem_sz = 3;
                     }
+                } else if epart.starts_with("@") {
+                    if req_elem_sz < 2 {
+                        req_elem_sz = 2;
+                    }
                 } else {
                     println!(
                         "ERROR: ln:{} Unsupported variable/value `{}` in eval.",
@@ -853,21 +873,21 @@ pub fn now(part: LinePart, line: &str) -> bool {
         },
     };
 
-    outputs::lines_main_push(&format!("    # {} {}", varname, part.rem));
+    outputs::lines_main_push(&format!("    # {} {}", varname0, part.rem));
 
     cur_stk_sz = 0;
-    for epart in &eval_parts {
-        if eval_part_is_op(&epart) {
+    for epart0 in &eval_parts {
+        if eval_part_is_op(&epart0) {
             if cur_stk_sz < 2 {
                 println!(
                     "ERROR: ln:{} Operation `{}` not permitted on current stack of size`{}`.",
-                    part.ln_no, &epart, cur_stk_sz);
+                    part.ln_no, &epart0, cur_stk_sz);
                 return true;
             }
 
             let stk_prev: u8 = cur_stk_sz -2;
             let stk_cur:  u8 = cur_stk_sz -1;
-            match &epart[..] {
+            match &epart0[..] {
                 "+" => {
                     if req_elem_sz == 1 {
                         outputs::lines_main_push(
@@ -1004,7 +1024,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                 _ => {
                     println!(
                         "ERROR: ln:{} Unhandled operation type `{}`.",
-                        part.ln_no, epart);
+                        part.ln_no, epart0);
                     return true;
                 }
             }
@@ -1012,6 +1032,11 @@ pub fn now(part: LinePart, line: &str) -> bool {
             continue;
         }
 
+        let epart_is_ref: bool = epart0.starts_with("@");
+        let epart = match epart_is_ref {
+            true => { &epart0[1..] },
+            false => { &epart0 },
+        };
         let epart_type: Option<String> = 
             get_evalpart_basetype(part.ln_no, &epart);
         let epart_ptr_str = match is_direct_deref(&epart) {
@@ -1033,9 +1058,34 @@ pub fn now(part: LinePart, line: &str) -> bool {
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" || vtype == "u8:ptr" || vtype == "char" {
+                if epart_is_ref {
+                    // we are getting a pointer address instead of underlying value
+                    if !vtype.ends_with(":ptr") {
+                        println!(
+                            "ERROR: ln:{} Unsupported reference of `{}` in eval.",
+                            part.ln_no, epart0);
+                        return true;
+                    }
+                    resolved_arg = epart.to_string();
+
+                    if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    equals__u16_ptr .{}_{} .{}", 
+                                stk_basename, cur_stk_sz, resolved_arg));
+                    } else if req_elem_sz == 3 {
+                        outputs::lines_main_push(
+                            &format!("    equals__u24_ptr .{}_{} .{}", 
+                                stk_basename, cur_stk_sz, resolved_arg));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (3).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+
+                } else if vtype == "u8" || vtype == "u8:ptr" || vtype == "char" {
                     if vtype == "u8:ptr" {
-                        resolved_arg = epart.clone();
+                        resolved_arg = epart.to_string();
                     } else {
                         match fn_args::get_u8_value_str(part.ln_no, epart, true) {
                             Some(u8val) => {
@@ -1069,7 +1119,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                     }
                 } else if vtype == "u16" || vtype == "u16:ptr" {
                     if vtype == "u16:ptr" {
-                        resolved_arg = epart.clone();
+                        resolved_arg = epart.to_string();
                     } else {
                         match fn_args::get_u16_value_str(part.ln_no, epart, true) {
                             Some(u16val) => {
@@ -1099,7 +1149,7 @@ pub fn now(part: LinePart, line: &str) -> bool {
                     }
                 } else if vtype == "u24" || vtype == "u24:ptr" {
                     if vtype == "u24:ptr" {
-                        resolved_arg = epart.clone();
+                        resolved_arg = epart.to_string();
                     } else {
                         match fn_args::get_u24_value_str(part.ln_no, epart, true) {
                             Some(u24val) => {

@@ -63,6 +63,28 @@ _textlayer__scroll_up__copy_row:
    bne _textlayer__scroll_up__next_row
    ; else the last row has been copied
 
+   ; clear the final row now that it was scrolled up
+   ldy #0
+_textlayer__scroll_up__fill_row:
+   ;-----------------------------;
+   ; Iterate over the 80 columns ;
+   ;-----------------------------;
+   ; blank out the character at that position
+   lda #$02
+   sta $0001
+   lda #' '
+   sta (r15),y
+   ; set the color LUT for that position
+   lda #$03
+   sta $0001
+   lda #$30 ; FG = 1; BG = 0 (black)
+   sta (r15),y
+
+   iny
+   cpy #80
+   bne _textlayer__scroll_up__fill_row
+   ; else the row has been filled
+
    rts
 
 _textlayer__newline:

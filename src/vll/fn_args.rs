@@ -411,3 +411,22 @@ pub fn get_u24ptr_str(part: &LinePart) -> Option<String> {
 
     return None;
 }
+
+pub fn is_type_ptr(part: &LinePart) -> bool {
+    if part.is_varname() {
+        let part_res = get::var_fullname(&part.next);
+        //--------------------------------------------------------------------//
+        // Extract the variable name                                          //
+        //--------------------------------------------------------------------//
+        let vartype: String;
+        match outputs::get_vartype(&part_res) {
+            Some(vtype) => { vartype = vtype; },
+            None => { return false; },
+        }
+        if vartype.ends_with(":ptr") {
+            return true;
+        }
+    }
+
+    return false;
+}

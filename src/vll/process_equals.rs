@@ -401,6 +401,9 @@ fn as_types_ptr_u16(part: LinePart) -> bool {
     }
 
     if !fn_args::is_type_u16(&rhs_part) {
+        println!(
+            "ERROR: ln:{} EQUALS: Expected a ptr value; got `{}` instead.",
+            part.ln_no, rhs_part.next);
         return true;
     }
     match fn_args::get_u16_value_str(&rhs_part) {
@@ -413,6 +416,67 @@ fn as_types_ptr_u16(part: LinePart) -> bool {
     };
 
     outputs::mainfn_append(&format!("   ; equals__ptr_u16 {} {}",
+        lhs, rhs));
+
+    if rhs_res.starts_with("#") {
+        outputs::mainfn_append(&format!("   lda #<{}", &rhs_res[1..]));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda #>{}", &rhs_res[1..]));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+    } else {
+        outputs::mainfn_append(&format!("   lda {rhs_res}"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}"));
+        outputs::mainfn_append(&format!("   lda {rhs_res}+1"));
+        outputs::mainfn_append(&format!("   sta {lhs_res}+1"));
+    }
+
+    outputs::mainfn_append("");
+
+    return false;
+}
+
+fn as_types_u16_ptr(part: LinePart) -> bool {
+    let lhs      = part.get_next().next;
+    let lhs_part = part.get_next();
+    let rhs      = lhs_part.get_next().next;
+    let rhs_part = lhs_part.get_next();
+    let lhs_res:  String;
+    let rhs_res:  String;
+
+    if !lhs_part.is_varname() {
+        println!("ERROR: ln:{} Expected varname, got `{}`",
+            part.ln_no, lhs);
+        return true;
+    }
+    lhs_res = get::var_fullname(&lhs);
+
+    //------------------------------------------------------------------------//
+    // Extract the variable name                                              //
+    //------------------------------------------------------------------------//
+    let vartype: String;
+    match outputs::get_vartype(&lhs_res) {
+        Some(vtype) => { vartype = vtype; },
+        None => {
+            println!("ERROR: ln:{} Undeclared variable `{}`.",
+                part.ln_no, lhs);
+            return true;
+        },
+    }
+    if vartype != "u16" {
+        println!(
+            "WARNING: ln:{} EQUALS: Expected a u16 type; got `{}`, which is type `{}`",
+            part.ln_no, lhs, vartype)
+    }
+
+    if !fn_args::is_type_ptr(&rhs_part) {
+        println!(
+            "ERROR: ln:{} EQUALS: Expected a ptr type; got `{}` instead.",
+            part.ln_no, rhs);
+        return true;
+    }
+    rhs_res = get::var_fullname(&rhs);
+
+    outputs::mainfn_append(&format!("   ; equals__u16_ptr {} {}",
         lhs, rhs));
 
     if rhs_res.starts_with("#") {
@@ -1408,6 +1472,9 @@ pub fn now(part: LinePart) -> bool {
 
     } else if part.next == "equals__u8ptr_u24" {
         return as_types_u8ptr_u24(part);
+
+    } else if part.next == "equals__u16_ptr" {
+        return as_types_u16_ptr(part);
 
     } else if part.next == "equals__u16_u16" {
         return as_types_u16_u16(part);

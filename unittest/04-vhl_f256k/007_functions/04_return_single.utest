@@ -1,0 +1,1 @@
+#----------------------------------------------## CALL A FUNCTION (WITH A SINGLE RETURN VALUE) ##----------------------------------------------#returns_5_literal() -> 5returns_5_var() -> 5returns_10_literal() -> 10returns_10_var() -> 10
