@@ -149,6 +149,10 @@ pub fn now(part: LinePart) -> bool {
                     if req_elem_sz < 3 {
                         req_elem_sz = 3;
                     }
+                } else if epart.starts_with("@") {
+                    if req_elem_sz < 2 {
+                        req_elem_sz = 2;
+                    }
                 } else {
                     println!(
                         "ERROR: ln:{} Unsupported variable/value `{}` in eval.",
@@ -190,18 +194,18 @@ pub fn now(part: LinePart) -> bool {
     }
 
     cur_stk_sz = 0;
-    for epart in &eval_parts {
-        if eval_part_is_op(&epart) {
+    for epart0 in &eval_parts {
+        if eval_part_is_op(&epart0) {
             if cur_stk_sz < 2 {
                 println!(
                     "ERROR: ln:{} Operation `{}` not permitted on current stack of size`{}`.",
-                    part.ln_no, &epart, cur_stk_sz);
+                    part.ln_no, &epart0, cur_stk_sz);
                 return true;
             }
 
             let stk_prev: u8 = cur_stk_sz -2;
             let stk_cur:  u8 = cur_stk_sz -1;
-            match &epart[..] {
+            match &epart0[..] {
                 "+" => {
                     match req_elem_sz {
                         1 => {
@@ -618,7 +622,7 @@ pub fn now(part: LinePart) -> bool {
                 _ => {
                     println!(
                         "ERROR: ln:{} Unhandled operation type `{}`.",
-                        part.ln_no, epart);
+                        part.ln_no, epart0);
                     return true;
                 }
             }
@@ -626,6 +630,11 @@ pub fn now(part: LinePart) -> bool {
             continue;
         }
 
+        let epart_is_ref: bool = epart0.starts_with("@");
+        let epart = match epart_is_ref {
+            true => { &epart0[1..] },
+            false => { &epart0 },
+        };
         let epart_type: Option<String> = 
             get_evalpart_basetype(part.ln_no, &epart);
         let epart_ptr_str = match is_direct_deref(&epart) {
@@ -647,10 +656,35 @@ pub fn now(part: LinePart) -> bool {
         match epart_type {
             Some(vtype) => {
                 let resolved_arg: String;
-                if vtype == "u8" || vtype == "u8:ptr" {
+                if epart_is_ref {
+                    // we are getting a pointer address instead of underlying value
+                    if !vtype.ends_with(":ptr") {
+                        println!(
+                            "ERROR: ln:{} Unsupported reference of `{}` in eval.",
+                            part.ln_no, epart0);
+                        return true;
+                    }
+                    resolved_arg = epart.to_string();
+
+                    if req_elem_sz == 2 {
+                        outputs::lines_main_push(
+                            &format!("    equals__u16_ptr .{}_{} .{}", 
+                                stk_basename, cur_stk_sz, resolved_arg));
+                    } else if req_elem_sz == 3 {
+                        outputs::lines_main_push(
+                            &format!("    equals__u24_ptr .{}_{} .{}", 
+                                stk_basename, cur_stk_sz, resolved_arg));
+                    } else {
+                        println!(
+                            "ERROR: ln:{} Stack elements of size `{}` not currently supported (3).",
+                            part.ln_no, req_elem_sz);
+                        return true;
+                    }
+
+                } else if vtype == "u8" || vtype == "u8:ptr" || vtype == "char" {
                     match fn_args::get_u8_value_str(part.ln_no, epart, true) {
                         Some(u8val) => {
-                            resolved_arg = u8val.clone();
+                            resolved_arg = u8val.to_string();
                         },
                         None => {
                             println!("ERROR: ln:{} Failed to get u8 value of `{}`",

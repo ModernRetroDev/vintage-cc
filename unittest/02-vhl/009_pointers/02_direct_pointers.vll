@@ -153,7 +153,7 @@ fn main
     equals__ptr_u16 ._temp_ptr_u8 0xA008
     equals__u8ptr_u8 ._temp_ptr_u8 ._stk_8_0
 
-    # chk_u8 = 0xA008;
+    # @chk_u8 = 0xA008;
     equals__u16_u16 ._stk_16_0 0xA008
     equals__ptr_u16 .chk_u8 ._stk_16_0
 
@@ -169,7 +169,7 @@ fn main
     equals__ptr_u16 ._temp_ptr_u16 0xA00A
     equals__u16ptr_u16 ._temp_ptr_u16 ._stk_16_0
 
-    # chk_u16 = 0xA00A;
+    # @chk_u16 = 0xA00A;
     equals__u16_u16 ._stk_16_0 0xA00A
     equals__ptr_u16 .chk_u16 ._stk_16_0
 

@@ -1,0 +1,189 @@
+fn shutdown
+   lang_asm "   ; shut off the system immediately"
+   lang_asm "   ldx #$42"
+   lang_asm "   ldy #$01"
+   lang_asm "   lda #$00"
+   lang_asm "   jsr $FEC9"
+endfn
+
+fn main
+    var__file outfile
+    ptr__u8 bnk_u8
+    var__bool _cmpres
+    var__u8 _stk_8_0
+    var__u8 _stk_8_1
+    var__u16 _stk_16_0
+    var__u16 _stk_16_1
+
+    equals__ptr_u16 .bnk_u8 0xA000
+
+    # outfile.create("03_reference_eval.utest");
+    setup__file .outfile 'w' "@:03_reference_eval.utest"
+    open__file .outfile
+
+    # outfile.writeln("#-----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln("# EVALUATION OF VALUES USING POINTER REFERENCES #");
+    setout__file .outfile
+    print__str8 "# EVALUATION OF VALUES USING POINTER REFERENCES #"
+    print__endl
+    setout__default
+
+    # outfile.writeln("#-----------------------------------------------#");
+    setout__file .outfile
+    print__str8 "#-----------------------------------------------#"
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("bnk_u8 address = @{}", @bnk_u8);
+    setout__file .outfile
+    print__str8 "bnk_u8 address = @"
+    print__ptr .bnk_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # @bnk_u8 = 0xA100;
+    equals__u16_u16 ._stk_16_0 0xA100
+    equals__ptr_u16 .bnk_u8 ._stk_16_0
+
+    # outfile.writeln("@bnk_u8 = 0xA100;  =>  @{}", @bnk_u8);
+    setout__file .outfile
+    print__str8 "@bnk_u8 = 0xA100;  =>  @"
+    print__ptr .bnk_u8
+    print__endl
+    setout__default
+
+    # @bnk_u8 += 1;
+    equals__u16_ptr ._stk_16_0 .bnk_u8
+    equals__u16_u8 ._stk_16_1 1
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__ptr_u16 .bnk_u8 ._stk_16_0
+
+    # outfile.writeln("@bnk_u8 += 1;  =>  @{}", @bnk_u8);
+    setout__file .outfile
+    print__str8 "@bnk_u8 += 1;  =>  @"
+    print__ptr .bnk_u8
+    print__endl
+    setout__default
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("if @bnk_u8 0xA500 > ;  =>  ", endl=false);
+    setout__file .outfile
+    print__str8 "if @bnk_u8 0xA500 > ;  =>  "
+    setout__default
+
+    # if' @bnk_u8 0xA500 > {
+    equals__u16_ptr ._stk_16_0 .bnk_u8
+    equals__u16_u16 ._stk_16_1 0xA500
+    eval_gt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln("if @bnk_u8 0xA500 < ;  =>  ", endl=false);
+    setout__file .outfile
+    print__str8 "if @bnk_u8 0xA500 < ;  =>  "
+    setout__default
+
+    # if' @bnk_u8 0xA500 < {
+    equals__u16_ptr ._stk_16_0 .bnk_u8
+    equals__u16_u16 ._stk_16_1 0xA500
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    if ._cmpres
+
+    # outfile.writeln("TRUE");
+    setout__file .outfile
+    print__str8 "TRUE"
+    print__endl
+    setout__default
+
+    # } else {
+    else
+    # outfile.writeln("FALSE");
+    setout__file .outfile
+    print__str8 "FALSE"
+    print__endl
+    setout__default
+
+    endif
+
+    # outfile.writeln();
+    setout__file .outfile
+    print__endl
+    setout__default
+
+    # outfile.writeln("while @bnk_u8 0xA10A < ; @bnk_u8 += 1; :");
+    setout__file .outfile
+    print__str8 "while @bnk_u8 0xA10A < ; @bnk_u8 += 1; :"
+    print__endl
+    setout__default
+
+    # while @bnk_u8 0xA10A < {
+    loop
+    equals__u16_ptr ._stk_16_0 .bnk_u8
+    equals__u16_u16 ._stk_16_1 0xA10A
+    eval_lt__u16 ._cmpres ._stk_16_0 ._stk_16_1
+    equals__u16_bool ._stk_16_0 ._cmpres
+    eval_neq__u16 ._cmpres ._stk_16_0  0
+    equals_not__bool_bool ._cmpres ._cmpres
+    if ._cmpres
+        break
+    endif
+
+    # outfile.writeln(" * @bnk_u8 = @{}", @bnk_u8);
+    setout__file .outfile
+    print__str8 " * @bnk_u8 = @"
+    print__ptr .bnk_u8
+    print__endl
+    setout__default
+
+    # @bnk_u8 += 1;
+    equals__u16_ptr ._stk_16_0 .bnk_u8
+    equals__u16_u8 ._stk_16_1 1
+    plus_equals__u16_u16 ._stk_16_0 ._stk_16_1
+    equals__ptr_u16 .bnk_u8 ._stk_16_0
+
+    endloop
+
+    close__file .outfile
+    # shutdown();
+    call shutdown
+
+endfn
+

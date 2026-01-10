@@ -82,7 +82,7 @@ fn main
     print__endl
     setout__default
 
-    # bnk_u8 = 0xA003;
+    # @bnk_u8 = 0xA003;
     equals__u16_u16 ._stk_16_0 0xA003
     equals__ptr_u16 .bnk_u8 ._stk_16_0
 
