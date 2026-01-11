@@ -1,0 +1,43 @@
+fn main() {
+	let outfile: file;
+	let bnk_u8:  u8@  = 0xA000;
+
+	outfile.create("out.utest");
+
+	outfile.writeln("#-----------------------------------------------#");
+	outfile.writeln("# EVALUATION OF VALUES USING POINTER REFERENCES #");
+	outfile.writeln("#-----------------------------------------------#");
+	outfile.writeln();
+
+	outfile.writeln("bnk_u8 address = @{}", @bnk_u8);
+	outfile.writeln();
+
+	@bnk_u8 = 0xA100;
+	outfile.writeln("@bnk_u8 = 0xA100;  =>  @{}", @bnk_u8);
+
+	@bnk_u8 += 1;
+	outfile.writeln("@bnk_u8 += 1;  =>  @{}", @bnk_u8);
+	outfile.writeln();
+
+	outfile.writeln("if @bnk_u8 0xA500 > ;  =>  ", endl=false);
+	if @bnk_u8 0xA500 > {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln("if @bnk_u8 0xA500 < ;  =>  ", endl=false);
+	if @bnk_u8 0xA500 < {
+		outfile.writeln("TRUE");
+	} else {
+		outfile.writeln("FALSE");
+	}
+	outfile.writeln();
+
+	outfile.writeln("while @bnk_u8 0xA10A < ; @bnk_u8 += 1; :");
+	while @bnk_u8 0xA10A < {
+		outfile.writeln(" * @bnk_u8 = @{}", @bnk_u8);
+		@bnk_u8 += 1;
+	}
+
+	outfile.close();
+}
