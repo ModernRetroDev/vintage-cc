@@ -1,20 +1,73 @@
 # VintageCC
-Vintage Code Compiler is a simple compiler written to compile a novel and equally simple lower level language, VLL (Vintage Low-Level).
 
-## VLL
-This language is designed to be simpler to write and more expressive than 6502 assembly, but much less complex to parse (from a compiler standpoint) than C.
+The Vintage Code Compiler (VCC) is a program designed and created to compile a
+novel programming language named Vintage. 
 
-Currently, VintageCC can compile VLL code down to 6502 assembly (CC65 flavor) for use with the Commander X16 platform.
+## Vintage Language
+
+Vintage is a higher-level language which is syntactically similar to `rust` but,
+includes a number of design features which make it particularly unique. This
+language was created with the primary goal of application development for older
+and modern retro-computing systems.
+
+Official documentation for the language is currently in development but, is not
+yet ready. For now, the best references available are the included unit-tests.
+
+## Supported Platforms
+
+Currently VCC can compile Vintage code to `cc65` assembly which can then be used
+to produce programs which run on the following platforms:
+
+* Commander X16
+* Commodore 64
+* Foenix/Wildbits F256K
 
 ## Future Plans
+### Integrated Build System
+
+Internally, VCC compiles the higher-level Vintage code down to a lower-level
+language, VLL. VCC can then compile the VLL code down into assembly language
+code, which can then be assembled using a supported assembler (i.e. `cc65`).
+
+The hope is to eventually streamline this process by including a build-system
+capability into the VCC which should eliminate the need for using ancillary
+build scripts.
+
+### Add Remaining Language Features
+
+VCC doesn't currently support all of the language features I originally planned
+to include into Vintage. The following isn't an exhaustive list however, here
+are a few of the language features which I plan to add but haven't included yet:
+
+* Error Handling System
+* Defer/Finally
+* Code/Module Init Function Support
+* Global/Module-Level Variables
+* Signed Integers (i8/i16/i24)
+* String Library Functions
+
 ### Additional Target Platforms
-I would like to add support for other target platforms, starting with the Foenix F256 and then the X65. Another fun option would be to allow compilation of VLL code into C for subsequent compilation and use on fully modern systems.
+
+The following is a list of platforms that I would be interested in supporting:
+
+* X65 (https://x65.zone/)
+* MEGA65 (https://mega65.org/) 
+* VLL -> C (allowing for code compilation and use on modern platforms)
+
+That said, the MEGA65 target is currently impossible for me to make as I don't
+have the hardware and the emulator is only made available to people who own the
+hardware.
 
 ### Included 6502/65816 Assembler
-Instead of having to rely on a system installation of CC65 to compile the resulting 6502/65816 assembly, I would very much like to write and include my own rudimentary assembler so that this compiler could be used in a more standalone manner.
+
+Instead of having to rely on a system installation of `cc65` to compile the
+resulting 6502/65816 assembly, I would very much like to write and include my
+own rudimentary assembler so that this compiler could be distributed and used in
+a more standalone manner.
 
 ### Self-hosted Compilation
-Given the simplistic design of VLL, it shouldn't be completely out of the realm of possibility to write a version of the compiler which could run directly on the various 8 or 16 bit systems. While I don't know how practical this would be... I'm sure it would be a lot of fun.
 
-### VHL (Vintage High Level)
-For a more concise and fun coding experience, I would eventually like to select or come up with a much more modern higher-level language design which could be compiled down to VLL, and so on and so forth.
+Given the simplistic design of VLL, it shouldn't be completely out of the realm
+of possibility to write a version of the compiler which could run directly on
+the various 8 or 16 bit systems. While I don't know how practical this would
+be... I'm sure it would be a lot of fun.
